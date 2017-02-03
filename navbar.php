@@ -95,10 +95,10 @@
             <li><a href="getting-started.php"><b>ΗΜΕΡΟΛΟΓΙΟ</b></a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><b>ΓΟΝΕΙΣ</b></a>
-              <ul class="dropdown-menu">
+              <!--<ul class="dropdown-menu">
                 <li><a href="#">Εμφάνιση καταλόγου</a></li>
                 <li><a href="#">Προσθήκη νέου</a></li>
-              </ul>
+              </ul>-->
             </li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><b>ΠΑΙΔΙΑ</b></a>
