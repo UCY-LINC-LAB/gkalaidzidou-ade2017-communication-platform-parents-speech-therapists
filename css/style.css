@@ -1,0 +1,530 @@
+/* Override some defaults */
+html, body {
+    background-color: #eee;
+}
+body {
+    padding-top: 40px;
+}
+.container {
+    max-width: 300px;
+    
+}
+
+/* The white background content wrapper */
+.container > .content {
+    background: rgba(255,255,255,0.5);
+    padding: 20px;
+    margin: 0 -20px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    border-radius: 10px 10px 10px 10px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+    box-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+
+.login-form {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+legend {
+    margin-right: -50px;
+    font-weight: bold;
+    color: #404040;
+}
+span a {
+    background:#222;
+    color:#fff;
+    display: inline-block;
+    /* float:left;  remove*/
+    margin:10px 10px 0 0;
+    padding:5px 10px
+}
+
+.bacground_50{
+    background: rgba(255,255,255,0.50);  border-radius: 20px;
+    margin-left: 10px;
+    /*margin-right: 3.5px;*/
+}
+ .col-centered{
+    float: none;
+    margin: 0 auto;
+    left: 30%;
+}
+
+/*******************************/
+.vertical-center {
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+    min-height: 100vh; /* These two lines are counted as one :-)       */
+
+    display: flex;
+    align-items: center;
+}
+
+/***********   glyphicon   ************/
+/* enable absolute positioning */
+.inner-addon {
+    position: relative;
+}
+
+/* style icon */
+.inner-addon .glyphicon {
+    position: absolute;
+    padding: 10px;
+    pointer-events: none;
+}
+
+/* align icon */
+.left-addon .glyphicon  { left:  0px;}
+.right-addon .glyphicon { right: 0px;}
+
+/* add padding  */
+.left-addon input  { padding-left:  30px; }
+.right-addon input { padding-right: 30px; }
+
+
+/***********   login   ************/
+.login{
+
+    margin: 100px auto auto;
+
+    max-height: 350px;
+    max-width: 350px;
+    border-radius: 5px;
+    background: rgba(255,255,255,0.5);
+    width: 60%;
+    padding: 10px;
+}
+
+/***********   button   ************/
+
+.button{
+
+    margin: 100px auto auto;
+
+    max-height: 350px;
+    max-width: 350px;
+    border-radius: 5px;
+    /*background: rgba(255,255,255,0.5);*/
+    width: 60%;
+    padding: 10px;
+}
+.on_button{
+    height: 70px;
+    width: 70px;
+
+    background: url(../img/on_button.png) no-repeat;
+    background-size: 70px;
+
+}
+.off_button{
+    height: 70px;
+    width: 70px;
+
+    background: url(../img/off_button.png) no-repeat;
+    background-size: 70px;
+
+}
+
+
+/**********************************/
+
+.cylinder {
+
+    height: 300px;
+    width: 200px;
+
+    background: url(../img/cylinder_icons.png) no-repeat;
+    background-size: 260px;
+
+}
+
+
+.cylinder_90 {
+
+    height: 150px;
+    width: 100px;
+
+    background: url(../img/cylinder_icons.png) no-repeat;
+    background-size: 130px;
+
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+
+}
+
+
+.cylinder-text {
+
+    /*height: 150px;*/
+    /*width: 150px;*/
+    margin-top: 40px;
+    margin-left: 50px;
+    font-size: 20px;
+    color: #0d5291;
+
+}
+
+/**********************************/
+
+.party_cloudy {
+
+    height: 60px;
+    width: 60px;
+
+    background: url(../img/partly_cloudy.png) no-repeat;
+    background-size: 60px;
+
+}
+
+
+.sunny {
+
+    height: 60px;
+    width: 60px;
+
+    background: url(../img/sunny.png) no-repeat;
+    background-size: 60px;
+
+}
+
+
+.sunny_s_cloudy {
+
+    height: 60px;
+    width: 60px;
+
+    background: url(../img/sunny_s_cloudy.png) no-repeat;
+    background-size: 60px;
+
+}
+/**********************************/
+
+
+
+/**********************************/
+
+
+body {
+
+    background: url(../img/background.jpg) ;
+    background-size: 100%;
+    /*font: 10px sans-serif;*/
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.bar {
+    fill: orange;
+}
+
+.bar:hover {
+    fill: orangered ;
+}
+
+.x.axis path {
+    display: none;
+}
+
+.d3-tip {
+    line-height: 1;
+    font-weight: bold;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.8);
+    content: "\25BC";
+    position: absolute;
+    text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
+}
+
+/**********************************/
+
+
+
+/* ============================================================
+  COMMON
+============================================================ */
+#wrapper {
+    min-width: 600px;
+}
+
+.settings {
+    display: table;
+    width: 100%;
+}
+.settings .row {
+    display: table-row;
+}
+.settings .question,
+.settings .switch {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 10px;
+}
+.settings .question {
+    width: 600px;
+    font-family: "Roboto Slab", serif;
+    font-size: 20px;
+}
+
+/* ============================================================
+  COMMON
+============================================================ */
+.cmn-toggle {
+    position: absolute;
+    margin-left: -9999px;
+    visibility: hidden;
+}
+.cmn-toggle + label {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* ============================================================
+  SWITCH 1 - ROUND
+============================================================ */
+input.cmn-toggle-round + label {
+    padding: 2px;
+    width: 120px;
+    height: 60px;
+    background-color: #dddddd;
+    -webkit-border-radius: 60px;
+    -moz-border-radius: 60px;
+    -ms-border-radius: 60px;
+    -o-border-radius: 60px;
+    border-radius: 60px;
+}
+input.cmn-toggle-round + label:before, input.cmn-toggle-round + label:after {
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    bottom: 1px;
+    content: "";
+}
+input.cmn-toggle-round + label:before {
+    right: 1px;
+    background-color: #f1f1f1;
+    -webkit-border-radius: 60px;
+    -moz-border-radius: 60px;
+    -ms-border-radius: 60px;
+    -o-border-radius: 60px;
+    border-radius: 60px;
+    -webkit-transition: background 0.4s;
+    -moz-transition: background 0.4s;
+    -o-transition: background 0.4s;
+    transition: background 0.4s;
+}
+input.cmn-toggle-round + label:after {
+    width: 58px;
+    background-color: #fff;
+    -webkit-border-radius: 100%;
+    -moz-border-radius: 100%;
+    -ms-border-radius: 100%;
+    -o-border-radius: 100%;
+    border-radius: 100%;
+    -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    -webkit-transition: margin 0.4s;
+    -moz-transition: margin 0.4s;
+    -o-transition: margin 0.4s;
+    transition: margin 0.4s;
+}
+input.cmn-toggle-round:checked + label:before {
+    background-color: #8ce196;
+}
+input.cmn-toggle-round:checked + label:after {
+    margin-left: 60px;
+}
+
+/* ============================================================
+  SWITCH 2 - ROUND FLAT
+============================================================ */
+input.cmn-toggle-round-flat + label {
+    padding: 2px;
+    width: 120px;
+    height: 60px;
+    background-color: #dddddd;
+    -webkit-border-radius: 60px;
+    -moz-border-radius: 60px;
+    -ms-border-radius: 60px;
+    -o-border-radius: 60px;
+    border-radius: 60px;
+    -webkit-transition: background 0.4s;
+    -moz-transition: background 0.4s;
+    -o-transition: background 0.4s;
+    transition: background 0.4s;
+}
+input.cmn-toggle-round-flat + label:before, input.cmn-toggle-round-flat + label:after {
+    display: block;
+    position: absolute;
+    content: "";
+}
+input.cmn-toggle-round-flat + label:before {
+    top: 2px;
+    left: 2px;
+    bottom: 2px;
+    right: 2px;
+    background-color: #fff;
+    -webkit-border-radius: 60px;
+    -moz-border-radius: 60px;
+    -ms-border-radius: 60px;
+    -o-border-radius: 60px;
+    border-radius: 60px;
+    -webkit-transition: background 0.4s;
+    -moz-transition: background 0.4s;
+    -o-transition: background 0.4s;
+    transition: background 0.4s;
+}
+input.cmn-toggle-round-flat + label:after {
+    top: 4px;
+    left: 4px;
+    bottom: 4px;
+    width: 52px;
+    background-color: #dddddd;
+    -webkit-border-radius: 52px;
+    -moz-border-radius: 52px;
+    -ms-border-radius: 52px;
+    -o-border-radius: 52px;
+    border-radius: 52px;
+    -webkit-transition: margin 0.4s, background 0.4s;
+    -moz-transition: margin 0.4s, background 0.4s;
+    -o-transition: margin 0.4s, background 0.4s;
+    transition: margin 0.4s, background 0.4s;
+}
+input.cmn-toggle-round-flat:checked + label {
+    background-color: #8ce196;
+}
+input.cmn-toggle-round-flat:checked + label:after {
+    margin-left: 60px;
+    background-color: #8ce196;
+}
+
+/* ============================================================
+  SWITCH 3 - YES NO
+============================================================ */
+input.cmn-toggle-yes-no + label {
+    padding: 2px;
+    width: 120px;
+    height: 60px;
+
+}
+input.cmn-toggle-yes-no + label:before, input.cmn-toggle-yes-no + label:after {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    color: #fff;
+    font-family: "Roboto Slab", serif;
+    font-size: 20px;
+    text-align: center;
+    line-height: 60px;
+}
+input.cmn-toggle-yes-no + label:before {
+    background-color: #3cdd7b;
+    border-radius: 20px;
+    content: attr(data-off);
+    -webkit-transition: -webkit-transform 0.5s;
+    -moz-transition: -moz-transform 0.5s;
+    -o-transition: -o-transform 0.5s;
+    transition: transform 0.5s;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+input.cmn-toggle-yes-no + label:after {
+    background-color: #e10b23;
+    border-radius: 20px;
+    content: attr(data-on);
+    -webkit-transition: -webkit-transform 0.5s;
+    -moz-transition: -moz-transform 0.5s;
+    -o-transition: -o-transform 0.5s;
+    transition: transform 0.5s;
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    -ms-transform: rotateY(180deg);
+    -o-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+input.cmn-toggle-yes-no:checked + label:before {
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    -ms-transform: rotateY(180deg);
+    -o-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+}
+input.cmn-toggle-yes-no:checked + label:after {
+    -webkit-transform: rotateY(0);
+    -moz-transform: rotateY(0);
+    -ms-transform: rotateY(0);
+    -o-transform: rotateY(0);
+    transform: rotateY(0);
+}
+
+
+/************************************************/
+/*  chart */
+
+
+.big-chart {
+    width:100%;
+    height:220px;
+}
+.line-chart {
+    width:100%;
+    height:100px;
+}
+.donut {width:100%;height:150px;min-width:150px;}
+
+.donut-label {
+    position:absolute;
+    left:45%;
+    font-size:22pt;
+    color:#ddd;
+    width:100%;
+    top:38%;
+}
+/****************************************************

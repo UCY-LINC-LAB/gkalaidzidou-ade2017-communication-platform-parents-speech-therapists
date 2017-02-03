@@ -1,0 +1,102 @@
+.fieldset-edit{
+    margin-top: 20px;
+    margin-bottom: 20px;
+   padding-left: 20px;
+   padding-top: 20px;
+   padding-top: 20px;
+    border: double 4px gray;
+
+}
+.navbar-default {
+     
+      border-color:black;
+}
+.navbar-brand{
+     background-color:#F8F8FF;
+      border-color:white;
+      color:white;
+}
+.margin{
+    margin-right: 50px;
+}
+
+caption{
+      font-weight: bold;
+      color: black;
+}
+tr,td,tr{
+	 border: 2px solid black;
+     padding: 5px;
+}
+input{
+
+}
+table.fix{
+    table-layout:fixed; height:50px;
+}
+td{
+   padding: 10px;
+}
+input[type="text"] {
+     width: 100%; 
+     box-sizing: border-box;
+     -webkit-box-sizing:border-box;
+     -moz-box-sizing: border-box;
+     border: 0px ; 
+ }
+p{
+    color: black;
+   
+    font-weight: normal;
+    padding-left: 5px;
+    font-size: 13px; 
+}
+
+.subheaders{
+    color: black;
+    text-align: left;
+    font-weight: bold;
+    padding-left: 5px;
+    font-size: 13px;
+}
+
+.header{
+    margin-top: 8px;
+    color: black;
+    text-align: center;
+     font-weight: bold; 
+     font-size: 16px;
+}
+
+
+.outside-table {
+	border: 5px double black;
+    border-collapse: collapse;
+    width:100%;
+    margin-top:10px;
+    margin-bottom:10px;
+    text-align: center;
+}
+
+.middle
+{
+    border-bottom: 5px double black;
+}
+
+.outside-table2 {
+	border: 5px double black;
+    border-collapse: collapse;
+    width:100%;
+    text-align: left;
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+ .outside-table2 input[type="text"] {
+     width: 100%; 
+     box-sizing: border-box;
+     -webkit-box-sizing:border-box;
+     -moz-box-sizing: border-box;
+     border: none ;
+     height: 50px;
+}
