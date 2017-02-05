@@ -50,20 +50,45 @@
     float:right;
     } 
 
-    #notifTitle{
-    float: center;
-    color: black;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-size: 25px;
-    color: #333;
-    }
     .ScrollStyle
     {
       max-height: 200px;
       overflow-y:auto;
       overflow-x: hidden;
     }
+
+    /*sticky note*/
+
+.stickyNote {
+  margin: auto;
+  width: 350px; 
+  height:350px;
+
+  background: #F9FFBF; /* Fallback */
+  /*background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F9FFBF), to(#C5C500));*/
+
+  padding: 20px 20px 20px 20px;
+    -webkit-box-shadow: 0px 1px 3px #000;
+    -moz-box-shadow: 0px 1px 3px #000;
+}
+
+
+
+.stickyNote h1{
+  font-size: 100px;
+  font-family: GoodDogRegular, Helvetica, sans-serif;
+}
+
+.stickyNote p {
+  font-family: GoodDogRegular, Helvetica, sans-serif;
+  font-size: 30px;
+  line-height: 35px;
+  margin: 10px 0 10px 0;
+  width: 280px;
+}
   </style>
+
+
 </head>
 
 <body>
@@ -115,33 +140,20 @@
     </div> <!--Modal end-->
 
     <div class="right">
-    <div id="notifTitle" style="margin-bottom: 20px;">
-      Notifications
+
+
+    <h4 id="notifTitle" style="margin-bottom: 60px"></h4>
+    
+    <div class="stickyNote">
+        <textarea  class="form-control" name="notes" style="margin-bottom: 10px;  background: transparent;   height: 250px;
+    border: none;" form="usrform" placeholder="Γράψε κάτι να θυμάσε.."></textarea>
+
+      <button type="button" class="btn" style=" float: left; background: transparent; float: right;"><span class="glyphicon glyphicon-ok"> </span> Αποθήκευση</button>
+
     </div>
-    <div class="ScrollStyle" >
-      <div class="row" style=" padding: 10px 0px; background-color: #fbfbfb;">
-        <div class="col-sm-2">
-          <img style='height: 40px; width: 40px;' class="img-circle" src="img/profile.jpg">
-        </div>
-        <div class="col-sm-10">
-          <label for="fullName">Χρίστος Παύλου</label>
-          <label for="time" style="color:grey; font-weight: normal; float: right;"> 34 min</label>
-          <br> <p>Hellooooo</p>
-        </div>
-      </div>
-      <hr style="margin-top: 1px; margin-bottom: 0px;">
-      <div class="row" style=" padding: 10px 0px; background-color: #fbfbfb;">
-        <div class="col-sm-2">
-          <img style='height: 40px; width: 40px;' class="img-circle" src="img/profile.jpg">
-        </div>
-        <div class="col-sm-10">
-          <label for="fullName">Χρίστος Παύλου</label>
-          <label for="time" style="color:grey; font-weight: normal; float: right;"> 34 min</label>
-          <br> <p>Hellooooo</p>
-        </div>
-      </div>
-    </div><!--notifi div end-->
-    </div>
+  </div>
+
+
   </div><!--container end-->
 </body>
 </html>

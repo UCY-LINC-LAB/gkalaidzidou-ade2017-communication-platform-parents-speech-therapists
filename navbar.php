@@ -74,7 +74,13 @@
     border: none;
     box-shadow: 0 6px 3px rgba(0,0,0,.35);
   }
-}  
+} 
+
+/*notification ring*/
+
+
+
+
 </style>
 </head>
 
@@ -92,9 +98,9 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse" >
           <ul class="nav navbar-nav">
-            <li><a href="getting-started.php"><b>ΗΜΕΡΟΛΟΓΙΟ</b></a></li>
+            <li><a href="home.php"><b>ΗΜΕΡΟΛΟΓΙΟ</b></a></li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><b>ΓΟΝΕΙΣ</b></a>
+              <a href="parent.php"><b>ΓΟΝΕΙΣ</b></a>
               <!--<ul class="dropdown-menu">
                 <li><a href="#">Εμφάνιση καταλόγου</a></li>
                 <li><a href="#">Προσθήκη νέου</a></li>
@@ -117,6 +123,7 @@
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
+          <li><a href=""> <span class="glyphicon glyphicon-bell" style="font-size: 15px; border-radius: 50%; border: 1px solid rgb(205, 209, 215); padding: 5px;"></span> </a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               <img style='height: 20px; width: 20px;' class="img-circle" src="img/profile.jpg">
