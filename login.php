@@ -1,7 +1,7 @@
 <?php
 include 'core/init.php';
 session_start(); 
-
+$_SESSION["add"]="";
 if($_SESSION["add"]=="unsuccess"){
     echo '<script language="javascript">';
     echo 'alert("Something has gone wrong. Try again! ")';

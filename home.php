@@ -138,7 +138,7 @@
         </div>
       </div>
     </div> <!--Modal end-->
-
+<!--
     <div class="right">
 
 
@@ -152,7 +152,7 @@
 
     </div>
   </div>
-
+-->
 
   </div><!--container end-->
 </body>

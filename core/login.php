@@ -22,9 +22,9 @@ if (!empty($_POST["email"]) && !empty($_POST["password"])){
 
      //if the students dosent submit app form and the deadline has not end then get him tu app form
     if($_SESSION['user_type']=='therapist'){
-        header('Location: ../navbar2_save.php');
+        header('Location: ../home.php');
     } else if($_SESSION['user_type']=='parent'){
-        header('Location: ../navbar2_save.php');
+        header('Location: ../home.php');
     }else{
      header('Location: ../login.php');
    }

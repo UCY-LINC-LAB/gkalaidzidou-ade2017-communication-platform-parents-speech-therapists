@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+ 
 <style>
 .navbar {
   background-color: #ebebeb !important; 
+
   border-color: transparent; 
   border-radius: 0%;
- box-shadow: 0 0 6px 3px rgba(0,0,0,.35);
+  box-shadow: 0 0 6px 3px rgba(0,0,0,.35);
+   
 }
 /** Default navbar **/
 .navbar-default .navbar-nav>li>a { 
@@ -19,7 +22,7 @@
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
-  /*background-color: transparent;*/
+  background-color: transparent;
   color: #DDBE42;
 }
 .navbar-default .navbar-nav > .open > a,
@@ -75,13 +78,21 @@
     box-shadow: 0 6px 3px rgba(0,0,0,.35);
   }
 } 
-
-/*notification ring*/
-
-
-
-
 </style>
+<script >
+  $('.navbar-nav li').click(function(e) {
+    alert(5);
+    $('.navbar-nav li.active').removeClass('active');
+    var $this = $(this);
+
+    if (!$this.hasClass('active')) {
+        $this.addClass('active');
+
+    }
+    e.preventDefault();
+});
+</script>
+
 </head>
 
 <body>
@@ -96,27 +107,34 @@
             <span class="icon-bar"></span>
           </button>
         </div>
-        <div id="navbar" class="navbar-collapse collapse" >
+        <div id="navbar" class="collapse navbar-collapse" >
           <ul class="nav navbar-nav">
-            <li><a href="home.php"><b>ΗΜΕΡΟΛΟΓΙΟ</b></a></li>
-            <li class="dropdown">
-              <a href="parent.php"><b>ΓΟΝΕΙΣ</b></a>
+            <li ><a href="home.php"><b>ΗΜΕΡΟΛΟΓΙΟ</b></a></li>
+            <li ><a href="parent.php"><b>ΕΓΓΕΓΡΑΜΜΕΝΟΙ</b></a>
               <!--<ul class="dropdown-menu">
                 <li><a href="#">Εμφάνιση καταλόγου</a></li>
                 <li><a href="#">Προσθήκη νέου</a></li>
               </ul>-->
             </li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><b>ΠΑΙΔΙΑ</b></a>
-              <ul class="dropdown-menu">
+              <a href="history.php"><b>ΙΣΤΟΡΙΚΑ</b></a>
+              <!--<ul class="dropdown-menu">
                 <li><a href="#">Εμφάνιση καταλόγου</a></li>
                 <li><a href="#">Προσθήκη νέου</a></li>
-              </ul>
+              </ul>-->
             </li>
+            <!--
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><b>ΙΣΤΟΡΙΚΑ</b></a>
+              <ul class="dropdown-menu">
+                <li><a href="history.php">Εμφάνιση</a></li>
+                <li><a href="#">Προσθήκη</a></li>
+              </ul>
+            </li>-->
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><b>ΑΣΚΗΣΕΙΣ</b></a>
               <ul class="dropdown-menu">
-                <li><a href="#">Εμφάνιση καταλόγου</a></li>
+                <li><a href="#">Εμφάνιση</a></li>
                 <li><a href="#">Δημιουργία νέου</a></li>
               </ul>
             </li>
@@ -130,7 +148,7 @@
               <b>Μαρία Ιακώβου</b><span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="#"> <span class="glyphicon glyphicon-log-out"></span> Ρυθμίσεις</a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-cog"></span> Έξοδος</a></li>
+                <li><a href="login.php"><span class="glyphicon glyphicon-cog"></span> Έξοδος</a></li>
               </ul>
             </li>
           </ul>

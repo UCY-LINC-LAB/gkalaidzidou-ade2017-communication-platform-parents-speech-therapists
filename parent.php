@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>logoucon | home</title>
+  <title>logoucon | members</title>
   <link rel="icon" type="image/png" href="img/logo.png">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -88,20 +88,37 @@
   }
 }
 
+td{
+    height: 70px;
+    vertical-align: middle;   }
+
+
+.btn-clr1{
+    background-color: #098680;
+    color:white;
+}
+
+body{
+  background-image: url("img/ww.jpg");'
+  background-repeat:no-repeat;
+  background-size:100% 100vh;
+}
+
+/*pagination*/
+.pagination>li>a, 
+.pagination>li>span { 
+  border-radius: 50% !important;
+  margin: 0 5px;
+  color: black;}
+
 </style>
 <body>
   <?php include_once('navbar.php');?>
 
 
 <div class="container">
-  <div class="row">
-    <div class="col-md-12">
-        <h4>Λίστα εγγεγραμμένων</h4>
-        <hr>
-    </div>
-  </div>
 
-    <div class="row" style="margin-bottom: 30px; margin-top: 10px;">
+    <div class="row" style="margin-bottom: 50px; margin-top: 30px;" >
         <div class="col-md-6">
             <form action="#" method="get">
                 <div class="input-group">
@@ -114,9 +131,10 @@
             </form>
         </div>
 
-        <div class="col-md-6">
-          <button type="button" class="btn btn-default btn-responsive" data-toggle="modal" data-target="#add"><span class="glyphicon glyphicon-plus"></span> Προσθήκη</button>
-        </div>          
+        <div class="col-md-2">
+          <button type="button" class="btn btn-default btn-responsive" data-toggle="modal" data-target="#add" style=""><span class="glyphicon glyphicon-plus"></span> Προσθήκη</button>
+        </div>  
+         
     </div>
 
     <div class="row">    
@@ -132,11 +150,12 @@
                   <th>Ημερομηνία Εγγραφής</th>
                   <th>Αριθμός Επισκέψεων</th>
                   <th></th>
-                  
+                  <th></th>
+                  <th></th>
               </tr>
           </thead>
           <tbody>
-              <tr>
+              <tr >
                   <td><img style='height: 20px; width: 20px;' class="img-circle" src="img/profile.jpg"></td>
                   <td>Ελευθερία Ιωάννου</td>
                   <td>99652144</td>
@@ -144,7 +163,7 @@
                   <td>example@gmail.com</td>
                   <td>12/09/09</td>
                   <td>12</td>
-                   <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+                   <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-clr1 btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
                   <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
                   <td>
                   <a id="invite" onclick="invited()">Προσκάλεσε</a>
@@ -159,7 +178,7 @@
                   <td>example@gmail.com</td>
                   <td>12/09/09</td>
                    <td>10</td>
-                  <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+                  <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-clr1 btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
                   <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
                   <td>
                   <a id="invite" onclick="invited()">Προσκάλεσε</a>
@@ -167,8 +186,68 @@
                   </td>
 
               </tr>
+              <tr >
+                  <td><img style='height: 20px; width: 20px;' class="img-circle" src="img/profile.jpg"></td>
+                  <td>Ελευθερία Ιωάννου</td>
+                  <td>99652144</td>
+                  <td>--</td>
+                  <td>example@gmail.com</td>
+                  <td>12/09/09</td>
+                  <td>12</td>
+                   <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-clr1 btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+                  <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
+                  <td>
+                  <a id="invite" onclick="invited()">Προσκάλεσε</a>
+                  <p hidden id="invited" style="color:grey;">  <span class="glyphicon glyphicon-ok"> </span> Προσκλήθηκε</p>
+                  </td>
+              </tr>
+              <tr>
+                  <td><img style='height: 20px; width: 20px;' class="img-circle" src="img/profile.jpg"></td>
+                  <td>Ελευθερία Ιωάννου</td>
+                  <td>99652144</td>
+                  <td>Πέτρος Ιωάννου</td>
+                  <td>example@gmail.com</td>
+                  <td>12/09/09</td>
+                   <td>10</td>
+                  <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-clr1 btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+                  <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
+                  <td>
+                  <a id="invite" onclick="invited()">Προσκάλεσε</a>
+                  <p hidden id="invited" style="color:grey;">  <span class="glyphicon glyphicon-ok"> </span> Προσκλήθηκε</p>
+                  </td>
+
+              </tr>
+                            <tr >
+                  <td><img style='height: 20px; width: 20px;' class="img-circle" src="img/profile.jpg"></td>
+                  <td>Ελευθερία Ιωάννου</td>
+                  <td>99652144</td>
+                  <td>--</td>
+                  <td>example@gmail.com</td>
+                  <td>12/09/09</td>
+                  <td>12</td>
+                   <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-clr1 btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+                  <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
+                  <td>
+                  <a id="invite" onclick="invited()">Προσκάλεσε</a>
+                  <p hidden id="invited" style="color:grey;">  <span class="glyphicon glyphicon-ok"> </span> Προσκλήθηκε</p>
+                  </td>
+              </tr>
+
           </tbody>
-      </table>   
+
+      </table>  
+
+            <div class="col-md-4">
+            <ul class="pagination">
+              <li class="disabled"><a href="#">«</a></li>
+              <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+              <li><a href="#">4</a></li>
+              <li><a href="#">5</a></li>
+              <li><a href="#">»</a></li>
+            </ul>
+      </div>
     </div>
   </div>
 </div>
@@ -213,7 +292,7 @@ function invited() {
                     </div>
                 </div>
                 <div class="row">
-                    <label class="col-sm-6" style="margin-bottom: 10px;" for="LName">Όνομα Παιδιού:</label>
+                    <label class="col-sm-6" style="margin-bottom: 10px;" for="LName">Όνομα Κειδεμόνα:</label>
                     <div class="col-sm-6"> 
                         <input type="text"  style="margin-bottom: 10px;" class="form-control"
                         id="Lname" placeholder="" name="lname" required/>  
@@ -260,7 +339,7 @@ function invited() {
                 </div>
             </div>
             <div class="row">
-                <label class="col-sm-6" style="margin-bottom: 10px;" for="LName">Όνομα Παιδιού:</label>
+                <label class="col-sm-6" style="margin-bottom: 10px;" for="LName">Όνομα Κειδεμόνα::</label>
                 <div class="col-sm-6"> 
                     <input type="text"  style="margin-bottom: 10px;" class="form-control"
                     id="Lname" placeholder="" name="lname" required/>  
