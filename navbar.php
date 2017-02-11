@@ -117,7 +117,7 @@
               </ul>-->
             </li>
             <li class="dropdown">
-              <a href="history.php"><b>ΙΣΤΟΡΙΚΑ</b></a>
+              <a href="history_details.php"><b>ΙΣΤΟΡΙΚΑ</b></a>
               <!--<ul class="dropdown-menu">
                 <li><a href="#">Εμφάνιση καταλόγου</a></li>
                 <li><a href="#">Προσθήκη νέου</a></li>

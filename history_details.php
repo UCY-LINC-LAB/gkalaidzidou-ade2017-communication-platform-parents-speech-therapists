@@ -25,85 +25,30 @@
   <!--  jQuery -->
   <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
-  <style type="text/css">
-    .carousel-control.left,.carousel-control.right  {background:none;width:25px;}
-    .carousel-control.left {left:-25px;}
-    .carousel-control.right {right:-25px;}
-    .broun-block {
-        background: grey;
-        padding-bottom: 34px;
-    }
-    .block-text {
-        background-color: #fff;
-        border-radius: 5px;
-        box-shadow: 0 3px 0 #2c2222;
-        color: #626262;
-        font-size: 14px;
-        margin-top: 27px;
-        padding: 15px 18px;
-    }
-    .block-text a {
-        color: #7d4702;
-        font-size: 25px;
-        font-weight: bold;
-        line-height: 10px;
-        text-decoration: none;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    }
-    .mark {
-        padding: 12px 0;background:none;
-    }
-    .block-text p {
-        color: #585858;
-        font-family: Georgia;
-        font-style: italic;
-        line-height: 10px;
-    }
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
-    .sprite-i-triangle {
-        background-position: 0 -1298px;
-        height: 44px;
-        width: 50px;
-    }
-    .block-text ins {
-        bottom: -44px;
-        left: 50%;
-        margin-left: -60px;
-    }
-    .block {
-        display: block;
-    }
-    .zmin {
-        z-index: 1;
-    }
-    .ab {
-        position: absolute;
-    }
-    .person-text {
-        padding: 10px 0 0;
-        text-align: center;
-        z-index: 2;
-    }
-    .person-text a {
-        color: #ffcc00;
-        display: block;
-        font-size: 14px;
-        margin-top: 3px;
-        text-decoration: underline;
-    }
-    .person-text i {
-        color: #fff;
-        font-family: Georgia;
-        font-size: 13px;
-    }
-    .rel {
-        position: relative;
-    }
-    .carousel-inner{
-      width:100%;
-      max-height: 200px !important;
-}
-  </style>
+
+
+
+  <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+
+
+  <script type="text/javascript">
+      tinymce.init({
+      selector: 'textarea',
+      height: 20,
+      menubar: false,
+      plugins: [
+        'advlist autolink lists link image charmap print preview anchor',
+        'searchreplace visualblocks code fullscreen',
+        'insertdatetime media table contextmenu paste code'
+      ],
+      toolbar: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+      content_css: '//www.tinymce.com/css/codepen.min.css'
+    });
+  </script>
+
+
 </head>
 
 <script type="text/javascript">
@@ -240,8 +185,8 @@ var d2 = [[1262304000000, 6], [1264982400000, 7], [1267401600000, 12], [12700800
 var d3 = [[1262304000000, 11], [1264982400000, 13], [1267401600000, 16], [1270080000000, 18], [1272672000000, 22], [1275350400000, 28], [1277942400000, 33], [1280620800000, 32], [1283299200000, 28], [1285891200000, 21], [1288569600000, 15], [1291161600000, 11]];
 
 var data1 = [
-    {label: "Προσοχή",  data: d1, points: { symbol: "circle", fillColor: "#058DC7" }, color: '#058DC7'},
-    {label: "Απόδοση",  data: d2, points: { symbol: "diamond", fillColor: "#AA4643" }, color: '#AA4643'},
+    {label: "",  data: d1, points: { symbol: "circle", fillColor: "#058DC7" }, color: '#058DC7'},
+    {label: "",  data: d2, points: { symbol: "diamond", fillColor: "#AA4643" }, color: '#AA4643'},
     {label: "",  data: d3, points: { symbol: "square", fillColor: "#50B432" }, color: '#50B432'}
 ];
  
@@ -334,114 +279,298 @@ $(document).ready(function () {
 });
 </script>
 
+<style type="text/css">
+.carousel-indicators-numbers li {
+  text-indent: 0;
+  margin: 0 2px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 100%;
+  line-height: 30px;
+  color: #fff;
+  background-color: #999;
+  -webkit-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+}
+.carousel-indicators-numbers li.active, .carousel-indicators-numbers li:hover {
+  margin: 0 2px;
+  width: 30px;
+  height: 30px;
+  background-color: #337ab7;
+}
+/* carousel */
+#quote-carousel 
+{
+  padding: 0 10px 30px 10px;
+  margin-top: 30px;
+}
 
-<!--carousel script-->
-<script type="text/javascript">
+/* Control buttons  */
+#quote-carousel .carousel-control
+{
+  background: none;
+  color: #222;
+  font-size: 2.3em;
+  text-shadow: none;
+  margin-top: 30px;
+}
+/* Previous button  */
+#quote-carousel .carousel-control.left 
+{
+  left: -50px;
+}
+/* Next button  */
+#quote-carousel .carousel-control.right 
+{
+  right: -50px !important;
+}
+/* Changes the position of the indicators */
+#quote-carousel .carousel-indicators 
+{
+  right: 50%;
+  top: auto;
+  bottom: 0px;
+  margin-right: -19px;
+}
+/* Changes the color of the indicators */
+#quote-carousel .carousel-indicators li 
+{
+  background: #c0c0c0;
+}
+#quote-carousel .carousel-indicators .active 
+{
+  background: #333333;
+}
+#quote-carousel img
+{
+  width: 250px;
+  height: 100px
+}
+/* End carousel */
 
-</script>
+.item blockquote {
+    border-left: none; 
+    margin: 0;
+}
+
+.item blockquote img {
+    margin-bottom: 10px;
+}
+
+.item blockquote p:before {
+    content: "\f10d";
+    font-family: 'Fontawesome';
+    float: left;
+    margin-right: 10px;
+}
+
+
+
+/**
+  MEDIA QUERIES
+*/
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) { 
+    #quote-carousel 
+    {
+      margin-bottom: 0;
+      padding: 0 40px 30px 40px;
+    }
+    
+}
+
+/* Small devices (tablets, up to 768px) */
+@media (max-width: 768px) { 
+    
+    /* Make the indicators larger for easier clicking with fingers/thumb on mobile */
+    
+    #quote-carousel .carousel-indicators {
+        bottom: -20px !important;  
+    }
+    #quote-carousel .carousel-indicators li {
+        display: inline-block;
+        margin: 0px 5px;
+        width: 15px;
+        height: 15px;
+    }
+    #quote-carousel .carousel-indicators li.active {
+        margin: 0px 5px;
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.glyphicon {
+    font-size: 15px;
+}
+
+div.polaroid {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+</style>
+
+
+
 <body>
   <?php include_once('navbar.php');?>
 
-  <div class="container">
+  <div class="container" style="margin-top: 40px;">
     <div class="row">
       <div class="col-sm-2">
+       <img style='height: 20px; width: 20px;' src="img/profile.jpg"><b>  Ηλίας Χρίστου</b>
         <nav class="nav-sidebar">
             <ul class="nav tabs">
-              <li class="active"><a href="#tab1" data-toggle="tab">Γραφική Προόδου</a></li>
-              <li class=""><a href="#tab2" data-toggle="tab">Ιστορικό</a></li>
-              <li class=""><a href="#tab3" data-toggle="tab">Θεραπευτική Προσέγγιση</a></li>
-              <li class=""><a href="#tab3" data-toggle="tab">Ασκήσεις</a></li>                                
+              <li class="active"><a href="#graph" data-toggle="tab">Γραφική Προόδου</a></li>
+              <li class=""><a href="#history" data-toggle="tab">Ιστορικό</a></li>
+              <li class=""><a href="#therapy" data-toggle="tab">Θεραπεία & Διάγνωση</a></li>
+              <li class=""><a href="#exercises" data-toggle="tab">Ασκήσεις Σπιτιού</a></li>                                
             </ul>
         </nav>
       </div>
-      <div class="col-sm-10" id="placeholder" style="margin-left: 50px;"></div>
+      <div class="col-sm-10">
+        <div class="tab-content">
+          <div class="tab-pane active" id="graph" role="tabpanel">
+            <div id="placeholder"></div>
+            <div class="container" style="margin-top: 20px;">
+              <div class='col-md-10'>
+                <div class="carousel slide " data-ride="carousel" id="quote-carousel" data-interval="false">
+                  <!-- Bottom Carousel Indicators -->
+                  <ol class="carousel-indicators carousel-indicators-numbers">
+                    <li data-target="#quote-carousel" data-slide-to="0" class="active">1</li>
+                    <li data-target="#quote-carousel" data-slide-to="1">2</li>
+                    <li data-target="#quote-carousel" data-slide-to="2">3</li>
+                  </ol>
+                  
+                  <!-- Carousel Slides / Quotes -->
+                  <div class="carousel-inner polaroid" >
+                    <!-- Quote 1 -->
+                    <div class="item">
+                        <div class="row text-center"><h4> 12/02/2017</h4></div>
+                        <div class="row" style="margin-bottom: 20px;">
+                          <div class="col-sm-3 text-center">
+                           <div style="color:#058DC7; "><span><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star"></span><span data-value="3" class="glyphicon glyphicon-star"></span><span data-value="5" class="glyphicon glyphicon-star-empty"></span></span></div>
+                           <div style="color:#AA4643;"><span><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star"></span><span data-value="3" class="glyphicon glyphicon-star"></span><span data-value="5" class="glyphicon glyphicon-star-empty"></span></span></div>
+                           <div style="color:#50B432;"><span><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star"></span><span data-value="3" class="glyphicon glyphicon-star"></span><span data-value="5" class="glyphicon glyphicon-star-empty"></span></span></div>
+                          </div>
+                          <div class="col-sm-9">
+                            <p><span class="glyphicon glyphicon-pencil"></span><b> Στόχος: </b>Εξάσκηση του γράμματος ξ.</p>
+                            <hr>
+                            <p><span class="glyphicon glyphicon-comment"></span><b> Σχόλια:</b> Πολυ καλύτερα συγκριτικά με την προηγούμενη εβδομάδα.</p>
+                          </div>
+                        </div>
+                    </div>
+                    <!-- Quote 2 -->
+                    <div class="item active">
+                        <div class="row text-center" style=" " ><h4> 12/02/2017</h4></div>
+                        <div class="row" style="margin-bottom: 20px;">
+                          <div class="col-sm-3 text-center">
+                           <div style="color:#058DC7; "><span><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star"></span><span data-value="3" class="glyphicon glyphicon-star"></span><span data-value="5" class="glyphicon glyphicon-star-empty"></span></span></div>
+                           <div style="color:#AA4643;"><span><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star"></span><span data-value="3" class="glyphicon glyphicon-star"></span><span data-value="5" class="glyphicon glyphicon-star-empty"></span></span></div>
+                           <div style="color:#50B432;"><span><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star"></span><span data-value="3" class="glyphicon glyphicon-star"></span><span data-value="5" class="glyphicon glyphicon-star-empty"></span></span></div>
+                          </div>
+                          <div class="col-sm-9">
+                            <p><span class="glyphicon glyphicon-pencil"></span><b> Στόχος: </b>Εξάσκηση του γράμματος ξ.</p>
+                            <hr>
+                            <p><span class="glyphicon glyphicon-comment"></span><b> Σχόλια:</b> Πολυ καλύτερα συγκριτικά με την προηγούμενη εβδομάδα.</p>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Carousel Buttons Next/Prev -->
+                  <a data-slide="prev" href="#quote-carousel" class="left carousel-control" style="color:#098680;"><i class="fa fa-chevron-left"></i></a>
+                  <a data-slide="next" href="#quote-carousel" class="right carousel-control" style="color:#098680;"><i class="fa fa-chevron-right"></i></a>
+                </div>                          
+              </div>
+            </div>
+          </div><!--tab graph-->
+          <div class="tab-pane" id="history" role="tabpanel">
+            <form action="form_handler.php" method="post">
+              <div class="row">
+              <h4>Για δική μου χρήση</h4>
+                <textarea cols="80" rows="10" id="content" name="content"> 
+                </textarea>
+                <div class="col-sm-12" style="">
+                    <input class= "btn pull-right" type="submit" value="Αποθήκευση" style="background-color:#E2CB35; margin-top: 10px;" />
+                </div>
+
+              </div>
+            </form>
+            <div class="row" style="margin-bottom: 10px;">
+              <h4>Για τον γονέα</h4>
+              <textarea cols="80" rows="10" id="content" name="content"> 
+              </textarea>
+              <div class="col-sm-12" style="">
+                  <input class= "btn pull-right" type="submit" value="Αποθήκευση" style="background-color:#E2CB35; margin-top: 10px;" />
+              </div>
+            </div>
+          </div><!--tab history-->
+          <div class="tab-pane" id="therapy" role="tabpanel">
+            <form action="form_handler.php" method="post">
+              <div class="row">
+              <h4>Για δική μου χρήση</h4>
+                <textarea cols="80" rows="10" id="content" name="content"> 
+                </textarea>
+                <div class="col-sm-12" style="">
+                    <input class= "btn pull-right" type="submit" value="Αποθήκευση" style="background-color:#E2CB35; margin-top: 10px;" />
+                </div>
+
+              </div>
+            </form>
+            <div class="row" style="margin-bottom: 10px;">
+              <h4>Για τον γονέα</h4>
+              <textarea cols="80" rows="10" id="content" name="content"> 
+              </textarea>
+              <div class="col-sm-12" style="">
+                  <input class= "btn pull-right" type="submit" value="Αποθήκευση" style="background-color:#E2CB35; margin-top: 10px;" />
+              </div>
+            </div>
+          </div><!--tab therapy-->
+          <div class="tab-pane" id="exercises" role="tabpanel">
+            <div table-responsive">
+             <table class="table table-list-search table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Τίτλος Άσκησης</th>
+                        <th>Ημερομηνία Καταχώρησης</th>
+                        <th>Αριθμός Επαναλήψεων</th>
+                        <th>Σχόλια Κηδεμόνα</th>
+                        <th></th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Γράμμα Ξ</td>
+                      <td>12/09/09</td>
+                      <td>4</td>
+                      <td>--</td>
+                      <td><a href="history_details.php" class="btn btn-default btn-xs btn-clr2">Προβολή</a></td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Γράμμα Σ</td>
+                      <td>12/09/09</td>
+                      <td>4</td>
+                      <td>--</td>
+                      <td><a href="history_details.php" class="btn btn-default btn-xs btn-clr2">Προβολή</a></td>
+                    </tr>
+                </tbody>
+            </table>   
+          </div>
+          </div><!--tab exercises-->
+        </div>
+        
+      </div>
     </div>
 
-      <div class="carousel-reviews broun-block ">
-        <div class="container">
-          <div class="row">
-              <div id="carousel-reviews" class="carousel slide" data-interval="false" data-ride="carousel">
-                  <div class="carousel-inner">
-                      <div class="item active">
-                          <div class="col-md-3 col-sm-6">
-                              <div class="block-text rel zmin">
-                                  <div class="mark">My rating: <span class="rating-input"><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star"></span><span data-value="3" class="glyphicon glyphicon-star"></span><span data-value="5" class="glyphicon glyphicon-star-empty"></span>  </span></div>
-                                  <p>Never </p>
-                              </div>
-                          </div>
-                          <div class="col-md-3 col-sm-6 hidden-xs">
-                              <div class="block-text rel zmin">
-                                  <a title="" href="#">The Purge: Anarchy</a>
-                                  <div class="mark">My rating: <span class="rating-input"><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star-empty"></span><span data-value="3" class="glyphicon glyphicon-star-empty"></span><span data-value="4" class="glyphicon glyphicon-star-empty"></span><span data-value="5" class="glyphicon glyphicon-star-empty"></span>  </span></div>
-                                  <p>The</p>
-                              </div>
-                          </div>
-                          <div class="col-md-4 col-sm-6 hidden-sm hidden-xs">
-                              <div class="block-text rel zmin">
-                                  <a title="" href="#">Planes: Fire & Rescue</a>
-                                  <div class="mark">My rating: <span class="rating-input"><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star"></span><span data-value="3" class="glyphicon glyphicon-star"></span><span data-value="4" class="glyphicon glyphicon-star"></span><span data-value="5" class="glyphicon glyphicon-star"></span>  </span></div>
-                                  <p>What</p>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="item">
-                          <div class="col-md-4 col-sm-6">
-                              <div class="block-text rel zmin">
-                                  <a title="" href="#">Hercules</a>
-                                  <div class="mark">My rating: <span class="rating-input"><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star"></span><span data-value="3" class="glyphicon glyphicon-star"></span><span data-value="4" class="glyphicon glyphicon-star-empty"></span><span data-value="5" class="glyphicon glyphicon-star-empty"></span>  </span></div>
-                                  <p>Never</p>
-                              </div>
-                          </div>
-                          <div class="col-md-4 col-sm-6 hidden-xs">
-                              <div class="block-text rel zmin">
-                                  <a title="" href="#">The Purge: Anarchy</a>
-                                  <div class="mark">My rating: <span class="rating-input"><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star-empty"></span><span data-value="3" class="glyphicon glyphicon-star-empty"></span><span data-value="4" class="glyphicon glyphicon-star-empty"></span><span data-value="5" class="glyphicon glyphicon-star-empty"></span>  </span></div>
-                                  <p>The </p>
-                              </div>
-                          </div>
-                          <div class="col-md-4 col-sm-6 hidden-sm hidden-xs">
-                              <div class="block-text rel zmin">
-                                  <a title="" href="#">Planes: Fire & Rescue</a>
-                                  <div class="mark">My rating: <span class="rating-input"><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star"></span><span data-value="3" class="glyphicon glyphicon-star"></span><span data-value="4" class="glyphicon glyphicon-star"></span><span data-value="5" class="glyphicon glyphicon-star"></span>  </span></div>
-                                  <p>What</p>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="item">
-                          <div class="col-md-4 col-sm-6">
-                              <div class="block-text rel zmin">
-                                  <a title="" href="#">Hercules</a>
-                                  <div class="mark">My rating: <span class="rating-input"><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star"></span><span data-value="3" class="glyphicon glyphicon-star"></span><span data-value="4" class="glyphicon glyphicon-star-empty"></span><span data-value="5" class="glyphicon glyphicon-star-empty"></span>  </span></div>
-                                  <p>Never</p>
-                              </div>
-                          </div>
-                          <div class="col-md-4 col-sm-6 hidden-xs">
-                              <div class="block-text rel zmin">
-                                  <a title="" href="#">The Purge: Anarchy</a>
-                                  <div class="mark">My rating: <span class="rating-input"><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star-empty"></span><span data-value="3" class="glyphicon glyphicon-star-empty"></span><span data-value="4" class="glyphicon glyphicon-star-empty"></span><span data-value="5" class="glyphicon glyphicon-star-empty"></span>  </span></div>
-                                  <p>The</p>
-                              </div>
-
-                          </div>
-                          <div class="col-md-4 col-sm-6 hidden-sm hidden-xs">
-                              <div class="block-text rel zmin">
-                                  <a title="" href="#">Planes: Fire & Rescue</a>
-                                  <div class="mark">My rating: <span class="rating-input"><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star"></span><span data-value="3" class="glyphicon glyphicon-star"></span><span data-value="4" class="glyphicon glyphicon-star"></span><span data-value="5" class="glyphicon glyphicon-star"></span>  </span></div>
-                                  <p>What</p> 
-                              </div>
-                          </div>
-                      </div>                    
-                  </div>
-                  <a class="left carousel-control" href="#carousel-reviews" role="button" data-slide="prev">
-                      <span class="glyphicon glyphicon-chevron-left"></span>
-                  </a>
-                  <a class="right carousel-control" href="#carousel-reviews" role="button" data-slide="next">
-                      <span class="glyphicon glyphicon-chevron-right"></span>
-                  </a>
-              </div>
-          </div>
-        </div>
-      </div>
   </div>
+
+
 </body>
 </html>
