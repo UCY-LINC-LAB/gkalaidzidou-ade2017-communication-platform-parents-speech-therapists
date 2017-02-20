@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
- 
+
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
 <style>
 .navbar {
   background-color: #ebebeb !important; 
@@ -79,24 +81,10 @@
   }
 } 
 </style>
-<script >
-  $('.navbar-nav li').click(function(e) {
-    alert(5);
-    $('.navbar-nav li.active').removeClass('active');
-    var $this = $(this);
-
-    if (!$this.hasClass('active')) {
-        $this.addClass('active');
-
-    }
-    e.preventDefault();
-});
-</script>
-
 </head>
 
 <body>
-<nav class="navbar navbar-default">
+<div class="navbar navbar-default" role="navigation">
       <div class="container">
         <div class="navbar-header" style="margin-right: 10px;">
           <!--<a href=""><img style="height:65px; width: 130px;" src="img/logo.png" style=""></a>-->
@@ -107,17 +95,16 @@
             <span class="icon-bar"></span>
           </button>
         </div>
-        <div id="navbar" class="collapse navbar-collapse" >
+        <div id="navbar" class="navbar-collapse collapse" >
           <ul class="nav navbar-nav">
-            <li ><a href="home.php"><b>ΗΜΕΡΟΛΟΓΙΟ</b></a></li>
+            <li class="active" ><a href="home.php"><b>ΗΜΕΡΟΛΟΓΙΟ</b></a></li>
             <li ><a href="parent.php"><b>ΕΓΓΕΓΡΑΜΜΕΝΟΙ</b></a>
               <!--<ul class="dropdown-menu">
                 <li><a href="#">Εμφάνιση καταλόγου</a></li>
                 <li><a href="#">Προσθήκη νέου</a></li>
               </ul>-->
             </li>
-            <li class="dropdown">
-              <a href="history_details.php"><b>ΙΣΤΟΡΙΚΑ</b></a>
+            <li> <a href="history_details.php"><b>ΙΣΤΟΡΙΚΑ</b></a>
               <!--<ul class="dropdown-menu">
                 <li><a href="#">Εμφάνιση καταλόγου</a></li>
                 <li><a href="#">Προσθήκη νέου</a></li>
@@ -154,6 +141,19 @@
           </ul>
         </div>
       </div>
-    </nav>
+    </div>
+
+    <!--script for active item in navbar-->
+    <script >
+      $(document).ready(function() {
+          // -----------------------------------------------------------------------
+          $.each($('#navbar').find('li'), function() {
+              $(this).toggleClass('active', 
+                  window.location.pathname.indexOf($(this).find('a').attr('href')) > -1);
+          }); 
+          // -----------------------------------------------------------------------
+      });
+    </script>
+    
 </body>
 </html>

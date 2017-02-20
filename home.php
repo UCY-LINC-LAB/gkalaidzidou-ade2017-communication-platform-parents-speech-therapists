@@ -5,16 +5,33 @@
   <link rel="icon" type="image/png" href="img/logo.png">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+
 
   <link rel='stylesheet' href='fullcalendar/fullcalendar.css' />
   <script src='fullcalendar/lib/jquery.min.js'></script>
   <script src='fullcalendar/lib/moment.min.js'></script>
   <script src='fullcalendar/fullcalendar.js'></script>
+  <script src='fullcalendar/locale-all.js'></script>
+
+
 
   <script type="text/javascript">
+
+
+
+
+
+
     $(document).ready(function() {
 
     // page is now ready, initialize the calendar...
@@ -22,18 +39,41 @@
         // put your options and callbacks here
         weekends: true, // will hide Saturdays and Sundays
         fixedWeekCount: false,
-        dayClick: function() {
-        alert('a day has been clicked!');
-    },
+        dayClick: function(date, jsEvent, view) {
+            $('#myModal').modal('show');
+          },eventClick:  function(event, jsEvent, view) {
+            $('#modalTitle').html(event.title);
+            $('#modalBody').html(event.description);
+            $('#eventUrl').attr('href',event.url);
+            $('#calendarModal').modal();
+        },
      header: {
       left: 'prev,next today',
       center: 'title',
       right: 'month,agendaWeek,agendaDay'
     },
     windowResize: function(view) {
-    }
+    },
+     locale: 'el',
+    
+    events: [
+        {
+            title: 'My Event',
+            start: '2017-02-19'
+           // url: 'http://google.com/'
+        }
+        // other events here
+    ]
    })
+
+
+
 });
+
+    var myevent = {title: 'All Day Event',start: new Date(2017, 02, 12)};
+$('.calendar').fullCalendar( 'renderEvent', myevent, true);
+
+
   </script>
 
   <style>
@@ -92,16 +132,36 @@
 </head>
 
 <body>
-  <?php include_once('navbar.php');?>
+ <!-- <?php //include_once('navbar.php');?>-->
 
   <div class="container">
 
     <div id="calendar" class="left">
     </div>
-    <!--<button type="button" class="btn btn-warning btn-circle" data-toggle="modal" data-target="#myModal" style="margin-top: 70px;"><i class="glyphicon glyphicon-plus"></i>Δημιουργία</button>-->
+    <button id="ok" type="button" class="btn btn-warning btn-circle" data-toggle="modal" data-target="#myModal" style="margin-top: 70px;"><i class="glyphicon glyphicon-plus"></i>Δημιουργία</button>
+
+
+<div id="fullCalModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                <h4 id="modalTitle" class="modal-title"></h4>
+            </div>
+            <div id="modalBody" class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button class="btn btn-primary"><a id="eventUrl" target="_blank">Event Page</a></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
     <!-- Modal -->
-    <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal fade" id="myModal2" role="dialog">
       <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">

@@ -15,6 +15,20 @@ if($_SESSION["add"]=="unsuccess"){
 
 ?>
 
+
+<!--
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
+<link rel='stylesheet' href='fullcalendar-3.2.0/fullcalendar.css' />
+<script src='fullcalendar-3.2.0/lib/jquery.min.js'></script>
+<script src='fullcalendar-3.2.0/lib/moment.min.js'></script>
+<script src='fullcalendar-3.2.0/fullcalendar.js'></script>
+<script src='fullcalendar-3.2.0/locale-all.js'></script>-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -83,6 +97,7 @@ if($_SESSION["add"]=="unsuccess"){
             max-height: 500px;
             width: auto;
 }
+
     </style>
 </head>
 
