@@ -7,8 +7,9 @@ $fkname = $_POST['fkname'];
 $lkname = $_POST['lkname'];
 $email = $_POST['email'];
 $telephone = $_POST['telephone'];
+$patient_id = $_POST['id'];
 
-$update_patient =  "UPDATE patient set first_name='$fpname' ,last_name='$lpname' ,parent_fname='$fkname' , parent_lname='$lkname' , telephone='$telephone',email='$email' where patient_id='4'";
+$update_patient =  "UPDATE patient set first_name='$fpname' ,last_name='$lpname' ,parent_fname='$fkname' , parent_lname='$lkname' , telephone='$telephone',email='$email' where patient_id='$patient_id'";
 
 $update = mysqli_query($conn, $update_patient);
    

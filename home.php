@@ -1,3 +1,14 @@
+<?php
+include 'core/init.php';
+session_start(); 
+
+//if ( $_SESSION['logged_in'] != true){
+ // header('Location: e-login.php');
+//}
+
+$therapist_id='1';//$_SESSION["user_ID"];
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,16 +17,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
-  <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js" ></script>
 
   <link rel='stylesheet' href='fullcalendar/fullcalendar.css' />
   <script src='fullcalendar/lib/jquery.min.js'></script>
@@ -24,57 +31,19 @@
   <script src='fullcalendar/locale-all.js'></script>
 
 
+  <!-- Bootstrap Date-Picker Plugin -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 
-  <script type="text/javascript">
+  <!-- Bootstrap Time-Picker Plugin -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
 
-
-
-
-
-
-    $(document).ready(function() {
-
-    // page is now ready, initialize the calendar...
-    $('#calendar').fullCalendar({
-        // put your options and callbacks here
-        weekends: true, // will hide Saturdays and Sundays
-        fixedWeekCount: false,
-        dayClick: function(date, jsEvent, view) {
-            $('#myModal').modal('show');
-          },eventClick:  function(event, jsEvent, view) {
-            $('#modalTitle').html(event.title);
-            $('#modalBody').html(event.description);
-            $('#eventUrl').attr('href',event.url);
-            $('#calendarModal').modal();
-        },
-     header: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'month,agendaWeek,agendaDay'
-    },
-    windowResize: function(view) {
-    },
-     locale: 'el',
-    
-    events: [
-        {
-            title: 'My Event',
-            start: '2017-02-19'
-           // url: 'http://google.com/'
-        }
-        // other events here
-    ]
-   })
-
-
-
-});
-
-    var myevent = {title: 'All Day Event',start: new Date(2017, 02, 12)};
-$('.calendar').fullCalendar( 'renderEvent', myevent, true);
-
-
-  </script>
+  <!--Search and select option in modal-->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
+  <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
 
   <style>
     /*split*/
@@ -112,8 +81,6 @@ $('.calendar').fullCalendar( 'renderEvent', myevent, true);
     -moz-box-shadow: 0px 1px 3px #000;
 }
 
-
-
 .stickyNote h1{
   font-size: 100px;
   font-family: GoodDogRegular, Helvetica, sans-serif;
@@ -126,78 +93,17 @@ $('.calendar').fullCalendar( 'renderEvent', myevent, true);
   margin: 10px 0 10px 0;
   width: 280px;
 }
+
+
+
   </style>
-
-
 </head>
 
 <body>
- <!-- <?php //include_once('navbar.php');?>-->
+  <?php include_once('navbar.php');?>
 
   <div class="container">
-
-    <div id="calendar" class="left">
-    </div>
-    <button id="ok" type="button" class="btn btn-warning btn-circle" data-toggle="modal" data-target="#myModal" style="margin-top: 70px;"><i class="glyphicon glyphicon-plus"></i>Δημιουργία</button>
-
-
-<div id="fullCalModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
-                <h4 id="modalTitle" class="modal-title"></h4>
-            </div>
-            <div id="modalBody" class="modal-body"></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button class="btn btn-primary"><a id="eventUrl" target="_blank">Event Page</a></button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-    <!-- Modal -->
-    <div class="modal fade" id="myModal2" role="dialog">
-      <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Προσθήκη Συνεδρίας</h4>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="row">
-                  <div class="col-sm-4">  <label style="margin-top: 10px;" for="date">Ημερομηνία: </label></div>
-                  <div class="col-sm-8"> 
-                      <input class="form-control" style="margin-bottom: 10px;" id="date" name="date" placeholder="" type="text" required/>
-                  </div>
-              </div>
-              <div class="row">
-                  <div class="col-sm-4">  <label style="margin-top: 10px;" for="date">Ώρα: </label></div>
-                  <div class="col-sm-8"> 
-                      <input class="form-control" style="margin-bottom: 10px;" id="time" name="date" placeholder="" type="text" required/>
-                  </div>
-              </div>
-              <div class="row">
-                  <div class="col-sm-4">  <label style="margin-top: 10px;" for="date">Περιγραφή: </label></div>
-                  <div class="col-sm-8"> 
-                      <input class="form-control" style="margin-bottom: 10px;" id="comment" name="date" placeholder="" type="text" required/>
-                  </div>
-              </div>
-          </form>
-        </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <input type="submit" class="btn btn-primary" value="Προσθήκη" style="float: right;">
-          </div>
-        </div>
-      </div>
-    </div> <!--Modal end-->
+    <div id="calendar" class="left"></div>
 <!--
     <div class="right">
 
@@ -213,7 +119,181 @@ $('.calendar').fullCalendar( 'renderEvent', myevent, true);
     </div>
   </div>
 -->
-
   </div><!--container end-->
 </body>
 </html>
+
+ <script type="text/javascript">
+
+    $(document).ready(function() {
+
+    // page is now ready, initialize the calendar...
+    $('#calendar').fullCalendar({
+        weekends: true, // will hide Saturdays and Sundays
+        fixedWeekCount: false,
+
+        dayClick: function(date, allDay, jsEvent, view) {
+            var modal =  bootbox.dialog(
+            {
+                title: "Προσθήκη συνεδρίας",
+                message: '<div class="row"> ' +
+                         '<div class="col-md-12"> ' +
+                         '<form id="addConf" action="core/add_conference.php" method="POST"  class="form-horizontal"> ' +
+
+                         '<div class="form-group"> ' +
+                         '<label class="col-md-4 control-label">Ημερομηνία</label> ' +
+                         '<div class="col-md-6 "> ' +
+                         '<input id="date" name="date" type="text" value="' + date.format('DD/MM/YYYY')+' " class="form-control input-md datepicker"> ' +
+                         '</div> ' +
+                         '</div> ' +
+
+                         '<div class="form-group"> ' +
+                         '<label class="col-md-4 control-label" for="name" >Ώρα</label> ' +
+
+                         '<div class="col-md-2 input-group bootstrap-timepicker timepicker" style="width=100%; float:left; margin-left: 16px;"> ' +
+                         '<input id="timepicker1" name="startTime" type="text" class="form-control input-small" >' +
+                         '<span class="input-group-addon" ><i class="glyphicon glyphicon-time"></i></span>' +
+                         '</div> ' +
+                         '<label class="col-md-1 control-label"> εώς </label> ' +
+
+                         '<div class=" col-md-2 input-group bootstrap-timepicker timepicker"  style="width=100%; float:left" >' +
+                         '<input id="timepicker2" name="endTime" type="text" class="form-control input-small" >' +
+                         '<span class="input-group-addon" ><i class="glyphicon glyphicon-time"></i></span>' +
+                         '</div> ' +
+                         '</div> ' +
+
+                         '<div class="form-group"> ' +
+                         '<label class="col-md-4 control-label">Περιγραφή στόχου</label> ' +
+                         '<div class="col-md-6"> ' +
+                         '<textarea rows="4" cols="50" placeholder="Γράψε κάτι" class="form-control" name="targetDescription"></textarea> ' +
+                         '</div> ' +
+                         '</div> ' +
+
+                         '<div class="form-group"> ' +
+                         '<label class="col-md-4 control-label" for="">Όνομα ασθενή</label> ' +
+
+                         '<div class="col-md-6">' +
+                         ' <select name="patient" class="selectpicker" data-show-subtext="true" data-live-search="true"> ' +
+
+                          <?php 
+                           $patient_list = mysqli_query($conn,"SELECT  distinct * FROM patient patList where patList.therapist_id='".$therapist_id."' ");
+
+                          if (!$patient_list) { // add this check.
+                              die('Invalid query: ' . mysql_error());
+                          }
+                          while ($list = mysqli_fetch_array($patient_list)) { ?>
+                         '<option data-subtext="<?php echo $list['parent_fname']." ".$list['parent_lname']?>" value="<?php echo $list['patient_id']?>" ><?php echo $list['first_name']." ".$list['last_name']?></option>' +
+                         <?php } ?>
+                         '</select>' +
+                         '</div> ' +
+                         
+                         '</form> </div> </div>',
+                buttons: {
+                    success: {
+                        label: "Αποθήκευση",
+                        className: "btn-success",
+                        callback: function () {
+                          $("#addConf").submit();
+                            this.close();
+                        }
+                    }
+                }
+            });
+
+            $(".datepicker").datepicker();
+            $('#timepicker1').timepicker(); 
+            $('#timepicker2').timepicker(); 
+            $('.selectpicker').selectpicker();
+         
+        modal.modal("show");
+        },  eventClick: function(calEvent, jsEvent, view) {
+
+             var viewConfe =  bootbox.dialog(
+            {
+                title: "Προβολή συνεδρίας",
+                message: '<div class="row"> ' +
+                         '<div class="col-md-12"> ' +
+                         '<form id="editConf" action="core/edit_conference.php" method="POST" class="form-horizontal"> ' +
+
+                         '<div class="form-group"> ' +
+                         '<label class="col-md-2 control-label">Πότε</label> ' +
+                         '<div class="col-md-10 "> ' +
+                         '<label class="col-md-6 control-label" style=" font-weight: normal">'+ moment(calEvent.start).format('MMMM Do YYYY,h:mm') + ' - '+ moment(calEvent.end).format('h:mm a') + '</label> ' +  
+                         '</div> ' +
+                         '</div> ' +
+
+                         '<div class="form-group"> ' +
+                         '<label class="col-md-4 control-label">Ημερομηνία</label> ' +
+                         '<div class="col-md-6 "> ' +
+                         '<label class="col-md-6 control-label" style=" font-weight: normal">'+ calEvent.title +'</label> ' +  
+                         '</div> ' +
+                         '</div> ' +
+
+                         '</form> </div> </div>',
+                buttons: {
+                    success: {
+                        label: "Τροποποίηση",
+                        className: "btn-success",
+                        callback: function () {
+                          $("#addConf").submit();
+                            this.close();
+                        }
+                    },
+                            confirm: {
+            label: '<i class="fa fa-check"></i> Διαγραφή'
+        }
+                }
+            });
+        viewConfe.modal("show");
+        },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        header: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'month,agendaWeek,agendaDay'
+        },
+        windowResize: function(view) {},
+        locale: 'el',
+        
+        events: [
+          
+
+            <?php 
+             $conferences_list = mysqli_query($conn,"SELECT  distinct * FROM conference confList where confList.therapist_id='".$therapist_id."' ");
+
+            if (!$conferences_list) { // add this check.
+                die('Invalid query: ' . mysql_error());
+            }
+            while ($list = mysqli_fetch_array($conferences_list)) {  ?>            
+           {
+            title: 'My Event',
+            start:'<?php echo $list['conference_date']." ".$list['start_time']?>',
+            end:'<?php echo $list['conference_date']." ".$list['end_time']?>'
+             // url: 'http://google.com/'
+          },
+          <?php } ?>
+          // other events here
+          ]
+       })
+
+
+    });
+
+  </script>
+
+
+
+   

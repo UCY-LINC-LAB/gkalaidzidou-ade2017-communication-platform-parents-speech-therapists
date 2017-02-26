@@ -174,19 +174,21 @@ $therapist_id='6';//$_SESSION["user_ID"];
                 <td><?php echo $list['registration_date']?></td>
                 <td>12</td>
 
-                <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-clr1 btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" 
-                onclick="showModal('data')" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+                <td><p data-placement="top" data-toggle="tooltip" title="Edit">
+                <button class="btn btn-clr1 btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" 
+                  data-id="<?php echo $list['patient_id']; ?>" 
+                  data-fpn="<?php echo $list['first_name']; ?>" 
+                  data-lpn="<?php echo $list['last_name']; ?>"
+                  data-fkn="<?php echo $list['parent_fname']; ?>"
+                  data-lkn="<?php echo $list['parent_lname']; ?>"
+                  data-email="<?php echo $list['email']; ?>"
+                  data-telephone="<?php echo $list['telephone']; ?>"><span class="glyphicon glyphicon-pencil"></span></button></p></td>
 
-                <script type="text/javascript">
-                  function showModal(data)
-                    {
-                       //you can do anything with data, or pass more data to this function. i set this data to modal header for example
-                       $("#myModal .modal-title").html(data)
-                       $("#myModal").modal();
-                    }
-                </script>
-
-                <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
+                <td><p data-placement="top" data-toggle="tooltip" title="Delete">
+                <button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete"
+                  data-id="<?php echo $list['patient_id']; ?>" 
+                  data-fpn="<?php echo $list['first_name']; ?>" 
+                  data-lpn="<?php echo $list['last_name']; ?>"><span class="glyphicon glyphicon-trash"></span></button></p></td>
                 <td>
                   <a id="invite" onclick="invited()">Προσκάλεσε</a>
                   <p hidden id="invited" style="color:grey;">  <span class="glyphicon glyphicon-ok"> </span> Προσκλήθηκε</p>
@@ -292,61 +294,67 @@ function invited() {
         <h4 class="modal-title custom_align" id="Heading">Τροποποίηση στοιχείων ατόμου</h4>
       </div>
       <div class="modal-body">
+        <div id="modal-loader" style="display: none; text-align: center;"></div>
+        <div id="dynamic-content">
         <form role="form"  action="core/update_patient.php" method="POST" class="form-horizontal">
             <div class="row">
                 <label  class="col-sm-4"  style="margin-bottom: 10px;  text-align: right;" for="Fname">Όνομα Ασθενή</label>
                 <div class="col-sm-6">
                     <input type="text" class="form-control" style="margin-bottom: 10px;"
-                    id="Fname" placeholder="" name="fpname" required/> 
+                    id="fpname" placeholder="" name="fpname" required/> 
                 </div>
             </div>
             <div class="row">
               <label  class="col-sm-4"  style="margin-bottom: 10px;  text-align: right;" for="lname">Επίθετο Ασθενή</label>
               <div class="col-sm-6">
                   <input type="text" class="form-control" style="margin-bottom: 10px;"
-                  id="Fname" placeholder="" name="lpname" required/> 
+                  id="lpname" placeholder="" name="lpname" required/> 
               </div>
             </div>
             <div class="row">
               <label class="col-sm-4" style="margin-bottom: 10px; text-align: right;" for="LName">Όνομα Κειδεμόνα</label>
               <div class="col-sm-6"> 
                   <input type="text"  style="margin-bottom: 10px;" class="form-control"
-                  id="Lname" placeholder="" name="fkname" required/>  
+                  id="fkname" placeholder="" name="fkname" required/>  
               </div>
             </div>
             <div class="row">
                 <label class="col-sm-4" style="margin-bottom: 10px; text-align: right;" for="LName">Επίθετο Κειδεμόνα</label>
                 <div class="col-sm-6"> 
                     <input type="text"  style="margin-bottom: 10px;" class="form-control"
-                    id="Lname" placeholder="" name="lkname" required/>  
+                    id="lkname" placeholder="" name="lkname" required/>  
                 </div>
             </div>
             <div class="row">
                 <label class="col-sm-4" style="margin-bottom: 10px;  text-align: right;" for="LName">Τηλέφωνο</label>
                 <div class="col-sm-6"> 
                     <input type="text"  style="margin-bottom: 10px; " class="form-control"
-                    id="Lname" placeholder="" name="telephone" required/>  
+                    id="telephone" placeholder="" name="telephone" required/>  
                 </div>
             </div>
             <div class="row">
                 <label class="col-sm-4" style="margin-bottom: 10px; text-align: right;" for="LName">Email</label>
                 <div class="col-sm-6"> 
                     <input type="text"  style="margin-bottom: 10px;" class="form-control"
-                    id="Lname" placeholder="" name="email" required/>  
+                    id="email" placeholder="" name="email" required/>  
                 </div>
             </div>
+            <input type="hidden" name="id" id="pid"  value="">
+
             <div class="row"> 
               <div class="col-sm-10" style="text-align: right;"> 
                 <!--<button type="button" class="btn btn-warning btn-s">Προσθήκη</button>-->
                 <input class="btn btn-warning btn-s"  type="submit" value='Αποθήκευση'>
               </div>
             </div>
-         </form>   
+         </form>
+         </div>   
       </div>
     </div><!-- /.modal-content --> 
   </div><!-- /.modal-dialog --> 
 </div><!-- /.modal- --> 
  
+<!--Modal for delete patient-->
 <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -354,15 +362,41 @@ function invited() {
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
         <h4 class="modal-title custom_align" id="Heading">Διαγραφή εγγραφής</h4>
       </div>
-      <div class="modal-body">
       <form role="form"  action="core/delete_patient.php" method="POST" class="form-horizontal">
-       <div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Είστε σίγουροι για ην διαγραφή της Ελευθερίας Ιωάννου;</div>
+      <div class="modal-body">
+       <div class="alert alert-danger" ><span class="glyphicon glyphicon-warning-sign"></span> Είστε σίγουροι για ην διαγραφή του/της <label id="name"></label></div>
+       <input type="hidden" name="id" id="pid"  value="">
       </div>
-        <div class="modal-footer ">
+      <div class="modal-footer ">
         <input class="btn btn-success"  type="submit" value='Ναι'>
         <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span>Όχι</button>
-      </form>
       </div>
-        </div><!-- /.modal-content --> 
+      </form>
+    </div><!-- /.modal-content --> 
   </div><!-- /.modal-dialog --> 
 </div>
+
+<!--Script for dynamic data for bootstrap modal edit, delete patient -->
+<script type="text/javascript">
+  $('#edit').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var modal = $(this)
+
+    modal.find('.modal-body #fpname').val(button.data('fpn'))
+    modal.find('.modal-body #lpname').val(button.data('lpn'))
+    modal.find('.modal-body #fkname').val(button.data('fkn'))
+    modal.find('.modal-body #lkname').val(button.data('lkn'))
+    modal.find('.modal-body #email').val(button.data('email'))
+    modal.find('.modal-body #telephone').val(button.data('telephone'))
+    modal.find('.modal-body #pid').val(button.data('id'))
+  })
+
+   $('#delete').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var modal = $(this)
+
+    modal.find('.modal-body #pid').val(button.data('id'))
+    modal.find('.modal-body #name').text(button.data('fpn') + " " +button.data('lpn'))
+  })
+
+</script>
