@@ -6,7 +6,7 @@ session_start();
  // header('Location: e-login.php');
 //}
 
-$therapist_id='6';//$_SESSION["user_ID"];
+$therapist_id='1';//$_SESSION["user_ID"];
 
 ?>
 
@@ -197,6 +197,7 @@ $therapist_id='6';//$_SESSION["user_ID"];
               <?php } ?>
             </tbody>     
       </table>  
+  <script src="//raw.github.com/botmonster/jquery-bootpag/master/lib/jquery.bootpag.min.js"></script>
       <!--Pagination-->
       <div class="col-md-4">
         <ul class="pagination">
@@ -209,6 +210,22 @@ $therapist_id='6';//$_SESSION["user_ID"];
           <li><a href="#">»</a></li>
         </ul>
       </div>
+
+<script type="text/javascript" src="http://botmonster.com/jquery-bootpag/jquery.bootpag.js"></script>
+
+    <script>
+$('#show_paginator').bootpag({
+      total: 23,
+      page: 3,
+      maxVisible: 10
+}).on('page', function(event, num)
+{
+     $("#dynamic_content").html("Page " + num); // or some ajax content loading...
+});
+    </script>
+<div id="dynamic_content">Pagination goes here</div>
+<div id="show_paginator"></div>
+    
     </div>
    </div>
 </div>

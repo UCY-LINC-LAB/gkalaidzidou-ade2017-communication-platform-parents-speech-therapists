@@ -2,13 +2,11 @@
 include 'init.php';
 session_start();
 
-
 $startTime = $_POST['startTime'];
 $endTime = $_POST['endTime'];
 $targetDescription = $_POST['targetDescription'];
 $patient = $_POST['patient'];
 $threapist_id = '1';
-
 
 $dateConf= date("Y-m-d",strtotime($_POST['date']));
 

@@ -1,8 +1,9 @@
 <?php
 include 'init.php';
-$confId = $_POST['conference_id'];
 
-$deleteConference = "DELETE FROM conference WHERE conference_id='4'";
+$conferenceID = $_POST['eventID'];
+
+$deleteConference = "DELETE FROM conference WHERE conference_id='$conferenceID'";
 $delete = mysqli_query($conn, $deleteConference);
 
 if (!$delete) { // add this check.

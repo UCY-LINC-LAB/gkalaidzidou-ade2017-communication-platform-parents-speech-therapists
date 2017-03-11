@@ -1,3 +1,24 @@
+<?php
+include 'core/init.php';
+session_start(); 
+
+//if ( $_SESSION['logged_in'] != true){
+ // header('Location: e-login.php');
+//}
+
+$therapist_id='1';//$_SESSION["user_ID"];
+$patient_id='6';//$_SESSION["user_ID"];     
+
+//   convert date language to greek                 
+date_default_timezone_set('Europe/Athens');
+
+setlocale(LC_TIME, 'el_GR.UTF-8');
+
+$greekDays = array( "Κυριακή", "Δευτέρα", "Τρίτη", "Τετάρτη", "Πέμπτη", "Παρασκευή", "Σάββατο" ); 
+$greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτίου','Απριλίου','Μαΐου','Ιουνίου','Ιουλίου','Αυγούστου','Σεπτεμβρίου','Οκτωβρίου','Νοεμβρίου','Δεκεμβρίου');  
+
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,6 +35,7 @@
   <!--text editor-->
   <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
   <script type="text/javascript">
+
       tinymce.init({
       selector: 'textarea',
       height: 20,
@@ -96,39 +118,41 @@
     #flot-tooltip { font-size: 12px; font-family: Verdana, Arial, sans-serif; position: absolute; display: none; background-color: #FFF; opacity: 0.8; -moz-border-radius: 5px; -webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; }
   </style>
    
-<!--[if lte IE 8]><script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/excanvas.min.js"></script><![endif]-->
-
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.symbol.min.js"></script>
 <script type="text/javascript" src="http://raw.github.com/markrcote/flot-axislabels/master/jquery.flot.axislabels.js"></script>
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.time.min.js"></script>
  
 <script type="text/javascript">
-//Rome, Italy
-var d1 = [[1262304000000, 12], [1264982400000, 13], [1267401600000, 15], [1270080000000, 18], [1272672000000, 23], [1275350400000, 27], [1277942400000, 30], [1280620800000, 30], [1283299200000, 27], [1285891200000, 22], [1288569600000, 16], [1291161600000, 13]];
-// Paris, France
-var d2 = [[1262304000000, 6], [1264982400000, 7], [1267401600000, 12], [1270080000000, 16], [1272672000000, 20], [1275350400000, 23], [1277942400000, 25], [1280620800000, 24], [1283299200000, 21], [1285891200000, 16], [1288569600000, 10], [1291161600000, 7]];
-// Madrid, Spain
-var d3 = [[1262304000000, 11], [1264982400000, 13], [1267401600000, 16], [1270080000000, 18], [1272672000000, 22], [1275350400000, 28], [1277942400000, 33], [1280620800000, 32], [1283299200000, 28], [1285891200000, 21], [1288569600000, 15], [1291161600000, 11]];
 
+/*//Rome, Italy
+var d1 = [[1262304000000, 12], [1264982400000, 13], [1267401600000, 15], [1270080000000, 18], [1272672000000, 23], [1275350400000, 27], [1277942400000, 30], [1280620800000, 30], [1283299200000, 27], [1285891200000, 22]];
+// Paris, France
+var d2 = [[1262304000000, 6], [1264982400000, 7], [1267401600000, 12], [1270080000000, 16], [1272672000000, 20], [1275350400000, 23], [1277942400000, 25], [1280620800000, 24], [1283299200000, 21], [1285891200000, 16]];
+// Madrid, Spain
+var d3 = [[1262304000000, 11], [1264982400000, 13], [1267401600000, 16], [1270080000000, 18], [1272672000000, 22], [1275350400000, 28], [1277942400000, 33], [1280620800000, 32], [1283299200000, 28], [1285891200000, 21]];
+*/
+/*
 var data1 = [
-    {label: "",  data: d1, points: { symbol: "circle", fillColor: "#058DC7" }, color: '#058DC7'},
-    {label: "",  data: d2, points: { symbol: "diamond", fillColor: "#AA4643" }, color: '#AA4643'},
-    {label: "",  data: d3, points: { symbol: "square", fillColor: "#50B432" }, color: '#50B432'}
+    {label: "Συμπεριφορά",  data: d1, points: { symbol: "circle", fillColor: "#058DC7" }, color: '#058DC7'},
+    {label: "Απόδοση στόχου",  data: d2, points: { symbol: "diamond", fillColor: "#AA4643" }, color: '#AA4643'},
+    {label: "Προσοχή",  data: d3, points: { symbol: "square", fillColor: "#50B432" }, color: '#50B432'}
 ];
  
 $(document).ready(function () {
-    $.plot($("#placeholder"), data1, {
+    $.plot($("#placeholder"), [ d1, d2, d3 ]);
+
+      /*, data1, {
         xaxis: {
             min: (new Date(2009, 11, 18)).getTime(),
             max: (new Date(2010, 11, 15)).getTime(),
             mode: "time",
             tickSize: [1, "month"],
-            monthNames: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+            monthNames: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
             tickLength: 0,
             axisLabel: 'Month',
             axisLabelUseCanvas: true,
-            axisLabelFontSizePixels: 12,
+            axisLabelFontSizePixels: 10,
             axisLabelFontFamily: 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
             axisLabelPadding: 5
         },
@@ -166,7 +190,7 @@ $(document).ready(function () {
     }
      
     function getMonthName(numericMonth) {
-        var monthArray = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        var monthArray = ["12/09/2016", "12/09/2016", "12/09/2016", "12/09/2016", "12/09/2016", "12/09/2016", "12/09/2016", "12/09/2016", "12/09/2016", "12/09/2016"];
         var alphaMonth = monthArray[numericMonth];
          
         return alphaMonth;
@@ -203,28 +227,124 @@ $(document).ready(function () {
             previousPoint = null;            
         }
     });
+});*/
+
+$(document).ready(function () {
+
+    var d3 = [[1, 5], [2, 2], [3, 5], [4, 1], [5, 5],[6, 3],[7, 3]];
+    var d2 = [[1, 3], [2, 5], [3, 5], [4, 3],[5, 3],[6, 3],[7, 3]];
+    var d1 = [[1, 2], [2, 3], [3, 5], [4, 3],[5, 3],[6, 4],[7, 3]];
+
+    var data1 = [
+    {label: "Συμπεριφορά",  data: d1, points: { symbol: "circle", fillColor: "#058DC7" }, color: '#058DC7'},
+    {label: "Απόδοση στόχου",  data: d2, points: { symbol: "diamond", fillColor: "#AA4643" }, color: '#AA4643'},
+    {label: "Προσοχή",  data: d3, points: { symbol: "square", fillColor: "#50B432" }, color: '#50B432'}
+];
+    
+
+    var options ={
+       axisLabels: {
+            show: true
+        },
+        xaxes: {
+            //min: (new Date(2009, 11, 18)).getTime(),
+           // max: (new Date(2010, 11, 15)).getTime(),
+           // mode: "time",
+            tickSize: 1,
+            tickLength: 0,
+            tickDecimals: 0,
+            axisLabel: 'Conference',
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
+            axisLabelPadding: 5
+        },
+        yaxes: {
+            axisLabel: 'Score',
+            axisLabelUseCanvas: true,
+            axisLabelFontSizePixels: 12,
+            axisLabelFontFamily: 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
+            axisLabelPadding: 5
+        },
+        series: {
+            lines: { show: true },
+            points: {
+                radius: 3,
+                show: true,
+                fill: true
+            },
+        },
+        grid: {
+            hoverable: true,
+            borderWidth:0
+        },
+        legend: {
+            labelBoxBorderColor: "none",
+                position: "right"
+        }
+
+
+    }
+
+    $.plot($("#placeholder"), data1,options);
+
+    var previousPoint = null;
+     
+    function showTooltip(x, y, contents, z) {
+        $('<div id="flot-tooltip">' + contents + '</div>').css({
+            top: y - 30,
+            left: x - 135,
+            'border-color': z,
+        }).appendTo("body").fadeIn(200);
+    }
+     
+    $("#placeholder").bind("plothover", function (event, pos, item) {
+        if (item) {
+            if ((previousPoint != item.dataIndex) || (previousLabel != item.series.label)) {
+                previousPoint = item.dataIndex;
+                previousLabel = item.series.label;
+             
+                $("#flot-tooltip").remove();
+ 
+                var x = item.datapoint[0];
+                y = item.datapoint[1];
+                z = item.series.color;
+                     
+                showTooltip(item.pageX, item.pageY,
+                    "<b>" + item.series.label + "</b><br /> Συνεδρία " + x + " , " + y + "/5",
+                    z);
+            }
+        } else {
+            $("#flot-tooltip").remove();
+            previousPoint = null;            
+        }
+    });
+
 });
+
+
 </script>
 
 <style type="text/css">
-.carousel-indicators-numbers li {
-  text-indent: 0;
-  margin: 0 2px;
-  width: 30px;
-  height: 30px;
-  border: none;
-  border-radius: 100%;
-  line-height: 30px;
-  color: #fff;
-  background-color: #999;
-  -webkit-transition: all 0.25s ease;
-  transition: all 0.25s ease;
-}
-.carousel-indicators-numbers li.active, .carousel-indicators-numbers li:hover {
-  margin: 0 2px;
-  width: 30px;
-  height: 30px;
-  background-color: #337ab7;
+.carousel-indicators-numbers {
+    li {
+      text-indent: 0;
+      margin: 0 2px;
+      width: 30px;
+      height: 30px;
+      border: none;
+      border-radius: 100%;
+      line-height: 30px;
+      color: #fff;
+      background-color: #999;
+      transition: all 0.25s ease;
+      &.active, &:hover {
+        margin: 0 2px;
+        width: 30px;
+        height: 30px;
+        background-color: #337ab7;        
+      }
+    }
 }
 /* carousel */
 #quote-carousel 
@@ -336,6 +456,20 @@ $(document).ready(function () {
 div.polaroid {
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
 }
+
+
+/*number inside circle*/
+.numberCircle {
+    border-radius: 50%;
+    width: 20px; 
+    font-size: 15px;
+    border: 2px solid #666;
+}
+.numberCircle span {
+    text-align: center;
+    line-height: 20px;
+    display: block;
+}
 </style>
 
 </head>
@@ -360,101 +494,132 @@ div.polaroid {
       <div class="col-sm-10">
         <div class="tab-content">
           <div class="tab-pane active" id="graph" role="tabpanel">
+          <!--Add graph-->
             <div id="placeholder"></div>
             <div class="container" style="margin-top: 20px;">
               <div class='col-md-10'>
                 <div class="carousel slide " data-ride="carousel" id="quote-carousel" data-interval="false">
                   <!-- Bottom Carousel Indicators -->
                   <ol class="carousel-indicators carousel-indicators-numbers">
-                    <li data-target="#quote-carousel" data-slide-to="0" class="active">1</li>
-                    <li data-target="#quote-carousel" data-slide-to="1">2</li>
-                    <li data-target="#quote-carousel" data-slide-to="2">3</li>
+                    <li data-target="#quote-carousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#quote-carousel" data-slide-to="1"></li>
+                    <li data-target="#quote-carousel" data-slide-to="2"></li>
                   </ol>
                   
                   <!-- Carousel Slides / Quotes -->
                   <div class="carousel-inner polaroid" >
+
+                      <?php 
+                      $conference_details = mysqli_query($conn,"SELECT  distinct * FROM conference as c where c.therapist_id='".$therapist_id."' and c.patient_id='".$patient_id."'");
+
+
+                      if (!$conference_details) { // add this check.
+                        die('Invalid query: ' . mysqli_error($conn));
+                      }
+                      $confCount=0;
+                      while ($list = mysqli_fetch_array($conference_details)) {
+                              $confCount++;
+                              $scores = mysqli_query($conn,"SELECT  distinct * FROM conference_score_bar as s where  s.conference_id='".$list['conference_id']."' ");
+                              if (!$scores) { // add this check.
+                                die('Invalid query: ' . mysqli_error($conn));
+                              }
+                      ?>
                     <!-- Quote 1 -->
-                    <div class="item">
-                        <div class="row text-center"><h4> 12/02/2017</h4></div>
-                        <div class="row" style="margin-bottom: 20px;">
-                          <div class="col-sm-3 text-center">
-                           <div style="color:#058DC7; "><span><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star"></span><span data-value="3" class="glyphicon glyphicon-star"></span><span data-value="5" class="glyphicon glyphicon-star-empty"></span></span></div>
-                           <div style="color:#AA4643;"><span><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star"></span><span data-value="3" class="glyphicon glyphicon-star"></span><span data-value="5" class="glyphicon glyphicon-star-empty"></span></span></div>
-                           <div style="color:#50B432;"><span><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star"></span><span data-value="3" class="glyphicon glyphicon-star"></span><span data-value="5" class="glyphicon glyphicon-star-empty"></span></span></div>
+                   
+                    <?php if( $confCount==1) echo ( '<div class="item active" >'); else echo ( '<div class="item" >'); ?>
+                        <div class="row text-center"></div>
+                        <div class="row" style="margin-bottom: 20px;margin-top: 20px;">
+                          <div class="col-sm-3 text-center" style="margin-top: 20px;">
+                              <h4> <?php echo $greekDays[date("w",strtotime($list['conference_date']))]?><br>
+                              <?php echo date('j',strtotime($list['conference_date'])) . ' ' . $greekMonths[intval(date('m',strtotime($list['conference_date'])))-1] ?><br>
+                              <?php echo date('Y',strtotime($list['conference_date']))?><br>
+                                </h4>
+                              <i><?php echo "Συνεδρία".$confCount."<sup>η</sup>";?></i>
+                              
                           </div>
                           <div class="col-sm-9">
-                            <p><span class="glyphicon glyphicon-pencil"></span><b> Στόχος: </b>Εξάσκηση του γράμματος ξ.</p>
+                            <p><span class="glyphicon glyphicon-pencil"></span><b> Στόχος: </b><?php echo $list['target_description'];?></p>
                             <hr>
-                            <p><span class="glyphicon glyphicon-comment"></span><b> Σχόλια:</b> Πολυ καλύτερα συγκριτικά με την προηγούμενη εβδομάδα.</p>
+                            <p><span class="glyphicon glyphicon-comment"></span><b> Σχόλια:</b> <?php echo $list['comment'];?></p>
+                            <hr>
+                            <p><span class="glyphicon glyphicon-thumbs-up"></span><b> Αξιολόγηση:</b> 
+
+                            <?php $comma=0;
+                            while ($sclist = mysqli_fetch_array($scores)) {
+
+                              $comma++;
+
+                             echo ($sclist['title']." (<b>".$sclist['score']."</b> /5) ");
+                            if($comma<mysqli_num_rows($scores))
+                              echo ("<b> , </b>");
+                            }?>
+                            </p>
                           </div>
                         </div>
                     </div>
-                    <!-- Quote 2 -->
-                    <div class="item active">
-                        <div class="row text-center" style=" " ><h4> 12/02/2017</h4></div>
-                        <div class="row" style="margin-bottom: 20px;">
-                          <div class="col-sm-3 text-center">
-                           <div style="color:#058DC7; "><span><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star"></span><span data-value="3" class="glyphicon glyphicon-star"></span><span data-value="5" class="glyphicon glyphicon-star-empty"></span></span></div>
-                           <div style="color:#AA4643;"><span><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star"></span><span data-value="3" class="glyphicon glyphicon-star"></span><span data-value="5" class="glyphicon glyphicon-star-empty"></span></span></div>
-                           <div style="color:#50B432;"><span><span data-value="0" class="glyphicon glyphicon-star"></span><span data-value="1" class="glyphicon glyphicon-star"></span><span data-value="2" class="glyphicon glyphicon-star"></span><span data-value="3" class="glyphicon glyphicon-star"></span><span data-value="5" class="glyphicon glyphicon-star-empty"></span></span></div>
-                          </div>
-                          <div class="col-sm-9">
-                            <p><span class="glyphicon glyphicon-pencil"></span><b> Στόχος: </b>Εξάσκηση του γράμματος ξ.</p>
-                            <hr>
-                            <p><span class="glyphicon glyphicon-comment"></span><b> Σχόλια:</b> Πολυ καλύτερα συγκριτικά με την προηγούμενη εβδομάδα.</p>
-                          </div>
-                        </div>
-                    </div>
+                     <?php } ?>
                   </div>
-                  
+
                   <!-- Carousel Buttons Next/Prev -->
                   <a data-slide="prev" href="#quote-carousel" class="left carousel-control" style="color:#098680;"><i class="fa fa-chevron-left"></i></a>
                   <a data-slide="next" href="#quote-carousel" class="right carousel-control" style="color:#098680;"><i class="fa fa-chevron-right"></i></a>
+
                 </div>                          
               </div>
             </div>
-          </div><!--tab graph-->
+          </div><!--end of tab graph-->
+              <?php 
+              $text = mysqli_query($conn,"SELECT * FROM patient_statement state where state.therapist_id='".$therapist_id."' and state.patient_id='".$patient_id."'");
+
+              if (!$text) { // add this check.
+                die('Invalid query: ' . mysqli_error());
+                  echo "<script>";
+                  echo " alert('Something is going wrong. Please try again.');      
+                        window.location.href='". $_SERVER['HTTP_REFERER']."'; </script>";
+              }
+
+              $list = mysqli_fetch_array($text);
+              ?>
           <div class="tab-pane" id="history" role="tabpanel">
-            <form action="form_handler.php" method="post">
+            <form action="core/history_save.php" method="post">
               <div class="row">
               <h4>Για δική μου χρήση</h4>
-                <textarea cols="80" rows="10" id="content" name="content"> 
+                <textarea cols="80" rows="10" id="content" name="contentTherapist"> <?php echo $list['history_ftherapist']?>
                 </textarea>
                 <div class="col-sm-12" style="">
-                    <input class= "btn pull-right" type="submit" value="Αποθήκευση" style="background-color:#E2CB35; margin-top: 10px;" />
+                    <input class= "btn pull-right" type="submit" name="history_ftherapist" value="Αποθήκευση" style="background-color:#E2CB35; margin-top: 10px;" />
                 </div>
-
               </div>
-            </form>
+
             <div class="row" style="margin-bottom: 10px;">
               <h4>Για τον γονέα</h4>
-              <textarea cols="80" rows="10" id="content" name="content"> 
+              <textarea cols="80" rows="10" id="content" name="contentParent"> <?php echo $list['history_fparent']?>
               </textarea>
               <div class="col-sm-12" style="">
-                  <input class= "btn pull-right" type="submit" value="Αποθήκευση" style="background-color:#E2CB35; margin-top: 10px;" />
+                  <input class= "btn pull-right" type="submit" name="history_fparent" value="Αποθήκευση" style="background-color:#E2CB35; margin-top: 10px;" />
               </div>
             </div>
+          </form>
           </div><!--tab history-->
           <div class="tab-pane" id="therapy" role="tabpanel">
-            <form action="form_handler.php" method="post">
+            <form action="core/diagnosis_save.php" method="post">
               <div class="row">
               <h4>Για δική μου χρήση</h4>
-                <textarea cols="80" rows="10" id="content" name="content"> 
+                <textarea cols="80" rows="10" id="content" name="contentTherapist">  <?php echo $list['diagnosis_ftherapist']?>
                 </textarea>
                 <div class="col-sm-12" style="">
-                    <input class= "btn pull-right" type="submit" value="Αποθήκευση" style="background-color:#E2CB35; margin-top: 10px;" />
+                    <input class= "btn pull-right" type="submit" name="diagnosis_ftherapist" value="Αποθήκευση" style="background-color:#E2CB35; margin-top: 10px;" />
                 </div>
-
               </div>
-            </form>
             <div class="row" style="margin-bottom: 10px;">
               <h4>Για τον γονέα</h4>
-              <textarea cols="80" rows="10" id="content" name="content"> 
+              <textarea cols="80" rows="10" id="content" name="contentParent"> <?php echo $list['diagnosis_fparent']?>
               </textarea>
               <div class="col-sm-12" style="">
-                  <input class= "btn pull-right" type="submit" value="Αποθήκευση" style="background-color:#E2CB35; margin-top: 10px;" />
+                  <input class= "btn pull-right" type="submit" name="diagnosis_fparent" value="Αποθήκευση" style="background-color:#E2CB35; margin-top: 10px;" />
               </div>
             </div>
+            </form>
           </div><!--tab therapy-->
           <div class="tab-pane" id="exercises" role="tabpanel">
             <div table-responsive">
