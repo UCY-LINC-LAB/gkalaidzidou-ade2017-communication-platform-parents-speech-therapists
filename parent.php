@@ -7,6 +7,7 @@ session_start();
 //}
 
 $therapist_id='1';//$_SESSION["user_ID"];
+$greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτίου','Απριλίου','Μαΐου','Ιουνίου','Ιουλίου','Αυγούστου','Σεπτεμβρίου','Οκτωβρίου','Νοεμβρίου','Δεκεμβρίου');  
 
 ?>
 
@@ -104,7 +105,7 @@ $therapist_id='1';//$_SESSION["user_ID"];
   }
 
   body{
-    background-image: url("img/ww.jpg");'
+    /*background-image: url("img/ww.jpg");'*/
     background-repeat:no-repeat;
     background-size:100% 100vh;
   }
@@ -164,7 +165,18 @@ $therapist_id='1';//$_SESSION["user_ID"];
                 die('Invalid query: ' . mysql_error());
               }
 
-              while ($list = mysqli_fetch_array($patient_list)) { ?>
+              while ($list = mysqli_fetch_array($patient_list)) { 
+
+                  $conn_req = mysqli_query($conn,"SELECT  distinct * FROM connection_state conn where conn.therapist_id='".$therapist_id."' and 
+                  conn.patient_id='".$list['patient_id']."'");
+
+
+                  if (!$conn_req) { // add this check.
+                    die('Invalid query: ' . mysql_error());
+                  }else{
+                    $conn_det = mysqli_fetch_array($conn_req);
+                  }
+                ?>
               <tr>
                 <td><img style='height: 20px; width: 20px;' class="img-circle" src="img/profile.jpg"></td>
                 <td><?php echo $list['first_name']." ".$list['last_name']?></td>
@@ -190,8 +202,25 @@ $therapist_id='1';//$_SESSION["user_ID"];
                   data-fpn="<?php echo $list['first_name']; ?>" 
                   data-lpn="<?php echo $list['last_name']; ?>"><span class="glyphicon glyphicon-trash"></span></button></p></td>
                 <td>
-                  <a id="invite" onclick="invited()">Προσκάλεσε</a>
-                  <p hidden id="invited" style="color:grey;">  <span class="glyphicon glyphicon-ok"> </span> Προσκλήθηκε</p>
+
+
+                  <?php 
+                    
+                  if($conn_det['request_state']==0){ ?>
+
+                  <!--<a id="invite" onclick="invited()">Προσκάλεσε</a>
+                  <p hidden id="invited" style="color:grey;">  <span class="glyphicon glyphicon-ok"> </span> Προσκλήθηκε</p>-->
+                  <form id="myForm" action="core/connect_request.php" method="post">
+                    <input type="hidden" name="conn_email" value="<?php echo $list['email']; ?>" />
+                    <input type="hidden" name="patID" value="<?php echo $list['patient_id']; ?>" />
+                    <a href="#" onclick="document.getElementById('myForm').submit();">Προσκάλεσε</a>
+                  </form>
+                  <?php }else if($conn_det['connection_state']==1){?>
+                    <p style="color:green;"><span class="glyphicon glyphicon-ok"></span> Συνδεδεμένοι</p>
+                  <?php }else{?> 
+                     <p style="font-size: 13px; color:grey;"><span class="glyphicon glyphicon-ok"></span> Προσκλήθηκε,<br>
+                      <?php echo date('j',strtotime($conn_det['request_date'])) . ' ' .$greekMonths[intval(date('m',strtotime($conn_det['request_date'])))-1]?></p>         
+                  <?php }?>
                 </td>
               </tr>
               <?php } ?>

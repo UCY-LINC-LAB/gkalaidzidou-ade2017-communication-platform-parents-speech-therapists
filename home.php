@@ -7,6 +7,7 @@ session_start();
 //}
 
 $therapist_id='1';//$_SESSION["user_ID"];
+$greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτίου','Απριλίου','Μαΐου','Ιουνίου','Ιουλίου','Αυγούστου','Σεπτεμβρίου','Οκτωβρίου','Νοεμβρίου','Δεκεμβρίου');  
 
 ?>
 <!DOCTYPE html>
@@ -94,8 +95,170 @@ $therapist_id='1';//$_SESSION["user_ID"];
   width: 280px;
 }
 
+/*alert notice*/
+.notice {
+    padding: 15px;
+    background-color: #fafafa;
+    border-left: 6px solid #7f7f84;
+    margin-bottom: 10px;
+    -webkit-box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
+       -moz-box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
+            box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
+}
+.notice-sm {
+    padding: 10px;
+    font-size: 80%;
+}
+.notice-lg {
+    padding: 35px;
+    font-size: large;
+}
+.notice-success {
+    border-color: #80D651;
+}
+.notice-success>strong {
+    color: #80D651;
+} 
+.notice-uncompleted {
+    border-color: #AA4643;
+}
+.notice-uncompleted>strong {
+    color: #AA4643;
+} 
+.notice-warning {
+    border-color: #FEAF20;
+}
+.notice-warning>strong {
+    color: #FEAF20;
+}
+
+/*timeline single column*/
+.message-item {
+margin-bottom: 25px;
+margin-left: 40px;
+position: relative;
+}
+.message-item .message-inner {
+background: #fff;
+border: 1px solid #ddd;
+border-radius: 3px;
+padding: 10px;
+position: relative;
+}
+.message-item .message-inner:before {
+border-right: 10px solid #ddd;
+border-style: solid;
+border-width: 10px;
+color: rgba(0,0,0,0);
+content: "";
+display: block;
+height: 0;
+position: absolute;
+left: -20px;
+top: 6px;
+width: 0;
+}
+.message-item .message-inner:after {
+border-right: 10px solid #fff;
+border-style: solid;
+border-width: 10px;
+color: rgba(0,0,0,0);
+content: "";
+display: block;
+height: 0;
+position: absolute;
+left: -18px;
+top: 6px;
+width: 0;
+}
+.message-item:before {
+background: #fff;
+border-radius: 2px;
+bottom: -30px;
+box-shadow: 0 0 3px rgba(0,0,0,0.2);
+content: "";
+height: 100%;
+left: -30px;
+position: absolute;
+width: 3px;
+}
+.message-item:after {
+background: #fff;
+border: 2px solid #ccc;
+border-radius: 50%;
+box-shadow: 0 0 5px rgba(0,0,0,0.1);
+content: "";
+height: 15px;
+left: -36px;
+position: absolute;
+top: 10px;
+width: 15px;
+}
+.clearfix:before, .clearfix:after {
+content: " ";
+display: table;
+}
+.message-item .message-head {
+border-bottom: 1px solid #eee;
+margin-bottom: 8px;
+padding-bottom: 8px;
+}
+.message-item .message-head .avatar {
+margin-right: 20px;
+}
+.message-item .message-head .user-detail {
+overflow: hidden;
+}
+.message-item .message-head .user-detail h5 {
+font-size: 16px;
+font-weight: bold;
+margin: 0;
+}
+.message-item .message-head .post-meta {
+float: left;
+padding: 0 15px 0 0;
+}
+.message-item .message-head .post-meta >div {
+color: #333;
+font-weight: bold;
+text-align: right;
+}
+.post-meta > div {
+color: #777;
+font-size: 12px;
+line-height: 22px;
+}
+.message-item .message-head .post-meta >div {
+color: #333;
+font-weight: bold;
+text-align: right;
+}
+.post-meta > div {
+color: #777;
+font-size: 12px;
+line-height: 22px;
+}
+.lineImg {
+ min-height: 40px;
+ max-height: 40px;
+}
 
 
+
+/* for radio*/
+.checkboxgroup {
+  display: inline-block;
+  text-align: center;
+}
+.checkboxgroup label {
+  display: block;
+}
+
+
+/*label styling*/
+label {
+    font-weight: normal !important;
+}
   </style>
 </head>
 
@@ -104,6 +267,186 @@ $therapist_id='1';//$_SESSION["user_ID"];
 
   <div class="container">
     <div id="calendar" class="left"></div>
+    <div class="right">
+
+    <h3> Ολοκλήρωση</h3>
+    <hr>
+
+    <?php 
+    $notif = mysqli_query($conn,"SELECT  distinct * FROM conference as conf,patient as pat where conf.therapist_id='".$therapist_id."' and 
+      DATE(conf.conference_date) < CURRENT_DATE and conf.patient_id=pat.patient_id");
+
+    if (!$notif) { // add this check.
+      die('Invalid query: ' . mysql_error());
+    }
+
+    while ($notifications = mysqli_fetch_array($notif)) { ?>
+    <!--
+      <div class="notice notice-success">
+        <div class="row">
+          <div class="col-md-2"> 
+              <a href="#">
+              <img style='height: 40px; width: 40px;'  src="img/profile.jpg"></a>
+             </div>
+          <div class="col-md-10"> Η σύνδεση με <b>Μαρία Γεωργίου </b> έχει ολοκληρωθεί <br>
+           <p style="color: grey; font-size: 10px;"><span class="glyphicon glyphicon-globe"></span> 12 Μαρτίου </p>
+          </div>
+        </div>
+      </div>-->
+      <div class="notice notice-uncompleted">
+        <div class="row">
+          <div class="col-md-2"> 
+          <a href="#">
+              <img style='height: 40px; width: 40px;'  src="img/profile.jpg"></a></div>
+          <div class="col-md-10"> Ασυμπλήρωτη συνεδρία με <b><?php echo $notifications['first_name']." ".$notifications['last_name']?></b>
+          <br>
+          <p style="color: grey; font-size: 10px;"><span class="glyphicon glyphicon-pencil"></span> 
+          <?php echo date('j',strtotime($notifications['conference_date'])) . ' ' .$greekMonths[intval(date('m',strtotime($notifications['conference_date'])))-1]  ?> </p>          
+          <p data-placement="top" data-toggle="tooltip" title="complete">
+                <button class="btn btn-clr1 btn-xs" data-title="complete" data-toggle="modal" data-target="#complete" 
+                  data-id="<?php echo $notifications['patient_id']; ?>" 
+                  data-name="<?php echo $notifications['first_name'].' '.$notifications['last_name']; ?>">
+                  <span class="glyphicon glyphicon-option-horizontal"></span></button>
+                  </p>
+
+          </div>
+        </div>
+      </div>
+      <?php }?>
+      <!--<div class="notice notice-warning">
+        <div class="row">
+          <div class="col-md-2"> <a href="#">
+              <img style='height: 40px; width: 40px;'  src="img/profile.jpg"></a></div>
+          <div class="col-md-10">Νέο σχόλιο από <b>Μαρία Γεωργίου </b><br>
+           <p style="color: grey; font-size: 10px;"><span class="glyphicon glyphicon-comment"></span> 12 Μαρτίου </p></div></div>
+        </div>
+      </div>-->
+
+  <!--  <div class="row">
+    <h2>Time Line</h2>
+  </div>
+    <div class="qa-message-list" id="wallmessages">
+            <div class="message-item" id="m16">
+            <div class="message-inner">
+              <div class="message-head clearfix">
+                <div class="avatar pull-left"><a href="./index.php?qa=user&qa_1=Oleg+Kolesnichenko"><img class="lineImg" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png"></a></div>
+                <div class="user-detail">
+                  <h5 class="handle">Στέλιος Βαισλείου</h5>
+                  <div class="post-meta">
+                    <div class="asker-meta">
+                      <span class="qa-message-what"></span>
+                      <span class="qa-message-when">
+                        <span class="qa-message-when-data">14 Μαρτίου</span>
+                      </span>
+                     
+                      <span class="qa-message-who">
+                        <span class="qa-message-who-pad">by </span>
+                        <span class="qa-message-who-data"><a href="./index.php?qa=user&qa_1=Oleg+Kolesnichenko">Στέλιος Βαισλείου</a></span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="qa-message-content">
+              <div class="row">
+                <div class="col-md-4">
+                  <p style="color: #50B432; font-weight: bold;">Προσοχή</p>
+                  <div id="checkboxes">
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioP" id="radioP1" />
+                      <label for="my_radio_button_id1">1</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioP" id="radioP2" />
+                      <label for="my_radio_button_id2">2</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioP" id="radioP3" checked="" />
+                      <label for="my_radio_button_id3">3</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioP" id="radioP4" />
+                      <label for="my_radio_button_id2">4</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioP" id="radioP5" />
+                      <label for="my_radio_button_id3">5</label>
+                    </div>
+                  </div>
+                </div>
+                 <div class="col-md-4">
+                  <p style="color: #058DC7; font-weight: bold;">Συμπεριφορά</p>
+                  <div id="checkboxes">
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioS" id="radioS1" />
+                      <label for="my_radio_button_id1">1</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioS" id="radioS2" />
+                      <label for="my_radio_button_id2">2</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioS" id="radioS3"  checked="" />
+                      <label for="my_radio_button_id3">3</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioS" id="radioS4" />
+                      <label for="my_radio_button_id2">4</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioS" id="radioS5" />
+                      <label for="my_radio_button_id3">5</label>
+                    </div>
+                  </div>
+                </div>
+                 <div class="col-md-4">
+                  <p style="color: #AA4643; font-weight: bold;">Απόδοση</p>
+                  <div id="checkboxes">
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioA" id="radioA1" />
+                      <label for="my_radio_button_id1">1</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioA" id="radioA2" />
+                      <label for="my_radio_button_id2">2</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioA" id="radioA3" checked="" />
+                      <label for="my_radio_button_id3">3</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioA" id="radioA4" />
+                      <label for="my_radio_button_id2">4</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioA" id="radioA5" />
+                      <label for="my_radio_button_id3">5</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+              <div class="col-md-12">
+                <p style="font-weight: bold;">Σχόλια</p>
+                <textarea  class="form-control" name="notes" placeholder=""></textarea>
+              </div>
+              </div>
+
+
+              </div>
+          </div></div>
+        
+          <div class="message-item" id="m9">
+            <div class="message-inner">
+             
+          </div></div>
+
+
+        
+        </div>-->
+</div>
+
+
 <!--
     <div class="right">
 
@@ -131,7 +474,6 @@ $therapist_id='1';//$_SESSION["user_ID"];
     $('#calendar').fullCalendar({
         weekends: true, // will hide Saturdays and Sundays
         fixedWeekCount: false,
-
         dayClick: function(date, allDay, jsEvent, view) {
             var modal =  bootbox.dialog(
             {
@@ -143,7 +485,7 @@ $therapist_id='1';//$_SESSION["user_ID"];
                          '<div class="form-group"> ' +
                          '<label class="col-md-4 control-label">Ημερομηνία</label> ' +
                          '<div class="col-md-6 "> ' +
-                         '<input id="date" name="date" type="text" value="' + date.format('DD/MM/YYYY')+' " class="form-control input-md datepicker"> ' +
+                         '<input id="date" name="date" type="text" value="' + date.format('MM/DD/YYYY')+' " class="form-control input-md datepicker"> ' +
                          '</div> ' +
                          '</div> ' +
 
@@ -334,7 +676,7 @@ $therapist_id='1';//$_SESSION["user_ID"];
              $conferences_list = mysqli_query($conn,"SELECT  distinct * FROM conference confList where confList.therapist_id='".$therapist_id."' ");
 
             if (!$conferences_list) { // add this check.
-                die('Invalid query: ' . mysql_error());
+                die('Invalid query: ' . mysqli_error($conn));
             }
             while ($list = mysqli_fetch_array($conferences_list)) {  
                  $patient_info = mysqli_query($conn,"SELECT  distinct * FROM patient patInfo where patInfo.patient_id='".$list['patient_id']."' ");
@@ -355,7 +697,9 @@ $therapist_id='1';//$_SESSION["user_ID"];
           },
           <?php } ?>
           // other events here
-          ]
+          ],
+          eventColor: '#378006',
+
        })
 
 
@@ -363,6 +707,135 @@ $therapist_id='1';//$_SESSION["user_ID"];
 
   </script>
 
+
+<div class="modal fade" id="complete" tabindex="-1" role="dialog" aria-labelledby="complete" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove "  style="font-size: 0.6em;" aria-hidden="true"></span></button>
+        <h4 class="modal-title custom_align"></h4>
+      </div>
+      <div class="modal-body">
+        <div id="modal-loader" style="display: none; text-align: center;">
+          
+         
+        </div>
+        <div id="dynamic-content">
+        <form role="form"  action="core/update_patient.php" method="POST" class="form-horizontal">
+           <div class="row">
+
+            <input type="" name="pname" id="pname" value="">
+
+
+
+
+                <div class="col-md-4">
+                  <p style="color: #50B432; font-weight: bold;">Προσοχή</p>
+                  <div id="checkboxes">
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioP" id="radioP1" />
+                      <label for="my_radio_button_id1">1</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioP" id="radioP2" />
+                      <label for="my_radio_button_id2">2</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioP" id="radioP3" checked="" />
+                      <label for="my_radio_button_id3">3</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioP" id="radioP4" />
+                      <label for="my_radio_button_id2">4</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioP" id="radioP5" />
+                      <label for="my_radio_button_id3">5</label>
+                    </div>
+                  </div>
+                </div>
+                 <div class="col-md-4">
+                  <p style="color: #058DC7; font-weight: bold;">Συμπεριφορά</p>
+                  <div id="checkboxes">
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioS" id="radioS1" />
+                      <label for="my_radio_button_id1">1</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioS" id="radioS2" />
+                      <label for="my_radio_button_id2">2</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioS" id="radioS3"  checked="" />
+                      <label for="my_radio_button_id3">3</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioS" id="radioS4" />
+                      <label for="my_radio_button_id2">4</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioS" id="radioS5" />
+                      <label for="my_radio_button_id3">5</label>
+                    </div>
+                  </div>
+                </div>
+                 <div class="col-md-4">
+                  <p style="color: #AA4643; font-weight: bold;">Απόδοση</p>
+                  <div id="checkboxes">
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioA" id="radioA1" />
+                      <label for="my_radio_button_id1">1</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioA" id="radioA2" />
+                      <label for="my_radio_button_id2">2</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioA" id="radioA3" checked="" />
+                      <label for="my_radio_button_id3">3</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioA" id="radioA4" />
+                      <label for="my_radio_button_id2">4</label>
+                    </div>
+                    <div class="checkboxgroup">
+                      <input type="radio" name="radioA" id="radioA5" />
+                      <label for="my_radio_button_id3">5</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row"  style="margin-bottom: 10px;" >
+              <div class="col-md-12">
+                <p style="font-weight: bold;">Σχόλια</p>
+                <textarea  class="form-control" name="notes" placeholder=""></textarea>
+              </div>
+              </div>
+            <input type="hidden" name="id" id="pid"  value="">
+
+            <div class="row"> 
+              <div class="col-sm-10" style="text-align: right;"> 
+                <!--<button type="button" class="btn btn-warning btn-s">Προσθήκη</button>-->
+                <input class="btn btn-warning btn-s"  type="submit" value='Αποθήκευση'>
+              </div>
+            </div>
+         </form>
+         </div>   
+      </div>
+    </div><!-- /.modal-content --> 
+  </div><!-- /.modal-dialog --> 
+</div><!-- /.modal- --> 
+
+<!--Script for dynamic data for bootstrap modal edit, delete patient -->
+<script type="text/javascript">
+  $('#complete').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var modal = $(this)
+
+    modal.find('.modal-body #pname').val(button.data('name'))
+    modal.find('.modal-body #pid').val(button.data('id'))
+  })
+</script>
 
 
    

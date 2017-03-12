@@ -1,3 +1,10 @@
+<?php
+include 'core/init.php';
+
+//if ( $_SESSION['logged_in'] != true)
+//  header('Location: e-login.php');
+//?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -86,8 +93,8 @@
 <body>
 <div class="navbar navbar-default" role="navigation">
       <div class="container">
-        <div class="navbar-header" style="margin-right: 10px;">
-          <!--<a href=""><img style="height:65px; width: 130px;" src="img/logo.png" style=""></a>-->
+        <div class="navbar-header" style="margin-right: -20px;">
+          <a href=""><img style="height:70px; width: 200px;" src="img/logoT4.png" style=""></a>
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Menu</span>
             <span class="icon-bar"></span>
@@ -134,7 +141,7 @@
               <img style='height: 20px; width: 20px;' class="img-circle" src="img/profile.jpg">
               <b>Μαρία Ιακώβου</b><span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="#"> <span class="glyphicon glyphicon-log-out"></span> Ρυθμίσεις</a></li>
+                <li><a href="#myModalNorm" role="button" data-toggle="modal"> <span class="glyphicon glyphicon-log-out"></span> Ρυθμίσεις</a></li>
                 <li><a href="login.php"><span class="glyphicon glyphicon-cog"></span> Έξοδος</a></li>
               </ul>
             </li>
@@ -157,3 +164,83 @@
     
 </body>
 </html>
+
+
+
+    <!-- Modal for general account settings-->
+<div class="modal fade" id="myModalNorm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header"  style="background-color: #F5F5F5;">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel" style="font-family: Sans-serif;font-weight: bold; color:#2F4F4F">
+                    Ρυθμίσεις Λογαριασμού
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form role="form"  action="core/update_personal_settings.php" method="POST"class="form-horizontal">
+                <div class="row">
+                        <label class="col-sm-3"  style="margin-top: 10px;"for="Password" >Όνομα</label>
+                        <div class="col-sm-8">  
+                            <input type="text"  style="margin-bottom: 10px;" class="form-control" id="Fname" name="fname" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-3"  style="margin-top: 10px;"for="Password" >Επίθετο</label>
+                        <div class="col-sm-8">  
+                            <input type="text"  style="margin-bottom: 10px;" class="form-control" id="Lname" name="lname" />
+                        </div>
+                    </div>
+
+                <div class="row" style="background-color: #F5F5F5; margin-bottom:10px; margin-top:10px;">
+                    <input type="submit" class="btn btn-primary pull-right" value="Αποθήκευση" name="changeName" style="margin-right:64px;"/>
+                </div>
+                 </form>
+                  <form role="form"  action="core/update_settings.php" method="POST"class="form-horizontal">
+                    <div class="row">
+                        <label class="col-sm-3"  style="margin-top: 10px;"for="Password" >Κωδικός πρόσβασης</label>
+                        <div class="col-sm-8">  
+                            <input type="password"  style="margin-bottom: 10px;" class="form-control"
+                            id="current_password" name="current_password" required onkeyup="CheckPasswordStrength(this.value)"/>
+                        </div>
+                         <div  style="margin-top:10px;"> <span id="password_strength"></span></div>
+                    </div>
+                     <div class="row">
+                        <label class="col-sm-3"  style="margin-top: 10px;"for="Password" >Νέος κωδικός</label>
+                        <div class="col-sm-8">  
+                            <input type="password"  style="margin-bottom: 10px;" class="form-control"
+                            id="password" name="password" required onkeyup="CheckPasswordStrength(this.value)"/>
+                          
+                        </div>
+                         <div  style="margin-top:10px;"> <span id="password_strength"></span></div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-3" style="margin-top: 10px;" for="ConfirmPassword">Επανάληψη νέου κωδικού</label>
+                        <div class="col-sm-8"> 
+                            <input type="password"   class="form-control"
+                            id="ConfirmPassword" name="ConfirmPassword" />
+                        </div>
+                       <script> validatePassword();</script>
+                    </div>
+                     <div class="row" style="background-color: #F5F5F5; margin-bottom:10px; margin-top:10px;">
+                    <input type="submit" class="btn btn-primary pull-right" value="Αποθήκευση" name="changePassword" style="margin-right:64px;"/>
+                </div>
+                <!-- Modal Footer -->
+                <div class="modal-footer"></div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+<script type="text/javascript">
+    document.getElementById("Fname").value="<?php echo $_SESSION['first_name'];?>";
+    document.getElementById("Lname").value="<?php echo$_SESSION['last_name'];?>";
+    document.getElementById("current_password").value="<?php echo  $_SESSION['passowrd'];?>";
+</script>

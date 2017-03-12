@@ -7,7 +7,7 @@ session_start();
 //}
 
 $therapist_id='1';//$_SESSION["user_ID"];
-$patient_id='6';//$_SESSION["user_ID"];     
+//$patient_id='6';//$_SESSION["user_ID"];     
 
 //   convert date language to greek                 
 date_default_timezone_set('Europe/Athens');
@@ -17,6 +17,19 @@ setlocale(LC_TIME, 'el_GR.UTF-8');
 $greekDays = array( "Κυριακή", "Δευτέρα", "Τρίτη", "Τετάρτη", "Πέμπτη", "Παρασκευή", "Σάββατο" ); 
 $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτίου','Απριλίου','Μαΐου','Ιουνίου','Ιουλίου','Αυγούστου','Σεπτεμβρίου','Οκτωβρίου','Νοεμβρίου','Δεκεμβρίου');  
 
+
+if(isset($_POST['patient'])){
+  $patient_id=$_POST['patient'];
+
+  $patient_info = mysqli_query($conn,"SELECT  distinct * FROM patient patList where patList.therapist_id='".$therapist_id."' and 
+    patList.patient_id='".$patient_id."'");
+
+  if (!$patient_info) { // add this check.
+      die('Invalid query: ' . mysql_error());
+  }
+  $info = mysqli_fetch_array($patient_info);
+  $patientName=$info['first_name'].' '.$info['last_name'];
+}
 
 ?>
 <!DOCTYPE html>
@@ -50,6 +63,10 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
     });
   </script>
 
+
+  <!--Search and select option in modal-->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
+  <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
   <style type="text/css">
       
   @media (max-width: 768px) {
@@ -470,6 +487,10 @@ div.polaroid {
     line-height: 20px;
     display: block;
 }
+
+
+
+
 </style>
 
 </head>
@@ -481,7 +502,26 @@ div.polaroid {
   <div class="container" style="margin-top: 40px;">
     <div class="row">
       <div class="col-sm-2">
-       <img style='height: 20px; width: 20px;' src="img/profile.jpg"><b>  Ηλίας Χρίστου</b>
+        <form name="form1" method="POST" action="history_details.php">
+        <select  onchange="this.form.submit()" name="patient" class="selectpicker" data-style="" data-width="100%" data-show-subtext="true" data-live-search="true" > 
+        <option selected><?php echo $patientName ?></option>
+        <?php 
+         $patient_list = mysqli_query($conn,"SELECT  distinct * FROM patient patList where patList.therapist_id='".$therapist_id."' ");
+
+        if (!$patient_list) { // add this check.
+            die('Invalid query: ' . mysql_error());
+        }
+        while ($list = mysqli_fetch_array($patient_list)) { ?>
+        
+        <option data-subtext="<?php echo $list['parent_fname']." ".$list['parent_lname']?>" value="<?php echo $list['patient_id']?>"  >
+        <?php echo $list['first_name']." ".$list['last_name']?></option>
+        <?php } ?>
+        </select>
+
+        
+        </form>
+      <!-- <img style='height: 20px; width: 20px;' src="img/profile.jpg"><b>  Ηλίας Χρίστου</b>-->
+
         <nav class="nav-sidebar">
             <ul class="nav tabs">
               <li class="active"><a href="#graph" data-toggle="tab">Γραφική Προόδου</a></li>
@@ -495,7 +535,7 @@ div.polaroid {
         <div class="tab-content">
           <div class="tab-pane active" id="graph" role="tabpanel">
           <!--Add graph-->
-            <div id="placeholder"></div>
+            <div id="placeholder" style="margin-left: 100px"></div>
             <div class="container" style="margin-top: 20px;">
               <div class='col-md-10'>
                 <div class="carousel slide " data-ride="carousel" id="quote-carousel" data-interval="false">
@@ -511,7 +551,6 @@ div.polaroid {
 
                       <?php 
                       $conference_details = mysqli_query($conn,"SELECT  distinct * FROM conference as c where c.therapist_id='".$therapist_id."' and c.patient_id='".$patient_id."'");
-
 
                       if (!$conference_details) { // add this check.
                         die('Invalid query: ' . mysqli_error($conn));
