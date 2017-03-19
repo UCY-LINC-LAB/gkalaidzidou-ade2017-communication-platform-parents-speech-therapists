@@ -247,11 +247,50 @@ $(document).ready(function () {
 });*/
 
 $(document).ready(function () {
+<?php 
+   $score = mysqli_query($conn,"SELECT  distinct * FROM  conference_score_bar as cs, conference as c
+    where c.therapist_id='".$therapist_id."' and c.conference_id=cs.conference_id and c.patient_id='".$patient_id."' ");
 
-    var d3 = [[1, 5], [2, 2], [3, 5], [4, 1], [5, 5],[6, 3],[7, 3]];
-    var d2 = [[1, 3], [2, 5], [3, 5], [4, 3],[5, 3],[6, 3],[7, 3]];
-    var d1 = [[1, 2], [2, 3], [3, 5], [4, 3],[5, 3],[6, 4],[7, 3]];
+  if (!$score) { // add this check.
+      die('Invalid query: ' . mysql_error());
+  } ?>
+var d3 = [
+ <?php $count=1;
+ while ($score_list = mysqli_fetch_array($score)) { 
+    if($score_list['title']=='Prosoxh'){
+      if($count!=1)
+        echo (',');
+      echo  ('['.$count.','.$score_list['score'].']');
+      $count++;
+    }
+ }
+ mysqli_data_seek($score, 0 );
+ ?>];
 
+var d2 = [
+<?php $count=1;
+ while ($score_list = mysqli_fetch_array($score)) { 
+    if($score_list['title']=='Apodosh'){
+      if($count!=1)
+        echo (',');
+      echo  ('['.$count.', '.$score_list['score'].']');
+      $count++;
+    }
+ }
+ mysqli_data_seek($score, 0 );?>
+];
+var d1 = [
+<?php $count=1;
+ while ($score_list = mysqli_fetch_array($score)) { 
+    if($score_list['title']=='Symperifora'){
+      if($count!=1)
+        echo (',');
+      echo  ('['.$count.', '.$score_list['score'].']');
+      $count++;
+    }
+ }
+?>
+];
     var data1 = [
     {label: "Συμπεριφορά",  data: d1, points: { symbol: "circle", fillColor: "#058DC7" }, color: '#058DC7'},
     {label: "Απόδοση στόχου",  data: d2, points: { symbol: "diamond", fillColor: "#AA4643" }, color: '#AA4643'},

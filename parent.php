@@ -5,6 +5,8 @@ session_start();
 //if ( $_SESSION['logged_in'] != true){
  // header('Location: e-login.php');
 //}
+if(!isset($_GET['page']))
+  $_GET['page']=1;
 
 $therapist_id='1';//$_SESSION["user_ID"];
 $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτίου','Απριλίου','Μαΐου','Ιουνίου','Ιουλίου','Αυγούστου','Σεπτεμβρίου','Οκτωβρίου','Νοεμβρίου','Δεκεμβρίου');  
@@ -45,7 +47,7 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
               if(inputText != '')
               {
                   $('.search-query-sf').remove();
-                  tableBody.prepend('<tr class="search-query-sf"><td colspan="6"><strong>Searching for: "'
+                  tableBody.prepend('<tr class="search-query-sf"><td colspan="6"><strong>Αναζήτηση: "'
                       + $(that).val()
                       + '"</strong></td></tr>');
               }
@@ -69,7 +71,7 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
           //all tr elements are hidden
           if(tableRowsClass.children(':visible').length == 0)
           {
-              tableBody.append('<tr class="search-sf"><td class="text-muted" colspan="6">No entries found.</td></tr>');
+              tableBody.append('<tr class="search-sf"><td class="text-muted" colspan="6">Δεν βρέθηκαν αποτελέσματα.</td></tr>');
           }
       });
   });
@@ -140,6 +142,29 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
         </div>  
     </div>
 
+<?php
+    // Requested page
+    $requested_page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+
+    // Get the product count
+    $r = mysqli_query($conn,"SELECT COUNT(*) FROM patient WHERE therapist_id='".$therapist_id."'");
+    $list = mysqli_fetch_row($r);
+    $product_count = $list[0];
+
+    $products_per_page = 2;
+
+    // 55 products => $page_count = 3
+    $page_count = ceil($product_count / $products_per_page);
+
+    // You can check if $requested_page is > to $page_count OR < 1,
+    // and redirect to the page one.
+
+    $first_product_shown = ($requested_page - 1) * $products_per_page;
+
+    // Then we retrieve the data for this requested page
+    $r = mysqli_query($conn,"SELECT * FROM patient WHERE therapist_id='1' LIMIT $first_product_shown, $products_per_page");
+?>
+
     <div class="row">    
       <div class="col-md-12 table-responsive">
        <table class="table table-list-search table-hover">
@@ -159,17 +184,10 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
           </thead>
             <tbody>
               <?php 
-              $patient_list = mysqli_query($conn,"SELECT  distinct * FROM patient patList where patList.therapist_id='".$therapist_id."' ");
-
-              if (!$patient_list) { // add this check.
-                die('Invalid query: ' . mysql_error());
-              }
-
-              while ($list = mysqli_fetch_array($patient_list)) { 
+              while($list = mysqli_fetch_assoc($r)) {
 
                   $conn_req = mysqli_query($conn,"SELECT  distinct * FROM connection_state conn where conn.therapist_id='".$therapist_id."' and 
                   conn.patient_id='".$list['patient_id']."'");
-
 
                   if (!$conn_req) { // add this check.
                     die('Invalid query: ' . mysql_error());
@@ -226,35 +244,36 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
               <?php } ?>
             </tbody>     
       </table>  
-  <script src="//raw.github.com/botmonster/jquery-bootpag/master/lib/jquery.bootpag.min.js"></script>
-      <!--Pagination-->
-      <div class="col-md-4">
-        <ul class="pagination">
-          <li class="disabled"><a href="#">«</a></li>
-          <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-          <li><a href="#">2</a></li>
-          <li><a href="#">3</a></li>
-          <li><a href="#">4</a></li>
-          <li><a href="#">5</a></li>
-          <li><a href="#">»</a></li>
+ 
+      <div class="col-md-4" >
+      <ul id="paginate" class="pagination" >
+       
+         <?php // Ok, we write the page links  
+            if ($_GET['page'] <=1 ) {
+              echo '<li class="disabled"><a href="#">«</a></li>';
+            }else if ($_GET['page'] >1){
+              $n=$_GET['page']-1;
+              echo '<li><a href="parent.php?page='.$n. '">«</a></li>';
+            }
+
+
+          for($i=1; $i<=$page_count; $i++) {
+              if($i == $requested_page) {
+                  echo '<li class="active"><a href="#">'.$i.' <span class="sr-only">(current)</span></a></li>';
+              } else {
+                  echo '<li><a href="parent.php?page='.$i.'">'.$i.'</a></li> ';
+              }
+          }
+          if ($_GET['page'] < $page_count) {
+            $n=$_GET['page']+1;
+            echo '<li><a href="parent.php?page='.$n. '">»</a></li>';
+          }else{
+            echo '<li class="disabled"><a href="#">»</a></li>';
+          }
+          ?>
         </ul>
       </div>
 
-<script type="text/javascript" src="http://botmonster.com/jquery-bootpag/jquery.bootpag.js"></script>
-
-    <script>
-$('#show_paginator').bootpag({
-      total: 23,
-      page: 3,
-      maxVisible: 10
-}).on('page', function(event, num)
-{
-     $("#dynamic_content").html("Page " + num); // or some ajax content loading...
-});
-    </script>
-<div id="dynamic_content">Pagination goes here</div>
-<div id="show_paginator"></div>
-    
     </div>
    </div>
 </div>
@@ -268,6 +287,25 @@ function invited() {
     document.getElementById("invited").style.display='block';
 }
 </script>
+
+      <script type="text/javascript">
+      alert("hello");
+        $("#paginate li").click(function(){
+          
+
+    var pageNum = <?php echo $currentPage; ?>;
+
+    if ( this.id == "prev" )
+         pageNum = Math.max(1, pageNum--);
+    else if ( this.id == "next" )
+         pageNum = Math.min(<?php echo $pages ?>, pageNum++);
+    else 
+         pageNum = this.id;
+
+    $("#content").load("parent.php?page=" + pageNum, Hide_Load());
+
+});
+      </script>
 
 <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="add" aria-hidden="true">
   <div class="modal-dialog">

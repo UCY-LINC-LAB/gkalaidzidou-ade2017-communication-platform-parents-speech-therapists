@@ -58,6 +58,7 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
     width: 35%; 
     padding: 1em; 
     float:right;
+
     } 
 
     .ScrollStyle
@@ -98,7 +99,7 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
 /*alert notice*/
 .notice {
     padding: 15px;
-    background-color: #fafafa;
+    background-color: #f9f9f9;
     border-left: 6px solid #7f7f84;
     margin-bottom: 10px;
     -webkit-box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
@@ -255,10 +256,10 @@ line-height: 22px;
 }
 
 
-/*label styling*/
+/*label styling
 label {
     font-weight: normal !important;
-}
+}*/
   </style>
 </head>
 
@@ -271,10 +272,10 @@ label {
 
     <h3> Ολοκλήρωση</h3>
     <hr>
-
+    <div style="overflow-y: auto; height:400px;">
     <?php 
     $notif = mysqli_query($conn,"SELECT  distinct * FROM conference as conf,patient as pat where conf.therapist_id='".$therapist_id."' and 
-      DATE(conf.conference_date) < CURRENT_DATE and conf.patient_id=pat.patient_id");
+      DATE(conf.conference_date) < CURRENT_DATE and conf.patient_id=pat.patient_id and conf.comment='' ");
 
     if (!$notif) { // add this check.
       die('Invalid query: ' . mysql_error());
@@ -302,169 +303,121 @@ label {
           <br>
           <p style="color: grey; font-size: 10px;"><span class="glyphicon glyphicon-pencil"></span> 
           <?php echo date('j',strtotime($notifications['conference_date'])) . ' ' .$greekMonths[intval(date('m',strtotime($notifications['conference_date'])))-1]  ?> </p>          
-          <p data-placement="top" data-toggle="tooltip" title="complete">
-                <button class="btn btn-clr1 btn-xs" data-title="complete" data-toggle="modal" data-target="#complete" 
-                  data-id="<?php echo $notifications['patient_id']; ?>" 
-                  data-name="<?php echo $notifications['first_name'].' '.$notifications['last_name']; ?>">
-                  <span class="glyphicon glyphicon-option-horizontal"></span></button>
-                  </p>
-
+    
+          <a href="#;" 
+            data-cid="<?php echo $notifications['conference_id']; ?>" 
+            data-id="<?php echo $notifications['patient_id']; ?>" 
+            data-name="<?php echo $notifications['first_name'].' '.$notifications['last_name']; ?>"
+            class="btn btn-clr1 btn-xs showme"><span class="glyphicon glyphicon-option-horizontal"></span></a>
           </div>
         </div>
       </div>
       <?php }?>
-      <!--<div class="notice notice-warning">
-        <div class="row">
-          <div class="col-md-2"> <a href="#">
-              <img style='height: 40px; width: 40px;'  src="img/profile.jpg"></a></div>
-          <div class="col-md-10">Νέο σχόλιο από <b>Μαρία Γεωργίου </b><br>
-           <p style="color: grey; font-size: 10px;"><span class="glyphicon glyphicon-comment"></span> 12 Μαρτίου </p></div></div>
-        </div>
-      </div>-->
-
-  <!--  <div class="row">
-    <h2>Time Line</h2>
-  </div>
-    <div class="qa-message-list" id="wallmessages">
-            <div class="message-item" id="m16">
-            <div class="message-inner">
-              <div class="message-head clearfix">
-                <div class="avatar pull-left"><a href="./index.php?qa=user&qa_1=Oleg+Kolesnichenko"><img class="lineImg" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png"></a></div>
-                <div class="user-detail">
-                  <h5 class="handle">Στέλιος Βαισλείου</h5>
-                  <div class="post-meta">
-                    <div class="asker-meta">
-                      <span class="qa-message-what"></span>
-                      <span class="qa-message-when">
-                        <span class="qa-message-when-data">14 Μαρτίου</span>
-                      </span>
-                     
-                      <span class="qa-message-who">
-                        <span class="qa-message-who-pad">by </span>
-                        <span class="qa-message-who-data"><a href="./index.php?qa=user&qa_1=Oleg+Kolesnichenko">Στέλιος Βαισλείου</a></span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="qa-message-content">
-              <div class="row">
-                <div class="col-md-4">
-                  <p style="color: #50B432; font-weight: bold;">Προσοχή</p>
-                  <div id="checkboxes">
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioP" id="radioP1" />
-                      <label for="my_radio_button_id1">1</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioP" id="radioP2" />
-                      <label for="my_radio_button_id2">2</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioP" id="radioP3" checked="" />
-                      <label for="my_radio_button_id3">3</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioP" id="radioP4" />
-                      <label for="my_radio_button_id2">4</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioP" id="radioP5" />
-                      <label for="my_radio_button_id3">5</label>
-                    </div>
-                  </div>
-                </div>
-                 <div class="col-md-4">
-                  <p style="color: #058DC7; font-weight: bold;">Συμπεριφορά</p>
-                  <div id="checkboxes">
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioS" id="radioS1" />
-                      <label for="my_radio_button_id1">1</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioS" id="radioS2" />
-                      <label for="my_radio_button_id2">2</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioS" id="radioS3"  checked="" />
-                      <label for="my_radio_button_id3">3</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioS" id="radioS4" />
-                      <label for="my_radio_button_id2">4</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioS" id="radioS5" />
-                      <label for="my_radio_button_id3">5</label>
-                    </div>
-                  </div>
-                </div>
-                 <div class="col-md-4">
-                  <p style="color: #AA4643; font-weight: bold;">Απόδοση</p>
-                  <div id="checkboxes">
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioA" id="radioA1" />
-                      <label for="my_radio_button_id1">1</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioA" id="radioA2" />
-                      <label for="my_radio_button_id2">2</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioA" id="radioA3" checked="" />
-                      <label for="my_radio_button_id3">3</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioA" id="radioA4" />
-                      <label for="my_radio_button_id2">4</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioA" id="radioA5" />
-                      <label for="my_radio_button_id3">5</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-              <div class="col-md-12">
-                <p style="font-weight: bold;">Σχόλια</p>
-                <textarea  class="form-control" name="notes" placeholder=""></textarea>
-              </div>
-              </div>
-
-
-              </div>
-          </div></div>
-        
-          <div class="message-item" id="m9">
-            <div class="message-inner">
-             
-          </div></div>
-
-
-        
-        </div>-->
-</div>
-
-
-<!--
-    <div class="right">
-
-
-    <h4 id="notifTitle" style="margin-bottom: 60px"></h4>
-    
-    <div class="stickyNote">
-        <textarea  class="form-control" name="notes" style="margin-bottom: 10px;  background: transparent;   height: 250px;
-    border: none;" form="usrform" placeholder="Γράψε κάτι να θυμάσε.."></textarea>
-
-      <button type="button" class="btn" style=" float: left; background: transparent; float: right;"><span class="glyphicon glyphicon-ok"> </span> Αποθήκευση</button>
-
+      </div>
+      
     </div>
-  </div>
--->
   </div><!--container end-->
 </body>
 </html>
+
+<script type="text/javascript">
+    jQuery(function($){
+         $('a.showme').click(function(ev){
+             ev.preventDefault();
+             var uid = $(this).data('id');
+             var uname = $(this).data('name');
+             var confeid = $(this).data('cid');
+
+             var dialog = bootbox.dialog({
+              title: '' + uname,
+                message: '<div id="dynamic-content">'+
+                          '<form role="form" id="completeConf" action="core/complete_conference.php" method="POST" class="form-horizontal">' +
+                              ' <input name="conference_id" value="'+confeid+'" type="text" hidden>'+
+                             '<div class="row">'+
+                              '<div class="col-md-4">'+
+                              '<label for="attention" class="control-label input-group">Προσοχή</label>'+
+                              '<div class="btn-group" data-toggle="buttons">'+
+                                '<label class="btn btn-default">'+
+                                 ' <input name="attention" value="1" type="radio" checked>1'+
+                                '</label>'+
+                                '<label class="btn btn-default">'+
+                                  '<input name="attention" value="2" type="radio">2'+
+                                '</label>'+
+                                '<label class="btn btn-default">'+
+                                  '<input name="attention" value="3" class="active" type="radio">3'+
+                                '</label>'+
+                                '<label class="btn btn-default">'+
+                                  '<input name="attention" value="4" class="active" type="radio">4'+
+                                '</label>'+
+                               '<label class="btn btn-default">'+
+                                  '<input name="attention" value="5" class="active" type="radio">5'+
+                                '</label>'+
+                              '</div>'+
+                             '</div>'+
+                              '<div class="col-md-4">'+
+                              '<label for="production" class="control-label input-group">Απόδοση</label>'+
+                              '<div class="btn-group" data-toggle="buttons">'+
+                                '<label class="btn btn-default">'+
+                                  '<input name="production" value="1" type="radio">1'+
+                                '</label>'+
+                                '<label class="btn btn-default">'+
+                                 ' <input name="production" value="2" type="radio">2'+
+                               ' </label>'+
+                                '<label class="btn btn-default">'+
+                                  '<input name="production" value="3" class="active" type="radio">3'+
+                                                '</label>'+
+                                '<label class="btn btn-default">'+
+                                  '<input name="production" value="4" class="active" type="radio">4'+
+                                '</label>'+
+                                '<label class="btn btn-default">'+
+                                  '<input name="production" value="5" class="active" type="radio">5'+
+                                '</label>'+
+                              '</div>'+
+                             ' </div>'+
+                              '<div class="col-md-4">'+
+                              '<label for="behavior" class="control-label input-group">Συμπεριφορά</label>'+
+                              '<div class="btn-group" data-toggle="buttons">'+
+                                '<label class="btn btn-default">'+
+                                  '<input name="behavior" value="1" type="radio" >1'+
+                                '</label>'+
+                                '<label class="btn btn-default">'+
+                                  '<input name="behavior" value="2" type="radio">2'+
+                                '</label>'+
+                                '<label class="btn btn-default">'+
+                                  '<input name="behavior" value="3" class="active" type="radio">3'+
+                                '</label>'+
+                                '<label class="btn btn-default">'+
+                                  '<input name="behavior" value="4" class="active" type="radio">4'+
+                               ' </label>'+
+                               ' <label class="btn btn-default">'+
+                                  '<input name="behavior" value="5" class="active" type="radio">5'+
+                                '</label>'+
+                              '</div>'+
+                              '</div>'+
+                              '</div>'+
+
+                              '<div class="row"  style="margin-top: 10px;" >'+
+                                '<div class="col-md-12">'+
+                                 ' <p style="font-weight: bold;">Σχόλια</p>'+
+                                  '<textarea  class="form-control" name="comments" placeholder=""></textarea>'+
+                                '</div>'+
+                              '</div>'+
+                           '</form>'+
+                         '  </div>',
+                  buttons: {
+                    success: {
+                        label: "Ολοκλήρωση",
+                        className: "btn-success",
+                        callback: function () {
+                          $("#completeConf").submit();
+                            this.close();
+                        }
+                    }
+                }
+          }); 
+         });
+    });
+</script>
 
  <script type="text/javascript">
 
@@ -708,134 +661,3 @@ label {
   </script>
 
 
-<div class="modal fade" id="complete" tabindex="-1" role="dialog" aria-labelledby="complete" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove "  style="font-size: 0.6em;" aria-hidden="true"></span></button>
-        <h4 class="modal-title custom_align"></h4>
-      </div>
-      <div class="modal-body">
-        <div id="modal-loader" style="display: none; text-align: center;">
-          
-         
-        </div>
-        <div id="dynamic-content">
-        <form role="form"  action="core/update_patient.php" method="POST" class="form-horizontal">
-           <div class="row">
-
-            <input type="" name="pname" id="pname" value="">
-
-
-
-
-                <div class="col-md-4">
-                  <p style="color: #50B432; font-weight: bold;">Προσοχή</p>
-                  <div id="checkboxes">
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioP" id="radioP1" />
-                      <label for="my_radio_button_id1">1</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioP" id="radioP2" />
-                      <label for="my_radio_button_id2">2</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioP" id="radioP3" checked="" />
-                      <label for="my_radio_button_id3">3</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioP" id="radioP4" />
-                      <label for="my_radio_button_id2">4</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioP" id="radioP5" />
-                      <label for="my_radio_button_id3">5</label>
-                    </div>
-                  </div>
-                </div>
-                 <div class="col-md-4">
-                  <p style="color: #058DC7; font-weight: bold;">Συμπεριφορά</p>
-                  <div id="checkboxes">
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioS" id="radioS1" />
-                      <label for="my_radio_button_id1">1</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioS" id="radioS2" />
-                      <label for="my_radio_button_id2">2</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioS" id="radioS3"  checked="" />
-                      <label for="my_radio_button_id3">3</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioS" id="radioS4" />
-                      <label for="my_radio_button_id2">4</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioS" id="radioS5" />
-                      <label for="my_radio_button_id3">5</label>
-                    </div>
-                  </div>
-                </div>
-                 <div class="col-md-4">
-                  <p style="color: #AA4643; font-weight: bold;">Απόδοση</p>
-                  <div id="checkboxes">
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioA" id="radioA1" />
-                      <label for="my_radio_button_id1">1</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioA" id="radioA2" />
-                      <label for="my_radio_button_id2">2</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioA" id="radioA3" checked="" />
-                      <label for="my_radio_button_id3">3</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioA" id="radioA4" />
-                      <label for="my_radio_button_id2">4</label>
-                    </div>
-                    <div class="checkboxgroup">
-                      <input type="radio" name="radioA" id="radioA5" />
-                      <label for="my_radio_button_id3">5</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row"  style="margin-bottom: 10px;" >
-              <div class="col-md-12">
-                <p style="font-weight: bold;">Σχόλια</p>
-                <textarea  class="form-control" name="notes" placeholder=""></textarea>
-              </div>
-              </div>
-            <input type="hidden" name="id" id="pid"  value="">
-
-            <div class="row"> 
-              <div class="col-sm-10" style="text-align: right;"> 
-                <!--<button type="button" class="btn btn-warning btn-s">Προσθήκη</button>-->
-                <input class="btn btn-warning btn-s"  type="submit" value='Αποθήκευση'>
-              </div>
-            </div>
-         </form>
-         </div>   
-      </div>
-    </div><!-- /.modal-content --> 
-  </div><!-- /.modal-dialog --> 
-</div><!-- /.modal- --> 
-
-<!--Script for dynamic data for bootstrap modal edit, delete patient -->
-<script type="text/javascript">
-  $('#complete').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget) // Button that triggered the modal
-    var modal = $(this)
-
-    modal.find('.modal-body #pname').val(button.data('name'))
-    modal.find('.modal-body #pid').val(button.data('id'))
-  })
-</script>
-
-
-   
