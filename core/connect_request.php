@@ -1,7 +1,7 @@
 <?php
 include 'init.php';
 session_start();
-
+alert("conn");
 $conn_email = $_POST['conn_email'];
 $patient_id = $_POST['patID'];
 $threapist_id = '1';

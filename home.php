@@ -300,15 +300,16 @@ label {
           <a href="#">
               <img style='height: 40px; width: 40px;'  src="img/profile.jpg"></a></div>
           <div class="col-md-10"> Ασυμπλήρωτη συνεδρία με <b><?php echo $notifications['first_name']." ".$notifications['last_name']?></b>
-          <br>
-          <p style="color: grey; font-size: 10px;"><span class="glyphicon glyphicon-pencil"></span> 
-          <?php echo date('j',strtotime($notifications['conference_date'])) . ' ' .$greekMonths[intval(date('m',strtotime($notifications['conference_date'])))-1]  ?> </p>          
-    
-          <a href="#;" 
+                    <a href="#;" 
             data-cid="<?php echo $notifications['conference_id']; ?>" 
             data-id="<?php echo $notifications['patient_id']; ?>" 
             data-name="<?php echo $notifications['first_name'].' '.$notifications['last_name']; ?>"
             class="btn btn-clr1 btn-xs showme"><span class="glyphicon glyphicon-option-horizontal"></span></a>
+          <br>
+          <p style="color: grey; font-size: 10px;"><span class="glyphicon glyphicon-pencil"></span> 
+          <?php echo date('j',strtotime($notifications['conference_date'])) . ' ' .$greekMonths[intval(date('m',strtotime($notifications['conference_date'])))-1]  ?> </p>          
+    
+
           </div>
         </div>
       </div>
@@ -449,7 +450,7 @@ label {
                          '<input id="timepicker1" name="startTime" type="text" class="form-control input-small" >' +
                          '<span class="input-group-addon" ><i class="glyphicon glyphicon-time"></i></span>' +
                          '</div> ' +
-                         '<label class="col-md-1 control-label"> εώς </label> ' +
+                         '<label class="col-md-1 control-label"> εώς   </label> ' +
 
                          '<div class=" col-md-2 input-group bootstrap-timepicker timepicker"  style="width=100%; float:left" >' +
                          '<input id="timepicker2" name="endTime" type="text" class="form-control input-small" >' +
@@ -520,15 +521,36 @@ label {
                          '<label class="col-md-6 control-label" style=" font-weight: normal">'+ calEvent.msg +'</label> ' +  
                          '</div> ' +
 
+                         '<div class="form-group"> ' +
+                         '<label class="col-md-4 control-label">Σχόλια</label> ' +
+                         '<label class="col-md-6 control-label" style=" font-weight: normal">'+ calEvent.comment +'</label> ' +  
+                         '</div> ' +
+
+                         '<div class="form-group"> ' +
+                         '<label class="col-md-4 control-label">Βαθμολογία</label> ' +
+              
+
+                         '<label class="col-md-6 control-label" style=" font-weight: normal">'+ "Απόδοση (" +calEvent.s1 + "/5), Συμπεριφορά ("  +calEvent.s2 + "/5), Προσοχή ("  + calEvent.s3 +'/5)</label> ' +  
+
+                         '</div> ' +
+
                          '<input name="eventID" hidden value="'+calEvent.id +'">'+
                          '</form> </div> </div>',
                 buttons: {
+                    cancel: {
+                        label: '<i class="fa fa-times "></i> Διαγραφή',
+                        className: "btn-danger",
+                        callback: function () {
+                          $("#deleteConf").submit();
+                            this.close();
+                        }
+                    },
                     success: {
-                        label: "Τροποποίηση",
+                        label: '<i class="fa fa-pencil"></i> Τροποποίηση',
                         className: "btn-success",
                         callback: function () {
                            var editModal =  bootbox.dialog({
-                title: "Προσθήκη συνεδρίας",
+                title: "Τροποποίηση συνεδρίας",
                 message: '<div class="row"> ' +
                          '<div class="col-md-12"> ' +
                          '<form id="updateConf" action="core/update_conference.php" method="POST"  class="form-horizontal"> ' +
@@ -603,14 +625,7 @@ label {
         editModal.modal("show");
                         }
                     },
-                    cancel: {
-                        label: '<i class="fa fa-check"></i> Διαγραφή',
-                        className: "btn-danger",
-                        callback: function () {
-                          $("#deleteConf").submit();
-                            this.close();
-                        }
-                    }
+
                 }
             });
         viewConfe.modal("show");
@@ -633,20 +648,35 @@ label {
             }
             while ($list = mysqli_fetch_array($conferences_list)) {  
                  $patient_info = mysqli_query($conn,"SELECT  distinct * FROM patient patInfo where patInfo.patient_id='".$list['patient_id']."' ");
+                 $scores = mysqli_query($conn,"SELECT  distinct * FROM conference_score_bar csb where csb.conference_id='".$list['conference_id']."' ");
+                 
                  if (!$patient_info) { // add this check.
                     die('Invalid query: ' . mysql_error());
                   }else{
                     $patInfo = mysqli_fetch_array($patient_info);
                   }
-
                  ?>            
            {
             title: '<?php echo $patInfo['first_name']." ".$patInfo['last_name'] ?>',
             start:'<?php echo $list['conference_date']." ".$list['start_time']?>',
             end:'<?php echo $list['conference_date']." ".$list['end_time']?>',
             msg :'<?php echo $list['target_description']?>',
-            id: '<?php echo $list['conference_id']?>'
-             // url: 'http://google.com/'
+            id: '<?php echo $list['conference_id']?>',
+            comment: '<?php echo $list['comment']?>',
+          
+          <?php  if (!$scores) { // add this check.
+                    die('Invalid query: ' . mysql_error());
+                  }else{
+                    while ($scorelist = mysqli_fetch_array($scores)) {  
+
+                        if($scorelist['title']=='Apodosh'){?>
+                          s1: '<?php echo $scorelist['score']?>',
+                        <?php }else if($scorelist['title']=='Symperifora'){?>
+                          s2: '<?php echo $scorelist['score']?>',
+                        <?php }else{?> 
+                          s3: '<?php echo $scorelist['score']?>',
+
+                        <?php }}}?>
           },
           <?php } ?>
           // other events here

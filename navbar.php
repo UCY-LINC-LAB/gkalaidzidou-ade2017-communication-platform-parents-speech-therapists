@@ -129,7 +129,7 @@ include 'core/init.php';
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><b>ΑΣΚΗΣΕΙΣ</b></a>
               <ul class="dropdown-menu">
                 <li><a href="#">Εμφάνιση</a></li>
-                <li><a href="#">Δημιουργία νέου</a></li>
+                <li><a href="exercises.php">Δημιουργία νέου</a></li>
               </ul>
             </li>
           </ul>
