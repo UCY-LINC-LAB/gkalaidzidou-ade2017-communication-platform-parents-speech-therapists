@@ -244,8 +244,6 @@ line-height: 22px;
  max-height: 40px;
 }
 
-
-
 /* for radio*/
 .checkboxgroup {
   display: inline-block;

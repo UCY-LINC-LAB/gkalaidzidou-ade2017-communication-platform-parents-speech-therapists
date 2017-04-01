@@ -3,17 +3,26 @@
 include 'init.php';
 
 if(!$_POST["data"]){
-    alert("data");
     echo "Nothing Sent";
     exit;
 }
  
-
+ $data=$_POST["data"];
 //decode JSON data received from AJAX POST request
-$data = json_decode($_POST["data"]);
- 
+$data = json_decode($data, true);
+
+//print_r($data);
+
+$totalItems= count($data);
+
+for ($x = 0; $x < $totalItems ; $x++) {
+        echo $data[$x]['id'];
+} 
 
 
+
+
+/*
 foreach($data->positions as $item) {
 
      echo ("ff" + $item->top); 
@@ -37,5 +46,5 @@ foreach($data->positions as $item) {
  
 //Return Success
 //echo "success";
- 
+ */
 ?>

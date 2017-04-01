@@ -14,7 +14,6 @@ include 'core/init.php';
 <style>
 .navbar {
   background-color: #ebebeb !important; 
-
   border-color: transparent; 
   border-radius: 0%;
   box-shadow: 0 0 6px 3px rgba(0,0,0,.35);
@@ -135,7 +134,7 @@ include 'core/init.php';
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
-          <li><a href=""> <span class="glyphicon glyphicon-bell" style="font-size: 15px; border-radius: 50%; border: 1px solid rgb(205, 209, 215); padding: 5px;"></span> </a></li>
+          <li><a> <span class="glyphicon glyphicon-bell" style="font-size: 15px; border-radius: 50%; border: 1px solid rgb(205, 209, 215); padding: 5px;"></span> </a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               <img style='height: 20px; width: 20px;' class="img-circle" src="img/profile.jpg">
