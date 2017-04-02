@@ -1,22 +1,37 @@
 <?php
 
 include 'init.php';
-
+session_start(); 
 if(!$_POST["data"]){
     echo "Nothing Sent";
     exit;
 }
  
- $data=$_POST["data"];
+
+ $exercise_id=$_SESSION['exercise_id'];
+
 //decode JSON data received from AJAX POST request
-$data = json_decode($data, true);
+$data = json_decode($_POST["data"], true);
 
 //print_r($data);
 
 $totalItems= count($data);
 
 for ($x = 0; $x < $totalItems ; $x++) {
-        echo $data[$x]['id'];
+    // echo $data[$x]['id'];
+    $split=explode("_", $data[$x]['id']);
+    $asset_id=$split[1];
+    $x_pos=$data[$x]['left'];
+    $y_pos=$data[$x]['top'];
+
+
+    $insert_exercise_assets = 
+    "INSERT INTO assets_of_exercise (exercise_id,asset_id,x_pos, y_pos) VALUES ('$exercise_id','$asset_id','$x_pos', '$y_pos')";
+    $insert_ex = mysqli_query($conn, $insert_exercise_assets);
+
+    if (!$insert_ex)
+        die('Invalid query: ' . mysqli_error($conn));
+          
 } 
 
 

@@ -2,6 +2,15 @@
 include 'core/init.php';
 session_start(); 
 
+if($_SESSION['exercise_id']!=null){
+  $exe=mysqli_query($conn,"SELECT * FROM exercise WHERE exercise_id='".$_SESSION['exercise_id']."' ");
+  $exercise_info= mysqli_fetch_array($exe);
+
+  $get_folder_id= mysqli_query($conn,"SELECT * FROM folder WHERE folder_id='".$_SESSION['folder_id']."' ");
+    if(mysqli_num_rows($get_folder_id) > 0 ){   
+        $folder_info =  mysqli_fetch_array($get_folder_id);
+    }
+}
 //if ( $_SESSION['logged_in'] != true){
  // header('Location: e-login.php');
 //}
@@ -36,6 +45,12 @@ $therapist_id='1';//$_SESSION["user_ID"];
 <link href='http://fonts.googleapis.com/css?family=News+Cycle:400,700' rel='stylesheet' type='text/css'>
 <link href="http://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
 
+
+
+  <!--Search and select option in modal-->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
+  <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+
   <style type="text/css">
     .left { 
       width: 25%; 
@@ -51,10 +66,18 @@ $therapist_id='1';//$_SESSION["user_ID"];
     .center { 
       width: 50%; 
       height: 400px;
-      border:1px solid #f0f0f0;
+     
       padding: 1em; 
       float:left;
     } 
+    .drop_area{
+       border:1px solid #f0f0f0;
+    height:400px;
+    position:relative;
+
+
+
+    }
     .assetImage{
       border: 1px solid #f0f0f0;
       padding:7px;
@@ -182,7 +205,10 @@ body {
                   cursor: "move",
                   stop: handleDragStop
               }));
-             var newID= "element_"+counter;
+
+          
+             var newID= $(ui.draggable).attr('id') +"_"+counter;
+             alert(newID);
               $(newClone).attr('id', newID);
 
               //var draggable = ui.draggable;
@@ -236,12 +262,7 @@ body {
 
   <div class="container">
     <div class="left"  style="clear: both">
-    <!--
-      <div id="trash"><span class="glyphicon glyphicon-trash"> <b>Διαγραφή</b>
-      </div>
-       <input type="button" value="Click me" id="press" onclick="saveFun()" >
-       -->
-    <button type="button" class="btn btn-xs left-block" style="background-color: transparent;" data-toggle="modal" data-target="#newFolder"><i class="fa fa-plus" aria-hidden="true"></i> Νέος Φάκελος</button>
+    <button type="button" class="btn btn-xs left-block" style="background-color: transparent;" data-toggle="modal" data-target="#newFolder"><i class="fa fa-plus" aria-hidden="true"></i> Νέα Άσκηση</button>
     <hr>
     <aside class="accordion">
        <?php 
@@ -264,7 +285,7 @@ body {
                <div>
               <h2> <i class="fa fa-angle-right" aria-hidden="true"></i> <a href="www.google.com"><?php echo $list_f['ex_name'] ?></a> </h2>
               <?php $prev=$list_f['folder_id']; }else{ ?>
-                  <h2> <a href="www.google.com"><?php echo $list_f['ex_name'] ?></a> </h2>
+                  <h2> <i class="fa fa-angle-right" aria-hidden="true"></i> <a href="www.google.com"><?php echo $list_f['ex_name'] ?></a> </h2>
               <?php } ?>
       <?php } ?>
        </div>
@@ -272,10 +293,51 @@ body {
 
     </div>
 
-    <div class="center" id="droppable"></div>
+    <div class="center" >
+      <div>
+        <h4><?php echo $folder_info['name'];?> <i class="fa fa-angle-right" aria-hidden="true"></i> <?php echo $exercise_info['ex_name'];?></h4>
+      </div>
+
+      <div id="droppable" class="drop_area" style=" position: relative;">
+      <!--  <div id="trash"><span class="glyphicon glyphicon-trash"></div>-->
+
+      <?php
+        //Create a query to fetch our values from the database  
+        $get_coords = mysqli_query($conn, "SELECT * FROM assets_of_exercise as ex, asset as a where ex.exercise_id='".$_SESSION['exercise_id']."' 
+          and a.asset_id=ex.asset_id");
+        //We then set variables from the * array that is fetched from the database
+        while($row = mysqli_fetch_array($get_coords)) {
+            $x = $row['x_pos'];
+            $y = $row['y_pos'];
+            $id = $row['asset_id'];
+
+             echo ($x ."  " . $y . " " . $id . "  # " );
+
+
+            //then echo our div element with CSS properties to set the left(x) and top(y) values of the element
+            //echo '<div id="element_'.$id.'" class="element" style="left:'.$x.'px; top:'.$y.'px;"><img style="height:100px; width:100px;" src="1.jpg" alt="Nettuts+" />Move the Box<p></p></div>';
+
+            echo '<img style="left:'.$x.'px; top:'.$y.'px; position:absolute; margin:auto;" class="assetImage" src="'.$row['path']. '" id="element_'.$row['asset_id'].'" draggable="true" />';
+          
+        }?>
+
+
+      
+      </div>
+
+
+      <div class="row" style="margin: 10px; float: right;">
+        <input onclick="saveFun()" class="btn btn-success btn-sm" value="Αποθήκευση">
+      </div>
+
+    </div>
 
     <div class="right">
-      <!--<div class="row"><b>Βιβλιοθήκη</b></div>-->
+      <div class="row" style="margin-left: 1px;">
+      <h4>Βιβλιοθήκη</h4>
+      
+        
+      </div>
       <div class="scrollStyle" id="library">
        <?php 
           $assets = mysqli_query($conn,"SELECT * FROM asset");
@@ -334,20 +396,54 @@ $(".accordion").click(function(e) {
        <form role="form"  action="core/create_folder.php" method="POST" class="form-horizontal">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Νέος Κατάλογος</h4>
+          <h5 class="modal-title"><b>Δημιουργία άσκησης</b></h5>
         </div>
         <div class="modal-body">
-          <div class="row">
-              <label  class="col-sm-6"  style="margin-bottom: 10px;" for="title">Όνομα </label>
+          <div class="row" style="margin-bottom: 10px;">
+              <label  class="col-sm-6"  style="margin-bottom: 10px;" for="title">Τίτλος </label>
               <div class="col-sm-6">
-                  <input type="text" class="form-control" id="folder_title" placeholder="" name="folder_title" value="new_folder" required/> 
+                  <input type="text" class="form-control" id="exer_title" placeholder="" name="exer_title" value="new_exer" required/> 
               </div>
           </div>
+          <div class="row">
+             <label  class="col-sm-4"  style="margin-bottom: 10px;" for="title">Κατάλογος </label>  
+             <div class="col-sm-2">
+             <button type="button" class="btn btn-xs" style="background-color: transparent;" onclick="displayCreateFolderDiv();">
+             <i class="fa fa-plus" aria-hidden="true"></i></button>   
+             </div>      
+             <div class="col-sm-6" >
+                <select  onchange="" name="folder_id" class="selectpicker" data-style="" data-width="100%" data-show-subtext="true" data-live-search="true" > 
+
+                <?php 
+
+                  $folders = mysqli_query($conn,"SELECT * FROM folder as f where f.therapist_id='".$therapist_id."' ORDER BY f.name");
+
+                  if (!$folders) {
+                    die('Invalid query: ' . mysqli_error($conn));
+                  }
+
+                while ($foldersList = mysqli_fetch_array($folders)) { ?>
+                
+                <option value="<?php echo $foldersList['folder_id'];?>"  >
+                <?php echo $foldersList['name'];?></option>
+                <?php } ?>
+                </select>  
+            </div>
+          </div>
+          
+          <div class="row" style="margin-bottom: 10px;" id="newFold" hidden="">
+            <hr>
+            <label  class="col-sm-6"  style="margin-bottom: 10px;" for="title" >Δημιουργία Καταλόγου</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" placeholder="" name="newFolder_title" value=""/> 
+            </div>
+          </div>
+
         </div>
         <div class="modal-footer">
-            <div>
-                <input type="submit" class="btn" value="Δημιουργία">
-            </div>
+          <div>
+              <input type="submit" class="btn btn-success btn-sm" value="Δημιουργία">
+          </div>
         </div>
         </form>
       </div>
@@ -355,7 +451,19 @@ $(".accordion").click(function(e) {
     </div>
   </div>
   
+   <script type="text/javascript">
+     function displayCreateFolderDiv(){
 
+      var div = document.getElementById('newFold');
+
+      if(div.style.visibility == false){
+        div.style.display = 'block';
+      }
+      else{
+       div.style.display = 'none';
+      }
+     }
+   </script>
 
 
 </body>
