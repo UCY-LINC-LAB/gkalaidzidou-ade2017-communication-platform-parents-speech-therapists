@@ -6,8 +6,7 @@ session_start();
  // header('Location: e-login.php');
 //}
 
-$therapist_id='1';//$_SESSION["user_ID"];
-//$patient_id='6';//$_SESSION["user_ID"];     
+$therapist_id='1';//$_SESSION["user_ID"];  
 
 //   convert date language to greek                 
 date_default_timezone_set('Europe/Athens');
@@ -20,7 +19,9 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
 
 if(isset($_POST['patient'])){
   $patient_id=$_POST['patient'];
-
+}else{
+  $patient_id='6';
+}
   $patient_info = mysqli_query($conn,"SELECT  distinct * FROM patient patList where patList.therapist_id='".$therapist_id."' and 
     patList.patient_id='".$patient_id."'");
 
@@ -29,7 +30,7 @@ if(isset($_POST['patient'])){
   }
   $info = mysqli_fetch_array($patient_info);
   $patientName=$info['first_name'].' '.$info['last_name'];
-}
+
 
 ?>
 <!DOCTYPE html>
@@ -141,15 +142,72 @@ if(isset($_POST['patient'])){
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.time.min.js"></script>
  
 <script type="text/javascript">
+<?php 
+   $score = mysqli_query($conn,"SELECT  distinct * FROM  conference_score_bar as cs, conference as c
+    where c.therapist_id='".$therapist_id."' and c.conference_id=cs.conference_id and c.patient_id='".$patient_id."' ");
 
-/*//Rome, Italy
-var d1 = [[1262304000000, 12], [1264982400000, 13], [1267401600000, 15], [1270080000000, 18], [1272672000000, 23], [1275350400000, 27], [1277942400000, 30], [1280620800000, 30], [1283299200000, 27], [1285891200000, 22]];
+  if (!$score) { // add this check.
+      die('Invalid query: ' . mysql_error());
+
+
+  } ?>
+
+
+//Rome, Italy
+//var d1 = [[1262304000000, 5], [1264982400000, 13], [1267401600000, 15], [1270080000000, 18], [1272672000000, 23], [1275350400000, 27], [1277942400000, 30], [1280620800000, 30], [1283299200000, 27], [1285891200000, 22]];
 // Paris, France
-var d2 = [[1262304000000, 6], [1264982400000, 7], [1267401600000, 12], [1270080000000, 16], [1272672000000, 20], [1275350400000, 23], [1277942400000, 25], [1280620800000, 24], [1283299200000, 21], [1285891200000, 16]];
+//var d2 = [[1262304000000, 3], [1264982400000, 7], [1267401600000, 12], [1270080000000, 16], [1272672000000, 20], [1275350400000, 23], [1277942400000, 25], [1280620800000, 24], [1283299200000, 21], [1285891200000, 16]];
 // Madrid, Spain
-var d3 = [[1262304000000, 11], [1264982400000, 13], [1267401600000, 16], [1270080000000, 18], [1272672000000, 22], [1275350400000, 28], [1277942400000, 33], [1280620800000, 32], [1283299200000, 28], [1285891200000, 21]];
-*/
-/*
+//var d3 = [[1262304000000, 2], [1264982400000, 13], [1267401600000, 16], [1270080000000, 18], [1272672000000, 22], [1275350400000, 28], [1277942400000, 33], [1280620800000, 32], [1283299200000, 28], [1285891200000, 21]];
+
+var d3 = [
+ <?php $count=0;
+   $ax = array("1262304000000", "1264982400000", "1267401600000","1270080000000","1272672000000","1275350400000","1277942400000","1280620800000","1283299200000",
+  "1285891200000"); 
+
+ while ($score_list = mysqli_fetch_array($score)) { 
+    if($score_list['title']=='Prosoxh'){
+      if($count!=0)
+        echo (',');
+      echo  ('['.$ax[$count].','.$score_list['score'].']');
+      $count++;
+    }
+ }
+ mysqli_data_seek($score, 0 );
+ ?>];
+
+
+var d2 = [
+<?php $count=0;
+   $ax = array("1262304000000", "1264982400000", "1267401600000","1270080000000","1272672000000","1275350400000","1277942400000","1280620800000","1283299200000",
+  "1285891200000"); 
+ while ($score_list = mysqli_fetch_array($score)) { 
+    if($score_list['title']=='Apodosh'){
+      if($count!=0)
+        echo (',');
+      echo  ('['.$ax[$count].', '.$score_list['score'].']');
+      $count++;
+    }
+ }
+ mysqli_data_seek($score, 0 );?>
+];
+
+
+var d1 = [
+<?php $count=0;
+   $ax = array("1262304000000", "1264982400000", "1267401600000","1270080000000","1272672000000","1275350400000","1277942400000","1280620800000","1283299200000",
+  "1285891200000"); 
+ while ($score_list = mysqli_fetch_array($score)) { 
+    if($score_list['title']=='Simperifora'){
+      if($count!=0)
+        echo (',');
+      echo  ('['.$ax[$count].', '.$score_list['score'].']');
+      $count++;
+    }
+ }
+?>
+];
+
 var data1 = [
     {label: "Συμπεριφορά",  data: d1, points: { symbol: "circle", fillColor: "#058DC7" }, color: '#058DC7'},
     {label: "Απόδοση στόχου",  data: d2, points: { symbol: "diamond", fillColor: "#AA4643" }, color: '#AA4643'},
@@ -157,15 +215,13 @@ var data1 = [
 ];
  
 $(document).ready(function () {
-    $.plot($("#placeholder"), [ d1, d2, d3 ]);
-
-      /*, data1, {
+    $.plot($("#placeholder"), data1, {
         xaxis: {
             min: (new Date(2009, 11, 18)).getTime(),
             max: (new Date(2010, 11, 15)).getTime(),
             mode: "time",
             tickSize: [1, "month"],
-            monthNames: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+            monthNames: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10","11","12"],
             tickLength: 0,
             axisLabel: 'Month',
             axisLabelUseCanvas: true,
@@ -178,7 +234,8 @@ $(document).ready(function () {
             axisLabelUseCanvas: true,
             axisLabelFontSizePixels: 12,
             axisLabelFontFamily: 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
-            axisLabelPadding: 5
+            axisLabelPadding: 2,
+            ticks: [[1,' 1'], [2,'2'], [3,'3'], [4,'4'], [5,'5']]
         },
         series: {
             lines: { show: true },
@@ -236,7 +293,7 @@ $(document).ready(function () {
                 z = item.series.color;
                      
                 showTooltip(item.pageX, item.pageY,
-                    "<b>" + item.series.label + "</b><br /> " + x + " = " + y + "mm",
+                    "<b>" + item.series.label + "</b>:  " + y + " <b>/5</b><br>" + x,
                     z);
             }
         } else {
@@ -244,144 +301,50 @@ $(document).ready(function () {
             previousPoint = null;            
         }
     });
-});*/
 
-$(document).ready(function () {
-<?php 
-   $score = mysqli_query($conn,"SELECT  distinct * FROM  conference_score_bar as cs, conference as c
-    where c.therapist_id='".$therapist_id."' and c.conference_id=cs.conference_id and c.patient_id='".$patient_id."' ");
+    var xaxisLabel = $("<div class='axisLabel xaxisLabel'></div>")
+  .text("Αριθμός Συνεδρίας")
+  .appendTo($('#placeholder'));
 
-  if (!$score) { // add this check.
-      die('Invalid query: ' . mysql_error());
-  } ?>
-var d3 = [
- <?php $count=1;
- while ($score_list = mysqli_fetch_array($score)) { 
-    if($score_list['title']=='Prosoxh'){
-      if($count!=1)
-        echo (',');
-      echo  ('['.$count.','.$score_list['score'].']');
-      $count++;
-    }
- }
- mysqli_data_seek($score, 0 );
- ?>];
+var yaxisLabel = $("<div class='axisLabel yaxisLabel'></div>")
+  .text("Βαθμολογία")
+  .appendTo($('#placeholder'));
 
-var d2 = [
-<?php $count=1;
- while ($score_list = mysqli_fetch_array($score)) { 
-    if($score_list['title']=='Apodosh'){
-      if($count!=1)
-        echo (',');
-      echo  ('['.$count.', '.$score_list['score'].']');
-      $count++;
-    }
- }
- mysqli_data_seek($score, 0 );?>
-];
-var d1 = [
-<?php $count=1;
- while ($score_list = mysqli_fetch_array($score)) { 
-    if($score_list['title']=='Symperifora'){
-      if($count!=1)
-        echo (',');
-      echo  ('['.$count.', '.$score_list['score'].']');
-      $count++;
-    }
- }
-?>
-];
-    var data1 = [
-    {label: "Συμπεριφορά",  data: d1, points: { symbol: "circle", fillColor: "#058DC7" }, color: '#058DC7'},
-    {label: "Απόδοση στόχου",  data: d2, points: { symbol: "diamond", fillColor: "#AA4643" }, color: '#AA4643'},
-    {label: "Προσοχή",  data: d3, points: { symbol: "square", fillColor: "#50B432" }, color: '#50B432'}
-];
-    
-
-    var options ={
-       axisLabels: {
-            show: true
-        },
-        xaxes: {
-            //min: (new Date(2009, 11, 18)).getTime(),
-           // max: (new Date(2010, 11, 15)).getTime(),
-           // mode: "time",
-            tickSize: 1,
-            tickLength: 0,
-            tickDecimals: 0,
-            axisLabel: 'Conference',
-            axisLabelUseCanvas: true,
-            axisLabelFontSizePixels: 12,
-            axisLabelFontFamily: 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
-            axisLabelPadding: 5
-        },
-        yaxes: {
-            axisLabel: 'Score',
-            axisLabelUseCanvas: true,
-            axisLabelFontSizePixels: 12,
-            axisLabelFontFamily: 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
-            axisLabelPadding: 5
-        },
-        series: {
-            lines: { show: true },
-            points: {
-                radius: 3,
-                show: true,
-                fill: true
-            },
-        },
-        grid: {
-            hoverable: true,
-            borderWidth:0
-        },
-        legend: {
-            labelBoxBorderColor: "none",
-                position: "right"
-        }
-
-
-    }
-
-    $.plot($("#placeholder"), data1,options);
-
-    var previousPoint = null;
-     
-    function showTooltip(x, y, contents, z) {
-        $('<div id="flot-tooltip">' + contents + '</div>').css({
-            top: y - 30,
-            left: x - 135,
-            'border-color': z,
-        }).appendTo("body").fadeIn(200);
-    }
-     
-    $("#placeholder").bind("plothover", function (event, pos, item) {
-        if (item) {
-            if ((previousPoint != item.dataIndex) || (previousLabel != item.series.label)) {
-                previousPoint = item.dataIndex;
-                previousLabel = item.series.label;
-             
-                $("#flot-tooltip").remove();
- 
-                var x = item.datapoint[0];
-                y = item.datapoint[1];
-                z = item.series.color;
-                     
-                showTooltip(item.pageX, item.pageY,
-                    "<b>" + item.series.label + "</b><br /> Συνεδρία " + x + " , " + y + "/5",
-                    z);
-            }
-        } else {
-            $("#flot-tooltip").remove();
-            previousPoint = null;            
-        }
-    });
 
 });
-
-
 </script>
 
 <style type="text/css">
+
+.axisLabel {
+    position: absolute;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.xaxisLabel {
+    bottom: -30px;
+    left: 0;
+    right: 0;
+}
+
+.yaxisLabel {
+    top: 67%;
+    left: -40px;
+    transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -webkit-transform:  rotate(-90deg);
+    transform-origin: 0 0;
+    -o-transform-origin: 0 0;
+    -ms-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+}
+
+
 .carousel-indicators-numbers {
     li {
       text-indent: 0;
@@ -699,6 +662,7 @@ div.polaroid {
             </div>
             </form>
           </div><!--tab therapy-->
+
           <div class="tab-pane" id="exercises" role="tabpanel">
             <div table-responsive">
              <table class="table table-list-search table-hover">
@@ -707,29 +671,54 @@ div.polaroid {
                         <th>#</th>
                         <th>Τίτλος Άσκησης</th>
                         <th>Ημερομηνία Καταχώρησης</th>
+                        <th>Οδηγίες</th>
                         <th>Αριθμός Επαναλήψεων</th>
                         <th>Σχόλια Κηδεμόνα</th>
                         <th></th>
-                        
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Γράμμα Ξ</td>
-                      <td>12/09/09</td>
-                      <td>4</td>
-                      <td>--</td>
-                      <td><a href="history_details.php" class="btn btn-default btn-xs btn-clr2">Προβολή</a></td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Γράμμα Σ</td>
-                      <td>12/09/09</td>
-                      <td>4</td>
-                      <td>--</td>
-                      <td><a href="history_details.php" class="btn btn-default btn-xs btn-clr2">Προβολή</a></td>
-                    </tr>
+
+                  <?php  
+                  $ex_list = mysqli_query($conn,"SELECT * FROM patient_exercises WHERE patient_id='".$patient_id."'");
+                  $count=0;
+
+                  while($list = mysqli_fetch_assoc($ex_list)) {
+                    $count++;
+                    $ex_details = mysqli_query($conn,"SELECT  distinct * FROM exercise where exercise_id='".$list['exercise_id']."'");
+
+                    if (!$ex_details) { // add this check.
+                      die('Invalid query: ' . mysql_error());
+                    }else{
+                      $details = mysqli_fetch_array($ex_details);
+                    }
+                ?>
+              <tr>
+                <td><?php echo $count?></td>
+                <td><a href="" style="color:black;"><?php echo $details['ex_name']?></a></td>
+                <td><?php echo $list['listing_date']?></td>
+                <td><?php echo $list['guide']?></td>
+                <td><?php echo $list['repetition']?></td>
+                <td><?php echo $list['parent_comment']?></td>
+
+                <td><p data-placement="top" data-toggle="tooltip" title="Edit">
+                <button class="btn btn-clr1 btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" 
+                  data-guide="<?php echo $list['guide']; ?>"
+                  data-ex="<?php echo $list['exercise_id']; ?>"
+                  data-pat="<?php echo $list['patient_id']; ?>"><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+
+                <td><p data-placement="top" data-toggle="tooltip" title="Delete">
+                <button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete"
+                 data-ex="<?php echo $list['exercise_id']; ?>"
+                 data-pat="<?php echo $list['patient_id']; ?>"><span class="glyphicon glyphicon-trash"></span></button></p></td>
+                <td>
+
+                </td>
+              </tr>
+              <?php } ?>
+
                 </tbody>
             </table>   
           </div>
@@ -741,6 +730,84 @@ div.polaroid {
 
   </div>
 
+
+<!--Modal to edit guide for parent-->
+<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove "  style="font-size: 0.6em;" aria-hidden="true"></span></button>
+        <h4 class="modal-title custom_align" id="Heading">Τροποποίηση στις Οδηγίες</h4>
+      </div>
+      <div class="modal-body">
+        <div id="modal-loader" style="display: none; text-align: center;"></div>
+        <div id="dynamic-content">
+        <form role="form"  action="core/update_shared_exercise.php" method="POST" class="form-horizontal">
+            <div class="row">
+                <label  class="col-sm-6"  style="margin-bottom: 10px;" for="guide">Οδηγίες</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" style="margin-bottom: 10px;"
+                    id="guide" placeholder="" name="guide" required/> 
+                </div>
+            </div>
+            <input type="hidden" name="exercise_id" id="exercise_id"  value="">
+            <input type="hidden" name="patient_id" id="patient_id"  value="">
+         </div>   
+      </div>
+      <div class="modal-footer">
+        <div>
+            <input type="submit" class="btn btn-success btn-sm" value="Αποθήκευση">
+        </div>
+      </div>
+       </form>
+    </div><!-- /.modal-content --> 
+  </div><!-- /.modal-dialog --> 
+</div><!-- /.modal- --> 
+ 
+<!--Modal for delete patient-->
+<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+        <h4 class="modal-title custom_align" id="Heading">Διαγραφή άσκησης</h4>
+      </div>
+      <form role="form"  action="core/delete_shared_exercise.php" method="POST" class="form-horizontal">
+      <div class="modal-body">
+       <div class="alert alert-danger" ><span class="glyphicon glyphicon-warning-sign"></span> Είστε σίγουροι για ην διαγραφή;</div>
+        <input type="hidden" name="ex_id" id="ex_id"  value="">
+        <input type="hidden" name="pat_id" id="pat_id"  value="">
+      </div>
+      <div class="modal-footer ">
+        <input class="btn btn-success"  type="submit" value='Ναι'>
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span>Όχι</button>
+      </div>
+      </form>
+    </div><!-- /.modal-content --> 
+  </div><!-- /.modal-dialog --> 
+</div>
+
+
+<!--Script for dynamic data for bootstrap modal edit, delete patient -->
+<script type="text/javascript">
+  $('#edit').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var modal = $(this)
+
+    modal.find('.modal-body #guide').val(button.data('guide'))
+    modal.find('.modal-body #exercise_id').val(button.data('ex'))
+    modal.find('.modal-body #patient_id').val(button.data('pat'))
+  })
+
+   $('#delete').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var modal = $(this)
+
+    modal.find('.modal-body #ex_id').val(button.data('ex'))
+    modal.find('.modal-body #pat_id').val(button.data('pat'))
+  })
+
+</script>
 
 </body>
 </html>

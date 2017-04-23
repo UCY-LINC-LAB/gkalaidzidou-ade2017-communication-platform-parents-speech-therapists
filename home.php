@@ -99,7 +99,7 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
 /*alert notice*/
 .notice {
     padding: 15px;
-    background-color: #f9f9f9;
+    background-color: transparent;
     border-left: 6px solid #7f7f84;
     margin-bottom: 10px;
     -webkit-box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
@@ -280,23 +280,11 @@ label {
     }
 
     while ($notifications = mysqli_fetch_array($notif)) { ?>
-    <!--
-      <div class="notice notice-success">
-        <div class="row">
-          <div class="col-md-2"> 
-              <a href="#">
-              <img style='height: 40px; width: 40px;'  src="img/profile.jpg"></a>
-             </div>
-          <div class="col-md-10"> Η σύνδεση με <b>Μαρία Γεωργίου </b> έχει ολοκληρωθεί <br>
-           <p style="color: grey; font-size: 10px;"><span class="glyphicon glyphicon-globe"></span> 12 Μαρτίου </p>
-          </div>
-        </div>
-      </div>-->
       <div class="notice notice-uncompleted">
         <div class="row">
           <div class="col-md-2"> 
           <a href="#">
-              <img style='height: 40px; width: 40px;'  src="img/profile.jpg"></a></div>
+              <img style='height: 40px; width: 40px;' src="<?php echo $notifications['profile']?>"></a></div>
           <div class="col-md-10"> Ασυμπλήρωτη συνεδρία με <b><?php echo $notifications['first_name']." ".$notifications['last_name']?></b>
                     <a href="#;" 
             data-cid="<?php echo $notifications['conference_id']; ?>" 
@@ -306,8 +294,6 @@ label {
           <br>
           <p style="color: grey; font-size: 10px;"><span class="glyphicon glyphicon-pencil"></span> 
           <?php echo date('j',strtotime($notifications['conference_date'])) . ' ' .$greekMonths[intval(date('m',strtotime($notifications['conference_date'])))-1]  ?> </p>          
-    
-
           </div>
         </div>
       </div>
@@ -331,7 +317,7 @@ label {
               title: '' + uname,
                 message: '<div id="dynamic-content">'+
                           '<form role="form" id="completeConf" action="core/complete_conference.php" method="POST" class="form-horizontal">' +
-                              ' <input name="conference_id" value="'+confeid+'" type="text" hidden>'+
+                            '<input name="conference_id" value="'+confeid+'" type="text" hidden>'+
                              '<div class="row">'+
                               '<div class="col-md-4">'+
                               '<label for="attention" class="control-label input-group">Προσοχή</label>'+
@@ -357,7 +343,7 @@ label {
                               '<label for="production" class="control-label input-group">Απόδοση</label>'+
                               '<div class="btn-group" data-toggle="buttons">'+
                                 '<label class="btn btn-default">'+
-                                  '<input name="production" value="1" type="radio">1'+
+                                  '<input name="production" value="1" type="radio" checked>1'+
                                 '</label>'+
                                 '<label class="btn btn-default">'+
                                  ' <input name="production" value="2" type="radio">2'+
@@ -377,7 +363,7 @@ label {
                               '<label for="behavior" class="control-label input-group">Συμπεριφορά</label>'+
                               '<div class="btn-group" data-toggle="buttons">'+
                                 '<label class="btn btn-default">'+
-                                  '<input name="behavior" value="1" type="radio" >1'+
+                                  '<input name="behavior" value="1" type="radio" checked>1'+
                                 '</label>'+
                                 '<label class="btn btn-default">'+
                                   '<input name="behavior" value="2" type="radio">2'+
@@ -448,7 +434,7 @@ label {
                          '<input id="timepicker1" name="startTime" type="text" class="form-control input-small" >' +
                          '<span class="input-group-addon" ><i class="glyphicon glyphicon-time"></i></span>' +
                          '</div> ' +
-                         '<label class="col-md-1 control-label"> εώς   </label> ' +
+                         '<label style="margin-right: 15px;" class="col-md-1 control-label">  εώς   </label> ' +
 
                          '<div class=" col-md-2 input-group bootstrap-timepicker timepicker"  style="width=100%; float:left" >' +
                          '<input id="timepicker2" name="endTime" type="text" class="form-control input-small" >' +
@@ -567,7 +553,7 @@ label {
                          '<input id="timepicker1" name="startTime" type="text" class="form-control input-small" value="' +  moment(calEvent.start).format('h:mm') +'">'+
                          '<span class="input-group-addon" ><i class="glyphicon glyphicon-time"></i></span>' +
                          '</div> ' +
-                         '<label class="col-md-1 control-label"> εώς </label> ' +
+                         '<label style="margin-right: 15px;" class="col-md-1 control-label"> εώς </label> ' +
 
                          '<div class=" col-md-2 input-group bootstrap-timepicker timepicker"  style="width=100%; float:left" >' +
                          '<input id="timepicker2" name="endTime" type="text" class="form-control input-small" value="' +  moment(calEvent.end).format('h:mm') +'">'+
@@ -578,7 +564,7 @@ label {
                          '<div class="form-group"> ' +
                          '<label class="col-md-4 control-label">Περιγραφή στόχου</label> ' +
                          '<div class="col-md-6"> ' +
-                         '<textarea rows="4" cols="50" placeholder="Γράψε κάτι" class="form-control" name="targetDescription">'+ calEvent.msg+'</textarea> ' +
+                         '<textarea rows="2" cols="50" placeholder="Γράψε κάτι" class="form-control" name="targetDescription">'+ calEvent.msg+'</textarea> ' +
                          '</div> ' +
                          '</div> ' +
 
@@ -599,8 +585,80 @@ label {
                          <?php } ?>
                          '</select>' +
                          '</div> ' +
-
                          '<input name="eventID" hidden value="'+calEvent.id +'">'+
+                         '</div>'+
+
+
+                         '<div class="form-group"> ' +
+                         '<label class="col-md-4 control-label">Σχόλια</label> ' +
+                         '<div class="col-md-6"> ' +
+                         '<textarea rows="2" cols="50" class="form-control" name="comments">'+ calEvent.comment+'</textarea> ' +
+                         '</div> ' +
+                         '</div> ' +
+
+
+                         '<div class="form-group">'+
+                          '<div class="col-md-4">'+
+                          '<label for="attention" class="control-label input-group">Προσοχή</label>'+
+                          '<div class="btn-group" data-toggle="buttons">'+
+                            '<label class="btn btn-default">'+
+                             ' <input name="attention" value="1" type="radio" checked>1'+
+                            '</label>'+
+                            '<label class="btn btn-default">'+
+                              '<input name="attention" value="2" type="radio">2'+
+                            '</label>'+
+                            '<label class="btn btn-default">'+
+                              '<input name="attention" value="3" class="active" type="radio">3'+
+                            '</label>'+
+                            '<label class="btn btn-default">'+
+                              '<input name="attention" value="4" class="active" type="radio">4'+
+                            '</label>'+
+                           '<label class="btn btn-default">'+
+                              '<input name="attention" value="5" class="active" type="radio">5'+
+                            '</label>'+
+                          '</div>'+
+                         '</div>'+
+                          '<div class="col-md-4">'+
+                          '<label for="production" class="control-label input-group">Απόδοση</label>'+
+                          '<div class="btn-group" data-toggle="buttons">'+
+                            '<label class="btn btn-default">'+
+                              '<input name="production" value="1" type="radio">1'+
+                            '</label>'+
+                            '<label class="btn btn-default">'+
+                             ' <input name="production" value="2" type="radio">2'+
+                           ' </label>'+
+                            '<label class="btn btn-default">'+
+                              '<input name="production" value="3" class="active" type="radio">3'+
+                                            '</label>'+
+                            '<label class="btn btn-default">'+
+                              '<input name="production" value="4" class="active" type="radio">4'+
+                            '</label>'+
+                            '<label class="btn btn-default">'+
+                              '<input name="production" value="5" class="active" type="radio">5'+
+                            '</label>'+
+                          '</div>'+
+                         ' </div>'+
+                          '<div class="col-md-4">'+
+                          '<label for="behavior" class="control-label input-group">Συμπεριφορά</label>'+
+                          '<div class="btn-group" data-toggle="buttons">'+
+                            '<label class="btn btn-default">'+
+                              '<input name="behavior" value="1" type="radio" >1'+
+                            '</label>'+
+                            '<label class="btn btn-default">'+
+                              '<input name="behavior" value="2" type="radio">2'+
+                            '</label>'+
+                            '<label class="btn btn-default">'+
+                              '<input name="behavior" value="3" class="active" type="radio">3'+
+                            '</label>'+
+                            '<label class="btn btn-default">'+
+                              '<input name="behavior" value="4" class="active" type="radio">4'+
+                           ' </label>'+
+                           ' <label class="btn btn-default">'+
+                              '<input name="behavior" value="5" class="active" type="radio">5'+
+                            '</label>'+
+                          '</div>'+
+                          '</div>'+
+                          '</div>'+
 
                          '</form> </div> </div>',
                 buttons: {
@@ -658,21 +716,22 @@ label {
             title: '<?php echo $patInfo['first_name']." ".$patInfo['last_name'] ?>',
             start:'<?php echo $list['conference_date']." ".$list['start_time']?>',
             end:'<?php echo $list['conference_date']." ".$list['end_time']?>',
-            msg :'<?php echo $list['target_description']?>',
+            msg :'<?php if (is_null($list['target_description'])) echo '-'; else echo $list['target_description'];?>',
             id: '<?php echo $list['conference_id']?>',
-            comment: '<?php echo $list['comment']?>',
-          
+            comment: '<?php if (is_null($list['comment'])) echo '-'; else echo $list['comment']?>',
+            s1: '-',
+            s2: '-',
+            s3: '-',
           <?php  if (!$scores) { // add this check.
-                    die('Invalid query: ' . mysql_error());
+                    //die('Invalid query: ' . mysql_error());
                   }else{
                     while ($scorelist = mysqli_fetch_array($scores)) {  
-
                         if($scorelist['title']=='Apodosh'){?>
-                          s1: '<?php echo $scorelist['score']?>',
-                        <?php }else if($scorelist['title']=='Symperifora'){?>
-                          s2: '<?php echo $scorelist['score']?>',
-                        <?php }else{?> 
-                          s3: '<?php echo $scorelist['score']?>',
+                          s1: '<?php echo $scorelist['score'];?>',
+                        <?php }else if($scorelist['title']=='Simperifora'){?>
+                          s2: '<?php echo $scorelist['score'];?>',
+                        <?php }else if($scorelist['title']=='Prosoxh'){?> 
+                          s3: '<?php echo $scorelist['score'];?>',
 
                         <?php }}}?>
           },

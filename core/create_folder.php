@@ -2,9 +2,6 @@
 include 'init.php';
 session_start();
 
-
-
-
 $folder_title = $_POST['newFolder_title'];
 $folder_id=$_POST['folder_id'];
 $exer_title = $_POST['exer_title'];

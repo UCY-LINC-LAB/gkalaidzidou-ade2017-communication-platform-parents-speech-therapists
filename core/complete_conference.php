@@ -7,7 +7,7 @@ $attention = $_POST['attention'];
 $production = $_POST['production'];
 $behavior = $_POST['behavior'];
 
-echo $conferenceID ;
+//echo $conferenceID ;
 
 $update_conference =  "UPDATE conference set comment='$comments' where conference_id='$conferenceID'";
 

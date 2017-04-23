@@ -122,9 +122,9 @@ if($_SESSION["add"]=="unsuccess"){
         </div>
     </div> <!-- /container -->
 
-<div id="screenshot_div">
+<!--<div id="screenshot_div">
   <button type="button" onclick="take_screenshot()">Take Screenshot</button>
-</div>
+</div>-->
 
 <script>
 function take_screenshot()

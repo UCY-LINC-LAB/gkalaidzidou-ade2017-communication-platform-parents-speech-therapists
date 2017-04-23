@@ -180,6 +180,7 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
                   <th></th>
                   <th></th>
                   <th></th>
+                   <th></th>
               </tr>
           </thead>
             <tbody>
@@ -196,13 +197,14 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
                   }
                 ?>
               <tr>
-                <td><img style='height: 20px; width: 20px;' class="img-circle" src="img/profile.jpg"></td>
+                <td><img style='height: 20px; width: 20px;' class="img-circle" src="<?php echo $list['profile']?>"></td>
                 <td><?php echo $list['first_name']." ".$list['last_name']?></td>
                 <td><?php echo $list['telephone']?></td>
                 <td><?php echo $list['parent_fname']." ".$list['parent_lname']?></td>
                 <td><?php echo $list['email']?></td>
                 <td><?php echo $list['registration_date']?></td>
                 <td>12</td>
+
 
                 <td><p data-placement="top" data-toggle="tooltip" title="Edit">
                 <button class="btn btn-clr1 btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" 
@@ -237,7 +239,13 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
                     <p style="color:green;"><span class="glyphicon glyphicon-ok"></span> Συνδεδεμένοι</p>
                   <?php }else{?> 
                      <p style="font-size: 13px; color:grey;"><span class="glyphicon glyphicon-ok"></span> Προσκλήθηκε,<br>
-                      <?php echo date('j',strtotime($conn_det['request_date'])) . ' ' .$greekMonths[intval(date('m',strtotime($conn_det['request_date'])))-1]?></p>         
+                      <?php echo date('j',strtotime($conn_det['request_date'])) . ' ' .$greekMonths[intval(date('m',strtotime($conn_det['request_date'])))-1]?></p>
+
+                <td><form id="myForm2" action="core/resend_connect_request.php" method="post">
+                  <input type="hidden" name="conn_email" value="<?php echo $list['email']; ?>" />
+                  <input type="hidden" name="patID" value="<?php echo $list['patient_id']; ?>" />
+                  <a href="#" onclick="document.getElementById('myForm2').submit();"><span class="glyphicon glyphicon-repeat"></span></a>
+                </form></td>
                   <?php }?>
                 </td>
               </tr>

@@ -1,12 +1,20 @@
 <?php
 include 'core/init.php';
 session_start(); 
+ $_SESSION['folder_id']='2';
+
+if (empty($_GET)) {
+    // no exercise id passed by get
+  $_SESSION['exercise_id']=1;
+}else{
+  $_SESSION['exercise_id'] = $_GET['exID'];
+}
 
 if($_SESSION['exercise_id']!=null){
   $exe=mysqli_query($conn,"SELECT * FROM exercise WHERE exercise_id='".$_SESSION['exercise_id']."' ");
   $exercise_info= mysqli_fetch_array($exe);
 
-  $get_folder_id= mysqli_query($conn,"SELECT * FROM folder WHERE folder_id='".$_SESSION['folder_id']."' ");
+  $get_folder_id= mysqli_query($conn,"SELECT * FROM folder WHERE folder_id='".$exercise_info['folder_id']."' ");
     if(mysqli_num_rows($get_folder_id) > 0 ){   
         $folder_info =  mysqli_fetch_array($get_folder_id);
     }
@@ -16,6 +24,7 @@ if($_SESSION['exercise_id']!=null){
 //}
 
 $therapist_id='1';//$_SESSION["user_ID"];
+
 
 ?>
 <!DOCTYPE html>
@@ -75,15 +84,24 @@ $therapist_id='1';//$_SESSION["user_ID"];
     height:400px;
     position:relative;
 
-
-
     }
     .assetImage{
-      border: 1px solid #f0f0f0;
+      border: none;
       padding:7px;
       height: 70px; 
       width: 70px;
       margin-bottom: 5px;
+
+    }
+
+    .imgDiv{
+      border: 1px solid #f0f0f0;
+      float:left;
+      height: 70px; 
+      width: 70px;
+      margin-bottom: 5px;
+      margin-left: 5px;
+        resize: both;
     }
     .scrollStyle{
       max-height: 200px;
@@ -171,10 +189,24 @@ body {
   line-height: 1.3rem;
 }
 
-
-
   </style>
 
+
+<style type="text/css">
+  
+
+  textarea {
+    height:100%;
+    background-color:beige;
+    width:100%;
+    resize:none; border:none;
+    padding:0px; margin:0px;
+    
+}
+div { padding:0px; }
+
+
+</style>
   <script type="text/javascript">
 
     var positions =[];
@@ -189,6 +221,7 @@ body {
         containment: '#droppable',
         cursor : "move",
         scroll: false,
+        cancel: "",
         //When first dragged 
         stop: function (ev, ui) {
           counter++;
@@ -200,25 +233,50 @@ body {
         activeClass: "ui-state-default",
         hoverClass: "ui-state-hover",
         drop: function(event, ui) {
+            //alert($(ui.draggable).attr('id'));
+
+
+
+
+
+
+              var str = $(ui.draggable).attr('id');
+              var n = str.startsWith("element_s_");
+
+            if(n){
+              var imagId=$(ui.draggable).attr('id');
+               document.getElementById(imagId).style.visibility = "hidden";
+            }
+
+
              var newClone= $(this).append($(ui.helper).clone().draggable({
                   containment: "parent",
                   cursor: "move",
                   stop: handleDragStop
               }));
 
-          
              var newID= $(ui.draggable).attr('id') +"_"+counter;
-             alert(newID);
+             //alert(newID);
               $(newClone).attr('id', newID);
 
-              //var draggable = ui.draggable;
+
               positions.push({id: newClone.attr('id'), left:  parseInt( ui.offset.left ) , top: parseInt( ui.offset.top )});
               
+
+
+                var value = $("#element_text").find('textarea').text();
+                //alert(value); 
+
+
               function handleDragStop( event, ui ) {
                 var offsetXPos = parseInt( ui.offset.left );
                 var offsetYPos = parseInt( ui.offset.top );
                 //alert( "Drag stopped!\n\nOffset: (" + offsetXPos + ", " + offsetYPos +  draggable.attr('id') + ")\n");
                 flag=0;
+
+                var vl=$("#element_text textarea").attr("id");
+                alert(vl);
+
 
                 $.each(positions, function() {
                   if (this.id == newClone.attr('id')) {
@@ -234,6 +292,7 @@ body {
         }
   });
     
+
     $('#trash').droppable({
         drop: function(event, ui) {
             $(ui.draggable).remove();
@@ -242,12 +301,48 @@ body {
 });
   </script>
 
+<script type="text/javascript">
+  $(function() {
+$('#new').click(function() {
+  var new_offset = {top:30, left:40};
+  var new_width = 200;
+  var new_height = 150;
+  var newElement$ = $('<div><textarea id="textarea"></textarea></div>')
+                                    .width(new_width)
+                    .height(new_height)
+                                    .draggable({
+                                        cancel: "text",
+                                        start: function (){
+                                            $('#textarea').focus();
+                                         },
+                                        stop: function (){
+                                            $('#textarea').focus();
+                                         } 
+                                     })
+                                    .resizable()
+                  .css({
+                      'position'          : 'absolute',
+                      'background-color'  : 'yellow',
+                      'border-color'      : 'black',
+                      'border-width'      : '1px',
+                      'border-style'      : 'solid'
+                     })
+                   .offset(new_offset)
+                         .appendTo('body');
+            });
+              
+});
+</script>
+
+
   <script type="text/javascript">
   function saveFun() {
-    alert(JSON.stringify(positions));
+   // alert(JSON.stringify(positions));
+                var value = $("#element_text").find('textarea').text();
+                alert(value); 
 
     $.post('core/updatecoords.php', 'data='+JSON.stringify(positions), function(response){
-    alert(response);
+     alert(response);
         //if(response=="success")
           //  $("#respond").html('<div class="success">X and Y Coordinates Saved!</div>').hide().fadeIn(1000);
            // setTimeout(function(){ $('#respond').fadeOut(1000); }, 2000);
@@ -255,6 +350,28 @@ body {
 }
   </script>
 
+<!--tab list style-->
+<style type="text/css">
+  .nav-tabs { border-bottom: 2px solid #DDD; }
+  .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover { border-width: 0; }
+  .nav-tabs > li > a { border: none; color: #666; }
+  .nav-tabs > li.active > a, .nav-tabs > li > a:hover { border: none; color: black !important; background: transparent; }
+  .nav-tabs > li > a::after { content: ""; background: #008000; height: 2px; position: absolute; width: 100%; left: 0px; bottom: -1px; transition: all 250ms ease 0s; transform: scale(0); }
+  .nav-tabs > li.active > a::after, .nav-tabs > li:hover > a::after { transform: scale(1); }
+  .tab-nav > li > a::after { background: #008000 none repeat scroll 0% 0%; color: #fff; }
+  .tab-pane { padding: 15px 0; }
+  .tab-content{padding:0px}
+
+  .card {background: #FFF none repeat scroll 0% 0%; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3); margin-bottom: 30px; }
+</style>
+
+<!--btn trancparence-->
+<style type="text/css">
+  .btn-primary-outline {
+  background-color: transparent;
+  border-color: #ccc;
+}
+</style>
 </head>
 
 <body>
@@ -283,9 +400,12 @@ body {
               $first_time="0";?>
               <h1><i class="fa fa-folder" aria-hidden="true"></i> <?php echo $list_f['name']; ?></h1>
                <div>
-              <h2> <i class="fa fa-angle-right" aria-hidden="true"></i> <a href="www.google.com"><?php echo $list_f['ex_name'] ?></a> </h2>
+              <h2> <i class="fa fa-angle-right" aria-hidden="true"></i> 
+
+
+              <a href="http://localhost:8080/logoucon/exercises.php?exID=<?php echo $list_f['exercise_id'] ?>"><?php echo $list_f['ex_name'] ?></a> </h2>
               <?php $prev=$list_f['folder_id']; }else{ ?>
-                  <h2> <i class="fa fa-angle-right" aria-hidden="true"></i> <a href="www.google.com"><?php echo $list_f['ex_name'] ?></a> </h2>
+                  <h2> <i class="fa fa-angle-right" aria-hidden="true"></i> <a href="http://localhost:8080/logoucon/exercises.php?exID=<?php echo $list_f['exercise_id'] ?>"><?php echo $list_f['ex_name'] ?></a> </h2>
               <?php } ?>
       <?php } ?>
        </div>
@@ -305,19 +425,19 @@ body {
         //Create a query to fetch our values from the database  
         $get_coords = mysqli_query($conn, "SELECT * FROM assets_of_exercise as ex, asset as a where ex.exercise_id='".$_SESSION['exercise_id']."' 
           and a.asset_id=ex.asset_id");
+
         //We then set variables from the * array that is fetched from the database
         while($row = mysqli_fetch_array($get_coords)) {
             $x = $row['x_pos'];
             $y = $row['y_pos'];
             $id = $row['asset_id'];
-
-             echo ($x ."  " . $y . " " . $id . "  # " );
+             //echo ($x ."  " . $y . " " . $id . "  # " );
 
 
             //then echo our div element with CSS properties to set the left(x) and top(y) values of the element
             //echo '<div id="element_'.$id.'" class="element" style="left:'.$x.'px; top:'.$y.'px;"><img style="height:100px; width:100px;" src="1.jpg" alt="Nettuts+" />Move the Box<p></p></div>';
 
-            echo '<img style="left:'.$x.'px; top:'.$y.'px; position:absolute; margin:auto;" class="assetImage" src="'.$row['path']. '" id="element_'.$row['asset_id'].'" draggable="true" />';
+            echo '<img style="left:'.($x-350).'px; top:'.($y-150).'px; position:absolute; margin:auto;" class="assetImage" src="'.$row['path']. '" id="element_s_'.$id.'_'.$x.'_'.$y.'" draggable="true" visible=""/>';
           
         }?>
 
@@ -327,18 +447,24 @@ body {
 
 
       <div class="row" style="margin: 10px; float: right;">
-        <input onclick="saveFun()" class="btn btn-success btn-sm" value="Αποθήκευση">
+          <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#shareEx"><i class="fa fa-share" aria-hidden="true"></i> Κοινοποίηση</button>
+          <button type="button" onclick="saveFun()" class="btn btn-success btn-sm"><i class="fa fa-floppy-o" aria-hidden="true"></i> Αποθήκευση</button>
       </div>
 
     </div>
 
     <div class="right">
-      <div class="row" style="margin-left: 1px;">
-      <h4>Βιβλιοθήκη</h4>
-      
-        
-      </div>
-      <div class="scrollStyle" id="library">
+
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#library" aria-controls="library" role="library" data-toggle="tab"><b>Βιβλιοθήκη</b></a></li>
+        <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"><b>Λεξικό</b></a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active scrollStyle" id="library">
+          
+
        <?php 
           $assets = mysqli_query($conn,"SELECT * FROM asset");
 
@@ -347,15 +473,83 @@ body {
           }
 
           while ($list = mysqli_fetch_array($assets)) {?>
-            <img class="assetImage" src="<?php echo $list['path']?>" id="element_<?php echo $list['asset_id']?>" draggable="true"/>
+          <div class="imgDiv" > 
+            <img class="assetImage"  src="<?php echo $list['path']?>" id="element_<?php echo $list['asset_id']?>" draggable="true"/>
+          </div>
       <?php } ?>
+
+  
+
+        </div>
+        <div role="tabpanel" class="tab-pane" id="profile">
+        <div class="row" >
+         <form id='dictionary_search' onsubmit="return false">
+          <div class="input-group">
+            <div class="input-group-btn">
+                  <select class="selectpicker" data-width="auto" data-style="btn-info" id="filterby">
+                    <option selected="true" disabled="disabled" ><b>Φιλτράρισμα</b></option>
+                    <option value="start">Ξεκινά με</option>
+                    <option value="contains">Περιέχει</option>
+                    <option value="ends">Τελειώνει με</option>
+                  </select>
+            </div>
+            <input type="text" class="form-control" name="word" id="word" style="border: 1px solid #e0dede" aria-label="Text input with dropdown button">
+            <span class="input-group-btn">
+              <button class="btn btn-primary-outline" type="submit" style="border: 1px solid #e0dede"><i class="fa fa-search" aria-hidden="true"></i></button>
+            </span>
+          </div>
+          </form>
+        </div>
+
+        <div id="dictionary_results" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+
+    <!--
+      <div class="scrollStyle" id="library">
+        <button id='new'>New</button>
+        <div id="element_text">*<textarea id="element_text" placeholder="Text" rows="1" style="border: none"></textarea></div>
+       <?php 
+          $assets = mysqli_query($conn,"SELECT * FROM asset");
+
+          if (!$assets) {
+            die('Invalid query: ' . mysql_error());
+          }
+
+          while ($list = mysqli_fetch_array($assets)) {?>
+          <div class="imgDiv" > 
+            <img class="assetImage"  src="<?php echo $list['path']?>" id="element_<?php echo $list['asset_id']?>" draggable="true"/>
+          </div>
+      <?php } ?>
+
       </div>
+
+-->
+
     </div>
 
   </div>
 
-
-
+<script type="text/javascript">
+  $('#dictionary_search').submit(function(event){
+      var word = $('#word').val();
+      var filter = $('#filterby').val();
+ 
+      var data = { 'word': word, 'filter': filter};
+  $.ajax({
+    url: 'core/dictionary_filter.php',
+    type: 'post',
+    dataType:'html',   //expect return data as html from server
+   data: data,
+   success: function(response, textStatus, jqXHR){
+      $('#dictionary_results').html(response);   //select the id and put the response in the html
+    },
+   error: function(jqXHR, textStatus, errorThrown){
+      console.log('error(s):'+textStatus, errorThrown);
+   }
+ });
+ });
+</script>
 
 <script type="text/javascript">
     var headers = ["H1","H2","H3","H4","H5","H6"];
@@ -387,7 +581,7 @@ $(".accordion").click(function(e) {
 
 
 
-  <!-- Modal -->
+  <!-- Modal for new folder -->
   <div class="modal fade" id="newFolder" role="dialog">
     <div class="modal-dialog">
     
@@ -464,6 +658,70 @@ $(".accordion").click(function(e) {
       }
      }
    </script>
+
+
+
+  <!-- Modal for share exercise -->
+  <div class="modal fade" id="shareEx" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content" tabindex="-1">
+       <form role="form"  action="core/share_exercise.php" method="POST" class="form-horizontal">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h5 class="modal-title"><b>Αποστολή άσκησης</b></h5>
+        </div>
+        <div class="modal-body">
+          <div class="row" style="margin-bottom: 10px;">
+              <label  class="col-sm-6"  style="margin-bottom: 10px;" for="title">Άσκηση </label>
+              <div class="col-sm-6">
+                <?php echo $folder_info['name'];?> <i class="fa fa-angle-right" aria-hidden="true"></i> <?php echo $exercise_info['ex_name'];?>
+                  <input type="hidden" class="form-control" id="exer_id" name="exer_id" value="<?php echo $_SESSION['exercise_id'];?>" /> 
+              </div>
+          </div>
+          <div class="row" style="margin-bottom: 10px;">
+             <label  class="col-sm-6"  style="margin-bottom: 10px;" for="title">Ασθενής </label>   
+             <div class="col-sm-6" >
+
+                <select name="patient" class="selectpicker" data-style="" data-width="100%" data-show-subtext="true" data-live-search="true" > 
+                <option selected><?php echo $patientName ?></option>
+                <?php 
+                 $patient_list = mysqli_query($conn,"SELECT  distinct * FROM patient patList where patList.therapist_id='".$therapist_id."' ");
+
+                if (!$patient_list) { // add this check.
+                    die('Invalid query: ' . mysql_error());
+                }
+                while ($list = mysqli_fetch_array($patient_list)) { ?>
+                
+                <option data-subtext="<?php echo $list['parent_fname']." ".$list['parent_lname']?>" value="<?php echo $list['patient_id']?>"  >
+                <?php echo $list['first_name']." ".$list['last_name']?></option>
+                <?php } ?>
+                </select>
+
+            </div>
+          </div>
+          <div class="row" style="margin-bottom: 10px;">
+              <label  class="col-sm-6"  style="margin-bottom: 10px;" for="title">Οδηγίες </label>
+              <div class="col-sm-6">
+                   <textarea rows="4" cols="50"  class="form-control" id="exer_guide" name="exer_guide"></textarea>
+              </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div>
+              <input type="submit" class="btn btn-success btn-sm" value="Αποστολή">
+          </div>
+        </div>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+  
+
+
+
 
 
 </body>

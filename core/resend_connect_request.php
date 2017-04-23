@@ -7,8 +7,6 @@ $patient_id = $_POST['patID'];
 $threapist_id = '1';
 
 $date= date("Y-m-d");
-//echo $dateConf;
-
 
 $parent_id=mysqli_query($conn,"SELECT user_id FROM user u where u.email='".$conn_email."' ");
 
@@ -22,11 +20,11 @@ $parent_id=mysqli_query($conn,"SELECT user_id FROM user u where u.email='".$conn
    	$id = mysqli_fetch_array($parent_id);
    	$parent_id= $id['user_id'];
 
-   	$add_connection =  "INSERT INTO connection_state (therapist_id,patient_id,parent_id,request_date,request_state) 
-   	VALUES ('$threapist_id','$patient_id','$parent_id','$date','1')";
-   	$add = mysqli_query($conn, $add_connection);
+   	$resend_connection =  "UPDATE connection_state  set request_date='$date' where therapist_id='$threapist_id' and patient_id='$patient_id' and parent_id='$parent_id'";
+   	$resend = mysqli_query($conn, $resend_connection);
 
-   	if(! $add ) {
+   	if(! $resend ) {
+   		die('Invalid query: ' . mysqli_error($conn));
 		echo "<script>";
 		echo " alert('Please check again your insert.');      
 		window.location.href='". $_SERVER['HTTP_REFERER']."';
