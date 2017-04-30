@@ -1,21 +1,22 @@
 <?php
 include 'core/init.php';
-session_start(); 
 
-//if ( $_SESSION['logged_in'] != true){
- // header('Location: e-login.php');
-//}
+if ( $_SESSION['logged_in'] != true){
+  header('Location: login.php');
+}
 
-$therapist_id='1';//$_SESSION["user_ID"];
+$therapist_id=$_SESSION["therapist_id"];
 $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτίου','Απριλίου','Μαΐου','Ιουνίου','Ιουλίου','Αυγούστου','Σεπτεμβρίου','Οκτωβρίου','Νοεμβρίου','Δεκεμβρίου');  
 
+mysqli_query( $conn,"SET NAMES 'utf8'");
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-  <title>logoucon | home</title>
+  <title>logoucon | αρχική</title>
   <link rel="icon" type="image/png" href="img/logo.png">
-  <meta charset="utf-8">
+
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>

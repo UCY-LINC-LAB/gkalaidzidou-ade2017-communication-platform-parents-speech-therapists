@@ -1,18 +1,5 @@
 <?php
 include 'core/init.php';
-session_start(); 
-$_SESSION["add"]="";
-if($_SESSION["add"]=="unsuccess"){
-    echo '<script language="javascript">';
-    echo 'alert("Something has gone wrong. Try again! ")';
-    echo '</script>';
-}else if ($_SESSION['add']=="success"){
-    echo '<script language="javascript">';
-    echo 'alert("You have successfully registered!")';
-    echo '</script>';
-}
-  $_SESSION["add"]="";
-
 ?>
 
 <!DOCTYPE html>
@@ -191,6 +178,13 @@ window.location.href='login.php';
                     <div class="col-sm-6"> 
                         <input type="text"  style="margin-bottom: 10px;" class="form-control"
                         id="Lname" placeholder="" name="lname" required/>  
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-6" style="margin-bottom: 10px;" for="telephone">Τηλέφωνο</label>
+                    <div class="col-sm-6"> 
+                        <input type="text"  style="margin-bottom: 10px;" class="form-control"
+                        id="telephone" placeholder="" name="telephone" required/>  
                     </div>
                 </div>
                 <div class="row">

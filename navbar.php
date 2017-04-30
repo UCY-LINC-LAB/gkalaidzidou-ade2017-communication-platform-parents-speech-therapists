@@ -1,9 +1,16 @@
 <?php
 include 'core/init.php';
 
-//if ( $_SESSION['logged_in'] != true)
-//  header('Location: e-login.php');
-//?>
+$greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτίου','Απριλίου','Μαΐου','Ιουνίου','Ιουλίου','Αυγούστου','Σεπτεμβρίου','Οκτωβρίου','Νοεμβρίου','Δεκεμβρίου');  
+$new_notifications = mysqli_query($conn,"SELECT  distinct * FROM notification_box as nb where nb.notif_to='".$_SESSION["email"]."' and nb.state='0' ");
+
+
+if (!$new_notifications) { // add this check.
+  die('Invalid query: ' . mysql_error());
+}
+
+$count_new_notif = mysqli_num_rows($new_notifications);
+?>
 
 <!DOCTYPE html>
 <html>
@@ -85,7 +92,99 @@ include 'core/init.php';
     border: none;
     box-shadow: 0 6px 3px rgba(0,0,0,.35);
   }
-} 
+}
+
+/* CSS used here will be applied after bootstrap.css */
+.notifications {
+   min-width:620px; 
+  }
+  
+  .notifications-wrapper {
+     overflow:auto;
+      max-height:250px;
+    }
+    
+ .menu-title {
+     color:black;
+     font-size:1.5rem;
+     display:inline-block;
+      }
+ 
+.glyphicon-circle-arrow-right {
+      margin-left:10px;     
+   }
+  
+   
+ .notification-heading, .notification-footer  {
+  padding:2px 10px;
+       }
+      
+        
+.dropdown-menu.divider {
+  margin:5px 0;          
+  }
+
+.item-title {
+  
+ font-size:1.3rem;
+ color:#000;
+    
+}
+.item-info {
+  
+ font-size:1.3rem;
+    
+}
+
+.notifications a.content {
+ text-decoration:none;
+ background: white;
+
+ }
+    
+.notification-item {
+ padding:10px;
+ margin:5px;
+ background: white;
+ border-radius:4px;
+ }
+
+.notif{
+  position: absolute; 
+  background-color: #DDBE42 !important;
+  border: none;
+  box-shadow: 0 6px 3px rgba(0,0,0,.35);
+  z-index: 10; 
+  width: 350px;
+  left: 730px;
+  top:85px;
+}
+
+.num {
+  position: absolute;
+  right: -13px;
+  top: -15px;
+  color: #fff;
+  background-color: #dd0000;
+  padding-right: 7px;
+  padding-left: 7px;
+  padding-bottom: 5px;
+  border-radius: 25px;
+  font-size:1.3rem;
+}
+
+.triangle-1
+{
+  position: absolute;
+    right: 291px;
+  top: 64px;
+    height: 0px;
+    width: 0px;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 15px solid #DDBE42;
+    /*#70c282;*/
+}
 </style>
 </head>
 
@@ -105,42 +204,68 @@ include 'core/init.php';
           <ul class="nav navbar-nav">
             <li class="active" ><a href="home.php"><b>ΗΜΕΡΟΛΟΓΙΟ</b></a></li>
             <li ><a href="parent.php"><b>ΕΓΓΕΓΡΑΜΜΕΝΟΙ</b></a>
-              <!--<ul class="dropdown-menu">
-                <li><a href="#">Εμφάνιση καταλόγου</a></li>
-                <li><a href="#">Προσθήκη νέου</a></li>
-              </ul>-->
             </li>
             <li> <a href="history_details.php"><b>ΙΣΤΟΡΙΚΑ</b></a>
-              <!--<ul class="dropdown-menu">
-                <li><a href="#">Εμφάνιση καταλόγου</a></li>
-                <li><a href="#">Προσθήκη νέου</a></li>
-              </ul>-->
             </li>
-            <!--
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><b>ΙΣΤΟΡΙΚΑ</b></a>
-              <ul class="dropdown-menu">
-                <li><a href="history.php">Εμφάνιση</a></li>
-                <li><a href="#">Προσθήκη</a></li>
-              </ul>
-            </li>-->
             <li class="dropdown"><a href="exercises.php"><b>ΑΣΚΗΣΕΙΣ</b></a></li>
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
-          <li><a> <span class="glyphicon glyphicon-bell" style="font-size: 15px; border-radius: 50%; border: 1px solid rgb(205, 209, 215); padding: 5px;"></span> </a></li>
+          <li class="dropdown" id="notification" ><a> <span class="glyphicon glyphicon-bell" style="font-size: 15px; border-radius: 50%; border: 1px solid rgb(205, 209, 215); padding: 5px;"><span class="num"><b><?php echo $count_new_notif?></b></span> </span> </a>
+          </li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               <img style='height: 20px; width: 20px;' class="img-circle" src="img/profile.jpg">
-              <b>Μαρία Ιακώβου</b><span class="caret"></span></a>
+              <b><?php echo $_SESSION["first_name"].' '.$_SESSION["last_name"]?></b><span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="#myModalNorm" role="button" data-toggle="modal"> <span class="glyphicon glyphicon-log-out"></span> Ρυθμίσεις</a></li>
-                <li><a href="login.php"><span class="glyphicon glyphicon-cog"></span> Έξοδος</a></li>
+                <li><a href="core/logout.php"><span class="glyphicon glyphicon-cog"></span> Έξοδος</a></li>
               </ul>
             </li>
           </ul>
         </div>
       </div>
+    </div>
+
+<div id="show_notification_tri" class="triangle-1" style="display: none"></div>
+<div  id="show_notification"  class="notif" style="display: none">
+
+
+<div class="notification-heading"><h4 class="menu-title"><b>Ειδοποιήσεις</b></h4></h4></div>
+
+   <div class="notifications-wrapper">
+
+    <?php 
+    $notification = mysqli_query($conn,"SELECT  distinct * FROM notification_box as nb,user as u where nb.notif_to='".$_SESSION["email"]."' and u.email=nb.notif_from ORDER BY nb.date DESC ");
+
+    if (!$notification) { // add this check.
+      die('Invalid query: ' . mysql_error());
+    }
+    while ($notification_list = mysqli_fetch_array($notification)) { 
+
+      if($notification_list["notif_type"]=="comment"){?>
+
+     <div class="content">
+       <div class="notification-item">
+        <a  href="#"><h4 class="item-title"><img style='height: 20px; width: 20px;' class="img-circle" src="img/profile.jpg"><b><?php echo " ".$notification_list['first_name']." ".$notification_list['last_name']; ?></b> σχολιάσε την άσκηση.</h4></a>
+        <p class="item-info" style="color: grey; margin-left: 17px;"><i class="fa fa-comment" aria-hidden="true" style="margin-right:7px; "></i><?php echo date('j',strtotime($notification_list['date'])) . ' ' .$greekMonths[intval(date('m',strtotime($notification_list['date'])))-1]; ?></p>
+      </div>
+    </div>
+    
+    <?php }else{?>
+
+    <div class="content" href="#">
+       <div class="notification-item">
+        <a  href="#"><h4 class="item-title"><img style='height: 20px; width: 20px;' class="img-circle" src="img/profile.jpg"><b><?php echo " ".$notification_list['first_name']." ".$notification_list['last_name']; ?></b> έχει συνδεθεί μαζί σας.</h4></a>
+        <p class="item-info" style="color: grey; margin-left: 17px;"><i class="fa fa-user" aria-hidden="true" style="margin-right:7px; "></i><?php echo date('j',strtotime($notification_list['date'])) . ' ' .$greekMonths[intval(date('m',strtotime($notification_list['date'])))-1]; ?></p>
+      </div>
+    </div>
+
+     <?php }}?>
+   </div>
+
+    <div class="notification-footer" style="float: right;"><a href="see_all_notifications.php" style="color:black;">Προβολή όλων</a></div>
+</div>
     </div>
 
     <!--script for active item in navbar-->
@@ -154,7 +279,20 @@ include 'core/init.php';
           // -----------------------------------------------------------------------
       });
     </script>
-    
+
+<script>
+$(document).ready(function(){
+    $("#notification").click(function(){
+        $("#show_notification").toggle();
+        $("#show_notification_tri").toggle();
+
+        var x = new XMLHttpRequest();
+        x.open("GET","core/read_notifications.php",true);
+        x.send();
+        return false;
+    });
+});
+</script>
 </body>
 </html>
 
@@ -177,7 +315,7 @@ include 'core/init.php';
 
             <!-- Modal Body -->
             <div class="modal-body">
-                <form role="form"  action="core/update_personal_settings.php" method="POST"class="form-horizontal">
+                <form role="form"  action="core/update_personal_settings.php" method="POST" class="form-horizontal">
                 <div class="row">
                         <label class="col-sm-3"  style="margin-top: 10px;"for="Password" >Όνομα</label>
                         <div class="col-sm-8">  
@@ -195,7 +333,7 @@ include 'core/init.php';
                     <input type="submit" class="btn btn-primary pull-right" value="Αποθήκευση" name="changeName" style="margin-right:64px;"/>
                 </div>
                  </form>
-                  <form role="form"  action="core/update_settings.php" method="POST"class="form-horizontal">
+                  <form role="form"  action="core/update_personal_settings.php" method="POST" class="form-horizontal">
                     <div class="row">
                         <label class="col-sm-3"  style="margin-top: 10px;"for="Password" >Κωδικός πρόσβασης</label>
                         <div class="col-sm-8">  
@@ -205,7 +343,7 @@ include 'core/init.php';
                          <div  style="margin-top:10px;"> <span id="password_strength"></span></div>
                     </div>
                      <div class="row">
-                        <label class="col-sm-3"  style="margin-top: 10px;"for="Password" >Νέος κωδικός</label>
+                        <label class="col-sm-3"  style="margin-top: 10px;" for="Password" >Νέος κωδικός</label>
                         <div class="col-sm-8">  
                             <input type="password"  style="margin-bottom: 10px;" class="form-control"
                             id="password" name="password" required onkeyup="CheckPasswordStrength(this.value)"/>

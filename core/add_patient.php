@@ -11,7 +11,6 @@ $telephone = $_POST['telephone'];
 
 $today = date("Y-m-d H:i:s");
 
-
 $add_patient =  "INSERT INTO patient (first_name,last_name,parent_fname, parent_lname, telephone,email,registration_date) VALUES ('$fpname', '$lpname','$fkname', '$lkname','$telephone','$email','$today')";
 
 $add = mysqli_query($conn, $add_patient);

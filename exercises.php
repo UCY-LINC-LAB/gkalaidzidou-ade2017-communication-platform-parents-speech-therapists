@@ -1,6 +1,12 @@
 <?php
 include 'core/init.php';
 session_start(); 
+
+if ( $_SESSION['logged_in'] != true){
+  header('Location: login.php');
+}
+
+
  $_SESSION['folder_id']='2';
 
 if (empty($_GET)) {
@@ -39,26 +45,48 @@ $therapist_id='1';//$_SESSION["user_ID"];
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-<!--<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>-->
-
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-json/2.6.0/jquery.json.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-json/2.6.0/jquery.json.min.js"></script>
 
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-<!--<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">-->
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
-<!--folder menu-->
-<link href='http://fonts.googleapis.com/css?family=News+Cycle:400,700' rel='stylesheet' type='text/css'>
-<link href="http://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
-
-
+  <!--folder menu-->
+  <link href='http://fonts.googleapis.com/css?family=News+Cycle:400,700' rel='stylesheet' type='text/css'>
+  <link href="http://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
 
   <!--Search and select option in modal-->
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
   <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+
+
+  <!--Screenshot of exercise-->
+  <script src="https://raw.githubusercontent.com/eligrey/FileSaver.js/master/FileSaver.js"></script>
+  <script src="html2canvas.js"></script>
+  <script type="text/javascript">
+    $(function() { 
+      $("#btnSave").click(function() { 
+          html2canvas($("#droppable"), {
+              onrendered: function(canvas) {
+
+                //Set hidden field's value to image data (base-64 string)
+                $('#img_val').val(canvas.toDataURL("image/png", 1.0));
+                //Submit the form manually
+                document.getElementById("myForm").submit();
+
+
+                 /* theCanvas = canvas;
+                  document.body.appendChild(canvas);
+
+                  canvas.toBlob(function(blob) {
+                      saveAs(blob, "Dashboard.png"); 
+                  });*/
+              }
+          });
+      });
+    }); 
+  </script>
 
   <style type="text/css">
     .left { 
@@ -82,6 +110,7 @@ $therapist_id='1';//$_SESSION["user_ID"];
     .drop_area{
        border:1px solid #f0f0f0;
     height:400px;
+    width: 500px;
     position:relative;
 
     }
@@ -207,6 +236,8 @@ div { padding:0px; }
 
 
 </style>
+
+
   <script type="text/javascript">
 
     var positions =[];
@@ -234,11 +265,6 @@ div { padding:0px; }
         hoverClass: "ui-state-hover",
         drop: function(event, ui) {
             //alert($(ui.draggable).attr('id'));
-
-
-
-
-
 
               var str = $(ui.draggable).attr('id');
               var n = str.startsWith("element_s_");
@@ -418,7 +444,9 @@ $('#new').click(function() {
         <h4><?php echo $folder_info['name'];?> <i class="fa fa-angle-right" aria-hidden="true"></i> <?php echo $exercise_info['ex_name'];?></h4>
       </div>
 
-      <div id="droppable" class="drop_area" style=" position: relative;">
+
+
+      <div id="droppable" class="drop_area"  style=" position: relative; background-color: white;">
       <!--  <div id="trash"><span class="glyphicon glyphicon-trash"></div>-->
 
       <?php
@@ -431,40 +459,44 @@ $('#new').click(function() {
             $x = $row['x_pos'];
             $y = $row['y_pos'];
             $id = $row['asset_id'];
-             //echo ($x ."  " . $y . " " . $id . "  # " );
-
-
-            //then echo our div element with CSS properties to set the left(x) and top(y) values of the element
-            //echo '<div id="element_'.$id.'" class="element" style="left:'.$x.'px; top:'.$y.'px;"><img style="height:100px; width:100px;" src="1.jpg" alt="Nettuts+" />Move the Box<p></p></div>';
 
             echo '<img style="left:'.($x-350).'px; top:'.($y-150).'px; position:absolute; margin:auto;" class="assetImage" src="'.$row['path']. '" id="element_s_'.$id.'_'.$x.'_'.$y.'" draggable="true" visible=""/>';
-          
         }?>
+     </div>
 
 
-      
-      </div>
 
 
       <div class="row" style="margin: 10px; float: right;">
           <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#shareEx"><i class="fa fa-share" aria-hidden="true"></i> Κοινοποίηση</button>
           <button type="button" onclick="saveFun()" class="btn btn-success btn-sm"><i class="fa fa-floppy-o" aria-hidden="true"></i> Αποθήκευση</button>
+          <input type="button" id="btnSave" value="Save PNG"/>
       </div>
+
+
+
+      <form method="POST" enctype="multipart/form-data" action="save.php" id="myForm">
+        <input type="hidden" name="img_val" id="img_val" value="" />
+    </form>
+
+
+
+
+      <div id="img-out"></div>
 
     </div>
 
     <div class="right">
 
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#library" aria-controls="library" role="library" data-toggle="tab"><b>Βιβλιοθήκη</b></a></li>
-        <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"><b>Λεξικό</b></a></li>
+    <ul class="nav nav-tabs" id="myTab">
+        <li role="presentation" class="active"><a href="#library" data-toggle="tab"><b>Βιβλιοθήκη</b></a></li>
+        <li role="presentation"><a href="#dictionary" data-toggle="tab"><b>Λεξικό</b></a></li>
     </ul>
 
     <!-- Tab panes -->
     <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active scrollStyle" id="library">
-          
-
+        <div role="tabpanel" class="tab-pane active" id="library">
+        
        <?php 
           $assets = mysqli_query($conn,"SELECT * FROM asset");
 
@@ -478,10 +510,9 @@ $('#new').click(function() {
           </div>
       <?php } ?>
 
-  
 
         </div>
-        <div role="tabpanel" class="tab-pane" id="profile">
+        <div role="tabpanel" class="tab-pane" id="dictionary">
         <div class="row" >
          <form id='dictionary_search' onsubmit="return false">
           <div class="input-group">
@@ -505,23 +536,21 @@ $('#new').click(function() {
         </div>
     </div>
 
+<script type="text/javascript">
+    var url = document.location.toString(); // select current url shown in browser.
+
+    if (url.match('#')) {
+        $('.nav-tabs a[href=#' + url.split('#')[1] + ']').tab('show'); // activate current tab after reload page.
+    }
+    // Change hash for page-reload
+    $('.nav-tabs a').on('shown', function (e) { // this function call when we change tab.
+        window.location.hash = e.target.hash; // to change hash location in url.
+    });
+</script>
     <!--
       <div class="scrollStyle" id="library">
         <button id='new'>New</button>
         <div id="element_text">*<textarea id="element_text" placeholder="Text" rows="1" style="border: none"></textarea></div>
-       <?php 
-          $assets = mysqli_query($conn,"SELECT * FROM asset");
-
-          if (!$assets) {
-            die('Invalid query: ' . mysql_error());
-          }
-
-          while ($list = mysqli_fetch_array($assets)) {?>
-          <div class="imgDiv" > 
-            <img class="assetImage"  src="<?php echo $list['path']?>" id="element_<?php echo $list['asset_id']?>" draggable="true"/>
-          </div>
-      <?php } ?>
-
       </div>
 
 -->
@@ -529,6 +558,7 @@ $('#new').click(function() {
     </div>
 
   </div>
+
 
 <script type="text/javascript">
   $('#dictionary_search').submit(function(event){
@@ -719,10 +749,6 @@ $(".accordion").click(function(e) {
     </div>
   </div>
   
-
-
-
-
 
 </body>
 </html>

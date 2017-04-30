@@ -2,9 +2,10 @@
 include 'core/init.php';
 session_start(); 
 
-//if ( $_SESSION['logged_in'] != true){
- // header('Location: e-login.php');
-//}
+if ( $_SESSION['logged_in'] != true){
+  header('Location: login.php');
+}
+
 if(!isset($_GET['page']))
   $_GET['page']=1;
 
@@ -19,7 +20,7 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
 <head>
   <title>logoucon | members</title>
   <link rel="icon" type="image/png" href="img/logo.png">
-  <meta charset="utf-8">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>

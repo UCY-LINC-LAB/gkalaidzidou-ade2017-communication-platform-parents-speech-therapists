@@ -2,9 +2,9 @@
 include 'core/init.php';
 session_start(); 
 
-//if ( $_SESSION['logged_in'] != true){
- // header('Location: e-login.php');
-//}
+if ( $_SESSION['logged_in'] != true){
+  header('Location: login.php');
+}
 
 $therapist_id='1';//$_SESSION["user_ID"];  
 
@@ -525,7 +525,7 @@ div.polaroid {
       <!-- <img style='height: 20px; width: 20px;' src="img/profile.jpg"><b>  Ηλίας Χρίστου</b>-->
 
         <nav class="nav-sidebar">
-            <ul class="nav tabs">
+            <ul class="nav tabs"  id="myTab">
               <li class="active"><a href="#graph" data-toggle="tab">Γραφική Προόδου</a></li>
               <li class=""><a href="#history" data-toggle="tab">Ιστορικό</a></li>
               <li class=""><a href="#therapy" data-toggle="tab">Θεραπεία & Διάγνωση</a></li>
@@ -536,7 +536,6 @@ div.polaroid {
       <div class="col-sm-10">
         <div class="tab-content">
           <div class="tab-pane active" id="graph" role="tabpanel">
-          <!--Add graph-->
             <div id="placeholder" style="margin-left: 100px"></div>
             <div class="container" style="margin-top: 20px;">
               <div class='col-md-10'>
@@ -728,7 +727,24 @@ div.polaroid {
       </div>
     </div>
 
-  </div>
+<script>
+$('#myTab a').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+});
+
+// store the currently selected tab in the hash value
+$("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
+    var id = $(e.target).attr("href").substr(1);
+    $.cookie('activeTab', id);
+});
+
+    // on load of the page: switch to the currently selected tab
+    var hash = $.cookie('activeTab');
+    if (hash != null) {
+        $('#myTab a[href="#' + hash + '"]').tab('show');
+    }
+</script>
 
 
 <!--Modal to edit guide for parent-->

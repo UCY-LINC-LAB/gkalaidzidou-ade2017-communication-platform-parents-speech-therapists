@@ -15,26 +15,34 @@ if (!empty($_POST["email"]) && !empty($_POST["password"])){
     $_SESSION["email"] = $email; 
     $_SESSION['first_name'] =$result['first_name'];
     $_SESSION['last_name'] =$result['last_name'];
-    $_SESSION['fullname'] = $result['first_name'] . " ". $result['last_name'];
     $_SESSION["user_type"] = $result['type'];
-    $_SESSION["user_ID"] = $result['user_id'];
     $_SESSION["passowrd"] = $result['password'];
+    $_SESSION["telephone"] = $result['telephone'];
 
      //if the students dosent submit app form and the deadline has not end then get him tu app form
     if($_SESSION['user_type']=='therapist'){
+        $therapist_data = mysqli_query($conn,"SELECT * FROM speech_therapist WHERE email = '".$email."'");
+        $therapist_details =  mysqli_fetch_array($therapist_data, MYSQLI_ASSOC);
+
+        $_SESSION["therapist_id"] = $therapist_details['therapist_id'];
+
         header('Location: ../home.php');
+        exit;
     } else if($_SESSION['user_type']=='parent'){
-        header('Location: ../home.php');
+        header('Location: ../homee.php');
+        exit;
     }else{
      header('Location: ../login.php');
+     exit;
    }
- }
- else{
+   
+ }else{
     // remove all session variables
   session_unset();
     // destroy the session
   session_destroy(); 
   header("Location:".$_SERVER['HTTP_REFERER']."?wrong_login=true");
+  exit;
 }
 }
 ?>
