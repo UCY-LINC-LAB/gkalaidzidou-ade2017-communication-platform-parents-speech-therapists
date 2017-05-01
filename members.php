@@ -9,16 +9,48 @@ if ( $_SESSION['logged_in'] != true){
 if(!isset($_GET['page']))
   $_GET['page']=1;
 
-$therapist_id='1';//$_SESSION["user_ID"];
+$therapist_id=$_SESSION["therapist_id"];
 $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτίου','Απριλίου','Μαΐου','Ιουνίου','Ιουλίου','Αυγούστου','Σεπτεμβρίου','Οκτωβρίου','Νοεμβρίου','Δεκεμβρίου');  
 
+// Requested page
+$requested_page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+
+$col_name=$_POST['col_name'];
+$date=$_POST['date'];
+$date2=$_POST['date2'];
+$num_from=$_POST['num_from'];
+$num_to=$_POST['num_to'];
+$col_state=$_POST['col_state'];
+
+  $q="SELECT COUNT(*) FROM patient WHERE therapist_id='".$therapist_id."'";
+
+  $r = mysqli_query($conn,$q);
+
+
+$list = mysqli_fetch_row($r);
+$product_count = $list[0];
+
+
+$products_per_page = 2;
+
+// 55 products => $page_count = 3
+$page_count = ceil($product_count / $products_per_page);
+
+// You can check if $requested_page is > to $page_count OR < 1,
+// and redirect to the page one.
+$first_product_shown = ($requested_page - 1) * $products_per_page;
+
+// Then we retrieve the data for this requested page
+
+$s="SELECT * FROM patient WHERE therapist_id='".$therapist_id."' LIMIT $first_product_shown, $products_per_page";
+$r = mysqli_query($conn,$s);
 ?>
 
 <!DOCTYPE html>
 <html>
 
 <head>
-  <title>logoucon | members</title>
+  <title>logoucon | εγγεγραμμένοι</title>
   <link rel="icon" type="image/png" href="img/logo.png">
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,6 +59,40 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- Bootstrap Date-Picker Plugin -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+    <script>
+    $(document).ready(function(){
+      var date_input=$('input[name="date"]'); //our date input has the name "date"
+      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+      var options={
+        format: 'yyyy/mm/dd',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+    };
+    date_input.datepicker(options);
+    })
+
+    $(document).ready(function(){
+      var date_input=$('input[name="date2"]'); //our date input has the name "date"
+      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+      var options={
+        format: 'yyyy/mm/dd',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+    };
+    date_input.datepicker(options);
+    })
+
+
+    </script>
+
+
 
   <!--search inside table-->
   <script type="text/javascript">
@@ -126,7 +192,7 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
   <?php include_once('navbar.php');?>
 
 <div class="container">
-    <div class="row" style="margin-bottom: 50px; margin-top: 30px;" >
+    <div class="row" style="margin-top: 30px;" >
         <div class="col-md-6">
             <form action="#" method="get">
                 <div class="input-group">
@@ -138,35 +204,76 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
                 </div>
             </form>
         </div>
+
         <div class="col-md-2">
           <button type="button" class="btn btn-default btn-responsive" data-toggle="modal" data-target="#add" style=""><span class="glyphicon glyphicon-plus"></span> Προσθήκη</button>
-        </div>  
+        </div> 
     </div>
 
-<?php
-    // Requested page
-    $requested_page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+    <div class="row" style="margin-bottom: 10px; margin-top: 10px;">        
+      <div class="col-sm-2">
+        <button type="button" class="btn btn-xs" style="background-color: transparent;" onclick="advanceSearch();">
+        <b style="color:#930000;"> Σύνθετη Αναζήτηση</b></button>   
+      </div>
+    </div>
 
-    // Get the product count
-    $r = mysqli_query($conn,"SELECT COUNT(*) FROM patient WHERE therapist_id='".$therapist_id."'");
-    $list = mysqli_fetch_row($r);
-    $product_count = $list[0];
+    <div id="advanceDiv" hidden="">
+      <form style="margin-top: 15px; margin-bottom: 30px;"  method="POST" action="members.php">
+        <div  class="row" >
+            <div class="col-xs-2"><label for="sel1" >ταξινόμηση</label></div>
+            <div class="col-xs-4"><label for="sel1" >ημερομηνία εγγραφής</label></div>
+            <div class="col-xs-2"><label for="sel1" >αριθμός επισκέψεων</label></div>
+            <div class="col-xs-2"><label for="sel1" >κατάσταση σύνδεσης</label></div>
+        </div>
+        <div  class="row" >
+            <div class="col-xs-2">         
+              <select  class="form-control" name="col_name" >
+                <option value=""></option>
+                <option value="patient_name">Εγγεγραμμένος</option>
+                <option value="parent_name">Όνομα Κηδεμόνα</option>
+                <option value="emmail">Email</option>
+                <option value="date">Ημερομηνία Εγγραφής</option>
+                <option value="conf_num">Αριθμός Επισκέψεων</option>
+              </select>
+            </div>
 
-    $products_per_page = 2;
+            <div class="col-xs-2"> <input id="date" name="date" placeholder="MM/DD/YYYY"  type="text" class="form-control"> </div>
+            <div class="col-xs-2"> <input id="date2" name="date2" placeholder="MM/DD/YYYY"  type="text" class="form-control"> </div>
 
-    // 55 products => $page_count = 3
-    $page_count = ceil($product_count / $products_per_page);
+            <div class="col-xs-1"> <input id="" name="num_from" placeholder="από"  type="text" class="form-control"> </div>
+            <div class="col-xs-1"> <input id="" name="num_to" placeholder="μέχρι"  type="text" class="form-control"> </div>
 
-    // You can check if $requested_page is > to $page_count OR < 1,
-    // and redirect to the page one.
+            <div class="col-xs-2">
+              <select  class="form-control" name="col_state" >
+                <option value=""></option>
+                <option value="connected">Συνδεδεμένοι</option>
+                <option value="invitated">Προσκλήθηκε</option>
+                <option value="not_invitated">Δεν προσκλήθηκε</option>
+              </select>
+            </div>
+            <div class="col-xs-2">
+              <input class="btn btn-warning btn-s"  type="submit" value='Αναζήτηση'>
+            </div>
+        </div>
+      </form>
+      <hr>
+</div>
 
-    $first_product_shown = ($requested_page - 1) * $products_per_page;
+   <script type="text/javascript">
+     function advanceSearch(){
 
-    // Then we retrieve the data for this requested page
-    $r = mysqli_query($conn,"SELECT * FROM patient WHERE therapist_id='1' LIMIT $first_product_shown, $products_per_page");
-?>
+      var div = document.getElementById('advanceDiv');
 
-    <div class="row">    
+      if(div.style.display == 'block'){
+        div.style.display = 'none';
+      }else if(div.style.visibility == false){
+        div.style.display = 'block';
+      }
+     }
+   </script>
+
+
+    <div class="row" style="margin-top: 35px;">    
       <div class="col-md-12 table-responsive">
        <table class="table table-list-search table-hover">
           <thead>
@@ -181,7 +288,7 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
                   <th></th>
                   <th></th>
                   <th></th>
-                   <th></th>
+                  <th><th></th>
               </tr>
           </thead>
             <tbody>
@@ -196,6 +303,15 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
                   }else{
                     $conn_det = mysqli_fetch_array($conn_req);
                   }
+
+                  $total_conferences = mysqli_query($conn,"SELECT COUNT(conference_id) as total_conf FROM conference where therapist_id='".$therapist_id."' and 
+                  patient_id='".$list['patient_id']."' and  DATE(conference_date) < CURRENT_DATE ");
+
+                  if (!$total_conferences) { // add this check.
+                    die('Invalid query: ' . mysql_error());
+                  }else{
+                    $completed_conferences = mysqli_fetch_array($total_conferences);
+                  }
                 ?>
               <tr>
                 <td><img style='height: 20px; width: 20px;' class="img-circle" src="<?php echo $list['profile']?>"></td>
@@ -204,7 +320,7 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
                 <td><?php echo $list['parent_fname']." ".$list['parent_lname']?></td>
                 <td><?php echo $list['email']?></td>
                 <td><?php echo $list['registration_date']?></td>
-                <td>12</td>
+                <td><?php echo $completed_conferences['total_conf']?></td>
 
 
                 <td><p data-placement="top" data-toggle="tooltip" title="Edit">
@@ -229,18 +345,19 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
                     
                   if($conn_det['request_state']==0){ ?>
 
-                  <!--<a id="invite" onclick="invited()">Προσκάλεσε</a>
-                  <p hidden id="invited" style="color:grey;">  <span class="glyphicon glyphicon-ok"> </span> Προσκλήθηκε</p>-->
                   <form id="myForm" action="core/connect_request.php" method="post">
                     <input type="hidden" name="conn_email" value="<?php echo $list['email']; ?>" />
                     <input type="hidden" name="patID" value="<?php echo $list['patient_id']; ?>" />
-                    <a href="#" onclick="document.getElementById('myForm').submit();">Προσκάλεσε</a>
+                    <a style="font-size: 12px;" href="#" onclick="document.getElementById('myForm').submit();">
+                     <span class="glyphicon glyphicon-share-alt"></span>Προσκάλεσε</span></a>
                   </form>
+                   
                   <?php }else if($conn_det['connection_state']==1){?>
-                    <p style="color:green;"><span class="glyphicon glyphicon-ok"></span> Συνδεδεμένοι</p>
+                    <p style="color:green;font-size: 12px; "><span class="glyphicon glyphicon-ok"></span>  Συνδεδεμένοι</p>
                   <?php }else{?> 
-                     <p style="font-size: 13px; color:grey;"><span class="glyphicon glyphicon-ok"></span> Προσκλήθηκε,<br>
-                      <?php echo date('j',strtotime($conn_det['request_date'])) . ' ' .$greekMonths[intval(date('m',strtotime($conn_det['request_date'])))-1]?></p>
+                     <p style="font-size: 12px; color:grey;"> Προσκλήθηκε,<br>
+                      <?php echo date('j',strtotime($conn_det['request_date'])) . ' ' .$greekMonths[intval(date('m',strtotime($conn_det['request_date'])))-1]?>
+                      <span class="glyphicon glyphicon-time"></span></p>
 
                 <td><form id="myForm2" action="core/resend_connect_request.php" method="post">
                   <input type="hidden" name="conn_email" value="<?php echo $list['email']; ?>" />
@@ -262,7 +379,7 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
               echo '<li class="disabled"><a href="#">«</a></li>';
             }else if ($_GET['page'] >1){
               $n=$_GET['page']-1;
-              echo '<li><a href="parent.php?page='.$n. '">«</a></li>';
+              echo '<li><a href="members.php?page='.$n. '">«</a></li>';
             }
 
 
@@ -270,12 +387,12 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
               if($i == $requested_page) {
                   echo '<li class="active"><a href="#">'.$i.' <span class="sr-only">(current)</span></a></li>';
               } else {
-                  echo '<li><a href="parent.php?page='.$i.'">'.$i.'</a></li> ';
+                  echo '<li><a href="members.php?page='.$i.'">'.$i.'</a></li> ';
               }
           }
           if ($_GET['page'] < $page_count) {
             $n=$_GET['page']+1;
-            echo '<li><a href="parent.php?page='.$n. '">»</a></li>';
+            echo '<li><a href="members.php?page='.$n. '">»</a></li>';
           }else{
             echo '<li class="disabled"><a href="#">»</a></li>';
           }
@@ -369,7 +486,6 @@ function invited() {
             </div>
             <div class="row"> 
               <div class="col-sm-10" style="text-align: right;"> 
-                <!--<button type="button" class="btn btn-warning btn-s">Προσθήκη</button>-->
                 <input class="btn btn-warning btn-s"  type="submit" value='Προσθήκη'>
               </div>
             </div>
@@ -436,7 +552,6 @@ function invited() {
 
             <div class="row"> 
               <div class="col-sm-10" style="text-align: right;"> 
-                <!--<button type="button" class="btn btn-warning btn-s">Προσθήκη</button>-->
                 <input class="btn btn-warning btn-s"  type="submit" value='Αποθήκευση'>
               </div>
             </div>

@@ -2,7 +2,10 @@
 include 'init.php';
 session_start();
 
-$check="SELECT * from patient_statement as p where p.patient_id='6' and p.therapist_id='1'";
+$therapist_id=$_SESSION["therapist_id"];
+$patient_id = $_POST['patient_id'];
+
+$check="SELECT * from patient_statement as p where p.patient_id='$patient_id' and p.therapist_id='$therapist_id'";
 $count = mysqli_query($conn, $check);
 
 if(!$count) {
@@ -14,14 +17,12 @@ if(!$count) {
 }
 
 if(mysqli_num_rows($count)==0){
-	echo mysqli_num_rows($count);
-	echo ("helloo");
 	if(isset($_POST['history_ftherapist'])){
 		$content = $_POST['contentTherapist'];
-		$add_history =  "INSERT INTO patient_statement (patient_id,therapist_id,history_ftherapist) VALUES ('6','1','$content')";
+		$add_history =  "INSERT INTO patient_statement (patient_id,therapist_id,history_ftherapist) VALUES ('$patient_id','$therapist_id','$content')";
 	}else{
 		$content = $_POST['contentParent'];
-		$add_history =  "INSERT INTO patient_statement (patient_id,therapist_id,history_fparent) VALUES ('6','1','$content')";
+		$add_history =  "INSERT INTO patient_statement (patient_id,therapist_id,history_fparent) VALUES ('$patient_id','$therapist_id','$content')";
 	}
 
 	$add = mysqli_query($conn, $add_history);
@@ -41,12 +42,12 @@ if(mysqli_num_rows($count)==0){
 }else{
 	if(isset($_POST['history_ftherapist'])){
 		$content = $_POST['contentTherapist'];
-		$update_history="UPDATE patient_statement set history_ftherapist='$content' where patient_id= '6' and therapist_id='1'";
+		$update_history="UPDATE patient_statement set history_ftherapist='$content' where patient_id= '$patient_id' and therapist_id='$therapist_id'";
 
 
 	}else{
 		$content = $_POST['contentParent'];
-		$update_history="UPDATE patient_statement set history_fparent='$content' where patient_id= '6' and therapist_id='1'";
+		$update_history="UPDATE patient_statement set history_fparent='$content' where patient_id= '$patient_id' and therapist_id='$therapist_id'";
 	}
 
 	$update = mysqli_query($conn, $update_history);

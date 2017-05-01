@@ -28,7 +28,6 @@ if (!$count) { // add this check.
 	echo $count_insertion['count'];
 }
 
-
 if($count_insertion['count']==3){
 
 	$update_conference_score1 =  "UPDATE conference_score_bar set score= '$attention' where conference_id='$conferenceID' and title='Prosoxh' ";

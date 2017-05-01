@@ -6,10 +6,9 @@ $startTime = $_POST['startTime'];
 $endTime = $_POST['endTime'];
 $targetDescription = $_POST['targetDescription'];
 $patient = $_POST['patient'];
-$threapist_id = '1';
+$threapist_id =$_SESSION["therapist_id"];
 
 $dateConf= date("Y-m-d",strtotime($_POST['date']));
-echo $dateConf;
 
 mysqli_query( $conn,"SET NAMES 'utf8'");
 

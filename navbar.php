@@ -10,6 +10,8 @@ if (!$new_notifications) { // add this check.
 }
 
 $count_new_notif = mysqli_num_rows($new_notifications);
+
+echo $_SESSION['ff'];
 ?>
 
 <!DOCTYPE html>
@@ -185,7 +187,19 @@ $count_new_notif = mysqli_num_rows($new_notifications);
     border-bottom: 15px solid #DDBE42;
     /*#70c282;*/
 }
+
+input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
 </style>
+
+
 </head>
 
 <body>
@@ -203,7 +217,7 @@ $count_new_notif = mysqli_num_rows($new_notifications);
         <div id="navbar" class="navbar-collapse collapse" >
           <ul class="nav navbar-nav">
             <li class="active" ><a href="home.php"><b>ΗΜΕΡΟΛΟΓΙΟ</b></a></li>
-            <li ><a href="parent.php"><b>ΕΓΓΕΓΡΑΜΜΕΝΟΙ</b></a>
+            <li ><a href="members.php"><b>ΕΓΓΕΓΡΑΜΜΕΝΟΙ</b></a>
             </li>
             <li> <a href="history_details.php"><b>ΙΣΤΟΡΙΚΑ</b></a>
             </li>
@@ -215,7 +229,7 @@ $count_new_notif = mysqli_num_rows($new_notifications);
           </li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-              <img style='height: 20px; width: 20px;' class="img-circle" src="img/profile.jpg">
+              <img style='height: 20px; width: 20px;' class="img-circle" src="<?php echo $_SESSION["photo"]?>">
               <b><?php echo $_SESSION["first_name"].' '.$_SESSION["last_name"]?></b><span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="#myModalNorm" role="button" data-toggle="modal"> <span class="glyphicon glyphicon-log-out"></span> Ρυθμίσεις</a></li>
@@ -328,7 +342,6 @@ $(document).ready(function(){
                             <input type="text"  style="margin-bottom: 10px;" class="form-control" id="Lname" name="lname" />
                         </div>
                     </div>
-
                 <div class="row" style="background-color: #F5F5F5; margin-bottom:10px; margin-top:10px;">
                     <input type="submit" class="btn btn-primary pull-right" value="Αποθήκευση" name="changeName" style="margin-right:64px;"/>
                 </div>
@@ -365,6 +378,21 @@ $(document).ready(function(){
                 <!-- Modal Footer -->
                 <div class="modal-footer"></div>
             </form>
+            <form role="form"  action="core/update_personal_settings.php" method="POST" enctype="multipart/form-data" class="form-horizontal">
+                <div class="row">
+                        <label class="col-sm-3"  style="margin-top: 10px;" for="Password" >Φωτογραφία</label>
+                        <div class="col-sm-8">  
+                            <input type="file" name="fileToUpload" id="fileToUpload" style="margin-bottom: 10px;">
+                        </div>
+
+                        <label for="file-upload" class="custom-file-upload"><i class="fa fa-cloud-upload"></i> Επιλογή</label>
+                        <input id="file-upload" name="file-upload" type="file"/>
+                        <label id="selected_file"></label>
+                  </div>
+                <div class="row" style="background-color: #F5F5F5; margin-bottom:10px; margin-top:10px;">
+                    <input type="submit" class="btn btn-primary pull-right" value="Αποθήκευση" name="upload_photo" style="margin-right:64px;"/>
+                </div>
+          </form>
         </div>
     </div>
 </div>
@@ -374,4 +402,11 @@ $(document).ready(function(){
     document.getElementById("Fname").value="<?php echo $_SESSION['first_name'];?>";
     document.getElementById("Lname").value="<?php echo$_SESSION['last_name'];?>";
     document.getElementById("current_password").value="<?php echo  $_SESSION['passowrd'];?>";
+</script>
+<script type="text/javascript">
+  document.getElementById('file-upload').onchange = function () {
+    var file = $('#file-upload')[0].files[0]
+
+  document.getElementById("selected_file").innerHTML =file.name;
+};
 </script>

@@ -10,7 +10,7 @@ include 'core/init.php';
     <meta name="description" content="">
     <meta name="author" content="Giouliana Kalaitzidou">
 
-    <title>logoucon</title>
+    <title>logoucon | καλώς ορίσατε</title>
     <link rel="icon" type="image/png" href="img/logo.png">
 
     <!-- Bootstrap Core CSS -->
@@ -203,12 +203,14 @@ window.location.href='login.php';
                      <script> validateEmail();</script>
                 </div>
                 <div class="row">
-                    <label class="col-sm-6" style="margin-bottom: 10px;" for="Password" >Κωδικός Πρόσβασης</label>
+                    <label class="col-sm-4" style="margin-bottom: 10px;" for="Password" >Κωδικός Πρόσβασης </label>
+                    <p class="col-sm-2"><b><span id="password_strength"></span></b></p>
                     <div class="col-sm-6">  
+                     
                         <input type="password"  style="margin-bottom: 10px;" class="form-control"
                         id="password" placeholder="" name="password1" required onkeyup="CheckPasswordStrength(this.value)"/>
                     </div>
-                     <div> <span id="password_strength"></span></div>
+                    
                 </div>
                 <div class="row">
                     <label class="col-sm-6" style="margin-bottom: 10px;" for="ConfirmPassword">Επιβεβαίωση Κωδικού Πρόσβασης</label>

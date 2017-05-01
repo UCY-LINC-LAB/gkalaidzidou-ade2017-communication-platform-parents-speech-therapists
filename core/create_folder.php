@@ -5,11 +5,9 @@ session_start();
 $folder_title = $_POST['newFolder_title'];
 $folder_id=$_POST['folder_id'];
 $exer_title = $_POST['exer_title'];
-$therapist_id = '1';
+$therapist_id=$_SESSION["therapist_id"];  
 
 $today = date("Y-m-d H:i:s");
-
-echo $folder_title;
 
 if($folder_title!=null){
 	$create_folder =  "INSERT INTO folder (name,therapist_id,created_date) VALUES ('$folder_title', '$therapist_id','$today')";
@@ -40,7 +38,6 @@ if(! $insert_ex ) {
     		$result =  mysqli_fetch_array($get_exercise_id, MYSQLI_ASSOC);
     		$_SESSION["exercise_id"]=$result['exercise_id'];
 		}
-
 
  	echo "<script>";
 	echo " alert('Insert done!');      

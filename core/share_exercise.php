@@ -3,7 +3,10 @@ include 'init.php';
 session_start();
 
 $path="dd";
-$therapist_id = '1';
+$therapist_id=$_SESSION["therapist_id"];  
+$exercise_id=$_POST['exer_id'];
+$patient=$_POST['patient'];
+$exer_guide=$_POST['exer_guide'];
 
 $today = date("Y-m-d H:i:s");
 

@@ -6,12 +6,13 @@ if ( $_SESSION['logged_in'] != true){
   header('Location: login.php');
 }
 
+$therapist_id=$_SESSION["therapist_id"];  
 
- $_SESSION['folder_id']='2';
+ $_SESSION['folder_id']='';
 
 if (empty($_GET)) {
     // no exercise id passed by get
-  $_SESSION['exercise_id']=1;
+  $_SESSION['exercise_id']='';
 }else{
   $_SESSION['exercise_id'] = $_GET['exID'];
 }
@@ -25,13 +26,6 @@ if($_SESSION['exercise_id']!=null){
         $folder_info =  mysqli_fetch_array($get_folder_id);
     }
 }
-//if ( $_SESSION['logged_in'] != true){
- // header('Location: e-login.php');
-//}
-
-$therapist_id='1';//$_SESSION["user_ID"];
-
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -60,7 +54,6 @@ $therapist_id='1';//$_SESSION["user_ID"];
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
   <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
 
-
   <!--Screenshot of exercise-->
   <script src="https://raw.githubusercontent.com/eligrey/FileSaver.js/master/FileSaver.js"></script>
   <script src="html2canvas.js"></script>
@@ -74,7 +67,6 @@ $therapist_id='1';//$_SESSION["user_ID"];
                 $('#img_val').val(canvas.toDataURL("image/png", 1.0));
                 //Submit the form manually
                 document.getElementById("myForm").submit();
-
 
                  /* theCanvas = canvas;
                   document.body.appendChild(canvas);
@@ -218,12 +210,6 @@ body {
   line-height: 1.3rem;
 }
 
-  </style>
-
-
-<style type="text/css">
-  
-
   textarea {
     height:100%;
     background-color:beige;
@@ -233,7 +219,6 @@ body {
     
 }
 div { padding:0px; }
-
 
 </style>
 
@@ -444,8 +429,6 @@ $('#new').click(function() {
         <h4><?php echo $folder_info['name'];?> <i class="fa fa-angle-right" aria-hidden="true"></i> <?php echo $exercise_info['ex_name'];?></h4>
       </div>
 
-
-
       <div id="droppable" class="drop_area"  style=" position: relative; background-color: white;">
       <!--  <div id="trash"><span class="glyphicon glyphicon-trash"></div>-->
 
@@ -460,12 +443,9 @@ $('#new').click(function() {
             $y = $row['y_pos'];
             $id = $row['asset_id'];
 
-            echo '<img style="left:'.($x-350).'px; top:'.($y-150).'px; position:absolute; margin:auto;" class="assetImage" src="'.$row['path']. '" id="element_s_'.$id.'_'.$x.'_'.$y.'" draggable="true" visible=""/>';
+            echo '<img style="left:'.($x-410).'px; top:'.($y-150).'px; position:absolute; margin:auto;" class="assetImage" src="'.$row['path']. '" id="element_s_'.$id.'_'.$x.'_'.$y.'" draggable="true" visible=""/>';
         }?>
      </div>
-
-
-
 
       <div class="row" style="margin: 10px; float: right;">
           <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#shareEx"><i class="fa fa-share" aria-hidden="true"></i> Κοινοποίηση</button>
@@ -473,15 +453,9 @@ $('#new').click(function() {
           <input type="button" id="btnSave" value="Save PNG"/>
       </div>
 
-
-
       <form method="POST" enctype="multipart/form-data" action="save.php" id="myForm">
         <input type="hidden" name="img_val" id="img_val" value="" />
     </form>
-
-
-
-
       <div id="img-out"></div>
 
     </div>
@@ -554,7 +528,6 @@ $('#new').click(function() {
       </div>
 
 -->
-
     </div>
 
   </div>
@@ -608,8 +581,6 @@ $(".accordion").click(function(e) {
   }
 });
   </script>
-
-
 
   <!-- Modal for new folder -->
   <div class="modal fade" id="newFolder" role="dialog">

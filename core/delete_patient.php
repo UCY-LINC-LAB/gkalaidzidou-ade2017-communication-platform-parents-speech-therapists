@@ -1,7 +1,9 @@
 <?php
 include 'init.php';
 
-$deletePatient = "DELETE FROM patient WHERE patient_id='4'";
+$patient_id = $_POST['id'];
+
+$deletePatient = "DELETE FROM patient WHERE patient_id='$patient_id'";
 $delete = mysqli_query($conn, $deletePatient);
 
 if (!$delete) { // add this check.

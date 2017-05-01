@@ -69,33 +69,6 @@ mysqli_query( $conn,"SET NAMES 'utf8'");
       overflow-x: hidden;
     }
 
-    /*sticky note*/
-
-.stickyNote {
-  margin: auto;
-  width: 350px; 
-  height:350px;
-
-  background: #F9FFBF; /* Fallback */
-  /*background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F9FFBF), to(#C5C500));*/
-
-  padding: 20px 20px 20px 20px;
-    -webkit-box-shadow: 0px 1px 3px #000;
-    -moz-box-shadow: 0px 1px 3px #000;
-}
-
-.stickyNote h1{
-  font-size: 100px;
-  font-family: GoodDogRegular, Helvetica, sans-serif;
-}
-
-.stickyNote p {
-  font-family: GoodDogRegular, Helvetica, sans-serif;
-  font-size: 30px;
-  line-height: 35px;
-  margin: 10px 0 10px 0;
-  width: 280px;
-}
 
 /*alert notice*/
 .notice {
@@ -253,13 +226,8 @@ line-height: 22px;
 .checkboxgroup label {
   display: block;
 }
-
-
-/*label styling
-label {
-    font-weight: normal !important;
-}*/
   </style>
+
 </head>
 
 <body>
@@ -274,7 +242,7 @@ label {
     <div style="overflow-y: auto; height:400px;">
     <?php 
     $notif = mysqli_query($conn,"SELECT  distinct * FROM conference as conf,patient as pat where conf.therapist_id='".$therapist_id."' and 
-      DATE(conf.conference_date) < CURRENT_DATE and conf.patient_id=pat.patient_id and conf.comment='' ");
+      DATE(conf.conference_date) < CURRENT_DATE and conf.patient_id=pat.patient_id and conf.comment IS NULL");
 
     if (!$notif) { // add this check.
       die('Invalid query: ' . mysql_error());
@@ -324,12 +292,12 @@ label {
                               '<label for="attention" class="control-label input-group">Προσοχή</label>'+
                               '<div class="btn-group" data-toggle="buttons">'+
                                 '<label class="btn btn-default">'+
-                                 ' <input name="attention" value="1" type="radio" checked>1'+
+                                 ' <input name="attention" value="1" type="radio" >1'+
                                 '</label>'+
                                 '<label class="btn btn-default">'+
                                   '<input name="attention" value="2" type="radio">2'+
                                 '</label>'+
-                                '<label class="btn btn-default">'+
+                                '<label class="btn btn-default active">'+
                                   '<input name="attention" value="3" class="active" type="radio">3'+
                                 '</label>'+
                                 '<label class="btn btn-default">'+
@@ -349,14 +317,14 @@ label {
                                 '<label class="btn btn-default">'+
                                  ' <input name="production" value="2" type="radio">2'+
                                ' </label>'+
-                                '<label class="btn btn-default">'+
-                                  '<input name="production" value="3" class="active" type="radio">3'+
+                                '<label class="btn btn-default active">'+
+                                  '<input name="production" value="3" type="radio">3'+
                                                 '</label>'+
                                 '<label class="btn btn-default">'+
-                                  '<input name="production" value="4" class="active" type="radio">4'+
+                                  '<input name="production" value="4" type="radio">4'+
                                 '</label>'+
                                 '<label class="btn btn-default">'+
-                                  '<input name="production" value="5" class="active" type="radio">5'+
+                                  '<input name="production" value="5" type="radio">5'+
                                 '</label>'+
                               '</div>'+
                              ' </div>'+
@@ -364,19 +332,19 @@ label {
                               '<label for="behavior" class="control-label input-group">Συμπεριφορά</label>'+
                               '<div class="btn-group" data-toggle="buttons">'+
                                 '<label class="btn btn-default">'+
-                                  '<input name="behavior" value="1" type="radio" checked>1'+
+                                  '<input name="behavior" value="1" type="radio" >1'+
                                 '</label>'+
                                 '<label class="btn btn-default">'+
                                   '<input name="behavior" value="2" type="radio">2'+
                                 '</label>'+
-                                '<label class="btn btn-default">'+
-                                  '<input name="behavior" value="3" class="active" type="radio">3'+
+                                '<label class="btn btn-default active" >'+
+                                  '<input name="behavior" value="3"  type="radio">3'+
                                 '</label>'+
                                 '<label class="btn btn-default">'+
-                                  '<input name="behavior" value="4" class="active" type="radio">4'+
+                                  '<input name="behavior" value="4"  type="radio">4'+
                                ' </label>'+
                                ' <label class="btn btn-default">'+
-                                  '<input name="behavior" value="5" class="active" type="radio">5'+
+                                  '<input name="behavior" value="5"  type="radio">5'+
                                 '</label>'+
                               '</div>'+
                               '</div>'+
@@ -603,19 +571,19 @@ label {
                           '<label for="attention" class="control-label input-group">Προσοχή</label>'+
                           '<div class="btn-group" data-toggle="buttons">'+
                             '<label class="btn btn-default">'+
-                             ' <input name="attention" value="1" type="radio" checked>1'+
+                             ' <input name="attention" value="1" type="radio" checked="checked">1'+
                             '</label>'+
                             '<label class="btn btn-default">'+
                               '<input name="attention" value="2" type="radio">2'+
                             '</label>'+
                             '<label class="btn btn-default">'+
-                              '<input name="attention" value="3" class="active" type="radio">3'+
+                              '<input name="attention" value="3"  type="radio">3'+
                             '</label>'+
                             '<label class="btn btn-default">'+
-                              '<input name="attention" value="4" class="active" type="radio">4'+
+                              '<input name="attention" value="4" type="radio">4'+
                             '</label>'+
                            '<label class="btn btn-default">'+
-                              '<input name="attention" value="5" class="active" type="radio">5'+
+                              '<input name="attention" value="5" type="radio">5'+
                             '</label>'+
                           '</div>'+
                          '</div>'+
@@ -747,5 +715,3 @@ label {
     });
 
   </script>
-
-

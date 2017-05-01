@@ -18,6 +18,7 @@ if (!empty($_POST["email"]) && !empty($_POST["password"])){
     $_SESSION["user_type"] = $result['type'];
     $_SESSION["passowrd"] = $result['password'];
     $_SESSION["telephone"] = $result['telephone'];
+    $_SESSION["photo"] = $result['profile_photo'];
 
      //if the students dosent submit app form and the deadline has not end then get him tu app form
     if($_SESSION['user_type']=='therapist'){

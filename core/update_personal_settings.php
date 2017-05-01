@@ -49,6 +49,29 @@ if(isset($_POST['changePassword'])){
 	}
 }
 
+$target_dir = "../img/profile/";
+$imageFileType = pathinfo(basename($_FILES["file-upload"]["name"]),PATHINFO_EXTENSION);
+$target_file = $target_dir . $id.'.'. $imageFileType;
 
+$path="img/profile/". $id.'.'. $imageFileType;
+
+if(isset($_POST['upload_photo'])){}
+	$updatePhoto= mysqli_query($conn,"UPDATE user set profile_photo='$path' where email= '$email'");
+
+	move_uploaded_file($_FILES['file-upload']['tmp_name'], $target_file);
+
+	if(!$updatePhoto){
+		echo "<script>";
+		echo " alert('Your changes could not be saved.');      
+		window.location.href='". $_SERVER['HTTP_REFERER']."';
+		</script>";
+	}else{
+		$_SESSION['photo']=$path;
+
+		echo "<script>";
+		echo " alert('Your changes were saved successfully.');      
+		window.location.href='". $_SERVER['HTTP_REFERER']."';
+		</script>";
+	}
 
 ?>

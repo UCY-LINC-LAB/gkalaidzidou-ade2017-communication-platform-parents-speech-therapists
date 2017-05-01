@@ -6,14 +6,12 @@ if ( $_SESSION['logged_in'] != true){
   header('Location: login.php');
 }
 
-$therapist_id="1";
-
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-  <title>logoucon | members</title>
+  <title>logoucon | ειδοποιήσεις</title>
   <link rel="icon" type="image/png" href="img/logo.png">
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,25 +25,20 @@ $therapist_id="1";
 
   <body>
   <?php include_once('navbar.php');?>
-
-
   <div class="container">
   	<h4>Οι ειδοποιήσεις σας</h4>
   	<hr>
-
   	   <div class="">
 
     <?php 
-    $notification = mysqli_query($conn,"SELECT  distinct * FROM notification_box as nb,speech_therapist as st where nb.notif_to='".$therapist_id."' and st.therapist_id='".$therapist_id."' ORDER BY nb.date DESC");
+    $notification = mysqli_query($conn,"SELECT  distinct * FROM notification_box as nb,user as u where nb.notif_to='".$_SESSION["email"]."' and u.email=nb.notif_from ORDER BY nb.date DESC");
 
     if (!$notification) { // add this check.
       die('Invalid query: ' . mysql_error());
     }
     while ($notification_list = mysqli_fetch_array($notification)) { 
 
-      if($notification_list["type"]=="comment"){?>
-
-
+      if($notification_list["notif_type"]=="comment"){?>
        <div class="">
         <a  href="#"><h4 class="item-title"><img style='height: 20px; width: 20px;' class="img-circle" src="img/profile.jpg"><b><?php echo " ".$notification_list['first_name']." ".$notification_list['last_name']; ?></b> σχολιάσε την άσκηση</h4></a>
         <p class="item-info" style="color: grey; margin-left: 17px;"><i class="fa fa-comment" aria-hidden="true" style="margin-right:7px; "></i><?php echo date('j',strtotime($notification_list['date'])) . ' ' .$greekMonths[intval(date('m',strtotime($notification_list['date'])))-1]; ?></p>
@@ -58,16 +51,10 @@ $therapist_id="1";
         <a  href="#"><h4 class="item-title"><img style='height: 20px; width: 20px;' class="img-circle" src="img/profile.jpg"><b><?php echo " ".$notification_list['first_name']." ".$notification_list['last_name']; ?></b> έχει συνδεθεί μαζί σας.</h4></a>
         <p class="item-info" style="color: grey; margin-left: 17px;"><i class="fa fa-user" aria-hidden="true" style="margin-right:7px; "></i><?php echo date('j',strtotime($notification_list['date'])) . ' ' .$greekMonths[intval(date('m',strtotime($notification_list['date'])))-1]; ?></p>
       </div>
-
-
      <?php }?>
       <hr>
-
     <?php }?>
    </div>
-
-
   </div>
   </body>
-
   </html>

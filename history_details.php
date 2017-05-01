@@ -6,7 +6,7 @@ if ( $_SESSION['logged_in'] != true){
   header('Location: login.php');
 }
 
-$therapist_id='1';//$_SESSION["user_ID"];  
+$therapist_id=$_SESSION["therapist_id"];  
 
 //   convert date language to greek                 
 date_default_timezone_set('Europe/Athens');
@@ -16,11 +16,10 @@ setlocale(LC_TIME, 'el_GR.UTF-8');
 $greekDays = array( "Κυριακή", "Δευτέρα", "Τρίτη", "Τετάρτη", "Πέμπτη", "Παρασκευή", "Σάββατο" ); 
 $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτίου','Απριλίου','Μαΐου','Ιουνίου','Ιουλίου','Αυγούστου','Σεπτεμβρίου','Οκτωβρίου','Νοεμβρίου','Δεκεμβρίου');  
 
-
 if(isset($_POST['patient'])){
   $patient_id=$_POST['patient'];
 }else{
-  $patient_id='6';
+  $patient_id='';
 }
   $patient_info = mysqli_query($conn,"SELECT  distinct * FROM patient patList where patList.therapist_id='".$therapist_id."' and 
     patList.patient_id='".$patient_id."'");
@@ -30,7 +29,6 @@ if(isset($_POST['patient'])){
   }
   $info = mysqli_fetch_array($patient_info);
   $patientName=$info['first_name'].' '.$info['last_name'];
-
 
 ?>
 <!DOCTYPE html>
@@ -148,8 +146,6 @@ if(isset($_POST['patient'])){
 
   if (!$score) { // add this check.
       die('Invalid query: ' . mysql_error());
-
-
   } ?>
 
 
@@ -430,9 +426,6 @@ var yaxisLabel = $("<div class='axisLabel yaxisLabel'></div>")
     float: left;
     margin-right: 10px;
 }
-
-
-
 /**
   MEDIA QUERIES
 */
@@ -489,10 +482,6 @@ div.polaroid {
     line-height: 20px;
     display: block;
 }
-
-
-
-
 </style>
 
 </head>
@@ -543,19 +532,24 @@ div.polaroid {
                   <!-- Bottom Carousel Indicators -->
                   <ol class="carousel-indicators carousel-indicators-numbers">
                     <li data-target="#quote-carousel" data-slide-to="0" class="active"></li>
-                    <li data-target="#quote-carousel" data-slide-to="1"></li>
-                    <li data-target="#quote-carousel" data-slide-to="2"></li>
+                  <?php                       
+                      $conference_details = mysqli_query($conn,"SELECT  distinct * FROM conference as c where c.therapist_id='".$therapist_id."' and c.patient_id='".$patient_id."' ORDER BY conference_date ASC");
+
+                      if (!$conference_details) { // add this check.
+                        die('Invalid query: ' . mysqli_error($conn));
+                      }
+                      $num_rows = mysqli_num_rows($conference_details);
+
+                      for ($x = 1; $x < $num_rows; $x++) {
+                      ?>
+                      <li data-target="#quote-carousel" data-slide-to="<?php echo $x ?>"></li>
+                    <?php }?>
                   </ol>
                   
                   <!-- Carousel Slides / Quotes -->
                   <div class="carousel-inner polaroid" >
 
                       <?php 
-                      $conference_details = mysqli_query($conn,"SELECT  distinct * FROM conference as c where c.therapist_id='".$therapist_id."' and c.patient_id='".$patient_id."'");
-
-                      if (!$conference_details) { // add this check.
-                        die('Invalid query: ' . mysqli_error($conn));
-                      }
                       $confCount=0;
                       while ($list = mysqli_fetch_array($conference_details)) {
                               $confCount++;
@@ -564,7 +558,6 @@ div.polaroid {
                                 die('Invalid query: ' . mysqli_error($conn));
                               }
                       ?>
-                    <!-- Quote 1 -->
                    
                     <?php if( $confCount==1) echo ( '<div class="item active" >'); else echo ( '<div class="item" >'); ?>
                         <div class="row text-center"></div>
@@ -622,6 +615,7 @@ div.polaroid {
               ?>
           <div class="tab-pane" id="history" role="tabpanel">
             <form action="core/history_save.php" method="post">
+              <input name="patient_id" value="<?php echo $patient_id?>" type="text" hidden>
               <div class="row">
               <h4>Για δική μου χρήση</h4>
                 <textarea cols="80" rows="10" id="content" name="contentTherapist"> <?php echo $list['history_ftherapist']?>
@@ -643,6 +637,7 @@ div.polaroid {
           </div><!--tab history-->
           <div class="tab-pane" id="therapy" role="tabpanel">
             <form action="core/diagnosis_save.php" method="post">
+             <input name="patient_id" value="<?php echo $patient_id?>" type="text" hidden>
               <div class="row">
               <h4>Για δική μου χρήση</h4>
                 <textarea cols="80" rows="10" id="content" name="contentTherapist">  <?php echo $list['diagnosis_ftherapist']?>
@@ -696,7 +691,9 @@ div.polaroid {
                 ?>
               <tr>
                 <td><?php echo $count?></td>
-                <td><a href="" style="color:black;"><?php echo $details['ex_name']?></a></td>
+                <td><a href="#" class="pop" style="color:black;"><?php echo $details['ex_name']?>
+                   <div hidden="">  <img src="<?php echo $list['exercise_path']?>"  class="img-responsive"></div>
+                </a></td>
                 <td><?php echo $list['listing_date']?></td>
                 <td><?php echo $list['guide']?></td>
                 <td><?php echo $list['repetition']?></td>
@@ -713,7 +710,6 @@ div.polaroid {
                  data-ex="<?php echo $list['exercise_id']; ?>"
                  data-pat="<?php echo $list['patient_id']; ?>"><span class="glyphicon glyphicon-trash"></span></button></p></td>
                 <td>
-
                 </td>
               </tr>
               <?php } ?>
@@ -726,6 +722,15 @@ div.polaroid {
         
       </div>
     </div>
+
+<script type="text/javascript">
+$(function() {
+    $('.pop').on('click', function() {
+      $('.imagepreview').attr('src', $(this).find('img').attr('src'));
+      $('#imagemodal').modal('show');   
+    });   
+});
+</script>
 
 <script>
 $('#myTab a').click(function (e) {
@@ -745,6 +750,23 @@ $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
         $('#myTab a[href="#' + hash + '"]').tab('show');
     }
 </script>
+
+<!--modal for open exercise as image-->
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" data-dismiss="modal">
+    <div class="modal-content"  >              
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <img src="" class="imagepreview" style="width: 100%;" >
+      </div> 
+      <div class="modal-footer">
+          <div class="col-xs-12">
+               <p class="text-left"></p>
+          </div>
+      </div>   
+    </div>
+  </div>
+</div>
 
 
 <!--Modal to edit guide for parent-->
@@ -802,7 +824,6 @@ $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
     </div><!-- /.modal-content --> 
   </div><!-- /.modal-dialog --> 
 </div>
-
 
 <!--Script for dynamic data for bootstrap modal edit, delete patient -->
 <script type="text/javascript">
