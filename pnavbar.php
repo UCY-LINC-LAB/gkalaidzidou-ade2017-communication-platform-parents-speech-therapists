@@ -4,14 +4,11 @@ include 'core/init.php';
 $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτίου','Απριλίου','Μαΐου','Ιουνίου','Ιουλίου','Αυγούστου','Σεπτεμβρίου','Οκτωβρίου','Νοεμβρίου','Δεκεμβρίου');  
 $new_notifications = mysqli_query($conn,"SELECT  distinct * FROM notification_box as nb where nb.notif_to='".$_SESSION["email"]."' and nb.state='0' ");
 
-
 if (!$new_notifications) { // add this check.
   die('Invalid query: ' . mysql_error());
 }
 
 $count_new_notif = mysqli_num_rows($new_notifications);
-
-echo $_SESSION['ff'];
 ?>
 
 <!DOCTYPE html>
@@ -216,12 +213,9 @@ input[type="file"] {
         </div>
         <div id="navbar" class="navbar-collapse collapse" >
           <ul class="nav navbar-nav">
-            <li class="active" ><a href="home.php"><b>ΗΜΕΡΟΛΟΓΙΟ</b></a></li>
-            <li ><a href="members.php"><b>ΕΓΓΕΓΡΑΜΜΕΝΟΙ</b></a>
-            </li>
-            <li> <a href="history_details.php"><b>ΙΣΤΟΡΙΚΑ</b></a>
-            </li>
-            <li class="dropdown"><a href="exercises.php"><b>ΑΣΚΗΣΕΙΣ</b></a></li>
+            <li class="active" ><a href="phome.php"><b>ΗΜΕΡΟΛΟΓΙΟ</b></a></li>
+            <li> <a href="mychild.php"><b>ΤΟ ΠΑΙΔΙ ΜΟΥ</b></a></li>
+            <li class="dropdown"><a href="pexercises.php"><b>ΑΣΚΗΣΕΙΣ</b></a></li>
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
@@ -257,21 +251,24 @@ input[type="file"] {
     }
     while ($notification_list = mysqli_fetch_array($notification)) { 
 
-      if($notification_list["notif_type"]=="comment"){?>
+      if($notification_list["notif_type"]=="connect"){?>
 
      <div class="content">
        <div class="notification-item">
-        <a  href="#"><h4 class="item-title"><img style='height: 20px; width: 20px;' class="img-circle" src="img/profile.jpg"><b><?php echo " ".$notification_list['first_name']." ".$notification_list['last_name']; ?></b> σχολιάσε την άσκηση.</h4></a>
-        <p class="item-info" style="color: grey; margin-left: 17px;"><i class="fa fa-comment" aria-hidden="true" style="margin-right:7px; "></i><?php echo date('j',strtotime($notification_list['send_date'])) . ' ' .$greekMonths[intval(date('m',strtotime($notification_list['send_date'])))-1]; ?></p>
+        <a  href="#" data-toggle="modal" data-target="#connect"
+                  data-email="<?php echo $notification_list['notif_from']; ?>" 
+                  data-fpn="<?php echo " ".$notification_list['first_name']." ".$notification_list['last_name']; ?>" 
+                  ><h4 class="item-title"><img style='height: 20px; width: 20px;' class="img-circle" src="img/profile.jpg"><b><?php echo " ".$notification_list['first_name']." ".$notification_list['last_name']; ?></b> σας προσκαλεί να συνδεθείτε</h4></a>
+        <p class="item-info" style="color: grey; margin-left: 17px;"><i class="fa fa-user" aria-hidden="true" style="margin-right:7px; "></i><?php echo date('j',strtotime($notification_list['send_date'])) . ' ' .$greekMonths[intval(date('m',strtotime($notification_list['send_date'])))-1]; ?></p>
       </div>
     </div>
     
-    <?php }else{?>
+    <?php }else if($notification_list["notif_type"]=="exercise"){?>
 
     <div class="content" href="#">
        <div class="notification-item">
-        <a  href="#"><h4 class="item-title"><img style='height: 20px; width: 20px;' class="img-circle" src="img/profile.jpg"><b><?php echo " ".$notification_list['first_name']." ".$notification_list['last_name']; ?></b> έχει συνδεθεί μαζί σας.</h4></a>
-        <p class="item-info" style="color: grey; margin-left: 17px;"><i class="fa fa-user" aria-hidden="true" style="margin-right:7px; "></i><?php echo date('j',strtotime($notification_list['send_date'])) . ' ' .$greekMonths[intval(date('m',strtotime($notification_list['send_date'])))-1]; ?></p>
+        <a  href="#"><h4 class="item-title"><img style='height: 20px; width: 20px;' class="img-circle" src="img/profile.jpg"><b><?php echo " ".$notification_list['first_name']." ".$notification_list['last_name']; ?></b> έχει καταχωρήσει μια νέα άσκηση.</h4></a>
+        <p class="item-info" style="color: grey; margin-left: 17px;"><i class="fa fa-paperclip" aria-hidden="true" style="margin-right:7px; "></i><?php echo date('j',strtotime($notification_list['send_date'])) . ' ' .$greekMonths[intval(date('m',strtotime($notification_list['send_date'])))-1]; ?></p>
       </div>
     </div>
 
@@ -398,6 +395,31 @@ $(document).ready(function(){
 </div>
 </div>
 
+
+<!--Modal for accept/denied connection-->
+<div class="modal fade" id="connect" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+        <h4 class="modal-title custom_align" id="Heading">Αίτηση Σύνδεσης</h4>
+      </div>
+      <form role="form"  action="core/accept_connection.php" method="POST" class="form-horizontal">
+      <div class="modal-body">
+       <div class="alert alert-success" ><span class=" glyphicon glyphicon-plus"></span> Επιθυμείτε να συνδεθείτε με τον λογοθεραπευτή σας;
+       <label id="name"></label></div>
+       <input type="hidden" name="id" id="pid"  value="">
+      </div>
+      <div class="modal-footer ">
+        <input class="btn btn-success" type="submit" value='Ναι'>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Όχι</button>
+      </div>
+      </form>
+    </div><!-- /.modal-content --> 
+  </div><!-- /.modal-dialog --> 
+</div>
+
+
 <script type="text/javascript">
     document.getElementById("Fname").value="<?php echo $_SESSION['first_name'];?>";
     document.getElementById("Lname").value="<?php echo$_SESSION['last_name'];?>";
@@ -410,3 +432,4 @@ $(document).ready(function(){
   document.getElementById("selected_file").innerHTML =file.name;
 };
 </script>
+

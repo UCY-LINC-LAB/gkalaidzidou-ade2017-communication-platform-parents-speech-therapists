@@ -6,8 +6,9 @@ if ( $_SESSION['logged_in'] != true){
   header('Location: login.php');
 }
 
-$therapist_id=$_SESSION["therapist_id"];  
-
+$patient_id=$_SESSION["patient_id"];
+$therapist_id=$_SESSION["therapist_id"];
+$email=$_SESSION["email"];
 //   convert date language to greek                 
 date_default_timezone_set('Europe/Athens');
 
@@ -18,9 +19,8 @@ $greekMonths = array('Ιανουαρίου','Φεβρουαρίου','Μαρτί
 
 if(isset($_POST['patient'])){
   $patient_id=$_POST['patient'];
-}else{
-  $patient_id='';
 }
+
   $patient_info = mysqli_query($conn,"SELECT  distinct * FROM patient patList where patList.therapist_id='".$therapist_id."' and 
     patList.patient_id='".$patient_id."'");
 
@@ -34,7 +34,7 @@ if(isset($_POST['patient'])){
 <!DOCTYPE html>
 <html>
 <head>
-  <title>logoucon | ιστορικά</title>
+  <title>logoucon | το παιδί μου</title>
   <link rel="icon" type="image/png" href="img/logo.png">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -147,14 +147,6 @@ if(isset($_POST['patient'])){
   if (!$score) { // add this check.
       die('Invalid query: ' . mysql_error());
   } ?>
-
-
-//Rome, Italy
-//var d1 = [[1262304000000, 5], [1264982400000, 13], [1267401600000, 15], [1270080000000, 18], [1272672000000, 23], [1275350400000, 27], [1277942400000, 30], [1280620800000, 30], [1283299200000, 27], [1285891200000, 22]];
-// Paris, France
-//var d2 = [[1262304000000, 3], [1264982400000, 7], [1267401600000, 12], [1270080000000, 16], [1272672000000, 20], [1275350400000, 23], [1277942400000, 25], [1280620800000, 24], [1283299200000, 21], [1285891200000, 16]];
-// Madrid, Spain
-//var d3 = [[1262304000000, 2], [1264982400000, 13], [1267401600000, 16], [1270080000000, 18], [1272672000000, 22], [1275350400000, 28], [1277942400000, 33], [1280620800000, 32], [1283299200000, 28], [1285891200000, 21]];
 
 var d3 = [
  <?php $count=0;
@@ -488,23 +480,23 @@ div.polaroid {
 
 
 <body>
-  <?php include_once('navbar.php');?>
+  <?php include_once('pnavbar.php');?>
 
   <div class="container" style="margin-top: 40px;">
     <div class="row">
       <div class="col-sm-2">
-        <form name="form1" method="POST" action="history_details.php">
+        <form name="form1" method="POST" action="mychild.php">
         <select  onchange="this.form.submit()" name="patient" class="selectpicker" data-style="" data-width="100%" data-show-subtext="true" data-live-search="true" > 
         <option selected><?php echo $patientName ?></option>
         <?php 
-         $patient_list = mysqli_query($conn,"SELECT  distinct * FROM patient patList where patList.therapist_id='".$therapist_id."' ");
+         $patient_list = mysqli_query($conn,"SELECT  distinct * FROM patient patList where patList.email='".$email."' ");
 
         if (!$patient_list) { // add this check.
             die('Invalid query: ' . mysql_error());
         }
         while ($list = mysqli_fetch_array($patient_list)) { ?>
         
-        <option data-subtext="<?php echo $list['parent_fname']." ".$list['parent_lname']?>" value="<?php echo $list['patient_id']?>"  >
+        <option value="<?php echo $list['patient_id']?>"  >
         <?php echo $list['first_name']." ".$list['last_name']?></option>
         <?php } ?>
         </select>
@@ -517,8 +509,7 @@ div.polaroid {
             <ul class="nav tabs"  id="myTab">
               <li class="active"><a href="#graph" data-toggle="tab">Γραφική Προόδου</a></li>
               <li class=""><a href="#history" data-toggle="tab">Ιστορικό</a></li>
-              <li class=""><a href="#therapy" data-toggle="tab">Θεραπεία & Διάγνωση</a></li>
-              <li class=""><a href="#exercises" data-toggle="tab">Ασκήσεις Σπιτιού</a></li>                                
+              <li class=""><a href="#therapy" data-toggle="tab">Θεραπεία & Διάγνωση</a></li>                              
             </ul>
         </nav>
       </div>
@@ -617,111 +608,30 @@ div.polaroid {
             <form action="core/history_save.php" method="post">
               <input name="patient_id" value="<?php echo $patient_id?>" type="text" hidden>
               <div class="row">
-              <h4>Για δική μου χρήση</h4>
-                <textarea cols="80" rows="10" id="content" name="contentTherapist"> <?php echo $list['history_ftherapist']?>
-                </textarea>
-                <div class="col-sm-12" style="">
-                    <input class= "btn pull-right btn-success" type="submit" name="history_ftherapist" value="Αποθήκευση" style=" margin-top: 10px; margin-left: 10px;" />
-                    <input class= "btn pull-right" type="button" onclick="window.print();" value="Εκτύπωση" style="background-color:#E2CB35; margin-top: 10px;" />
+              <h4>Ιστορικό</h4>
+              <hr>
+              <?php echo $list['history_fparent']?>
+              <hr>
+                <div class="col-sm-12" style=" margin-bottom: 15px;">
+                    <input class= "btn pull-right" type="button" onclick="window.print();" name="history_ftherapist" value="Εκτύπωση" style="background-color:#E2CB35; margin-top: 10px;" />
                 </div>
               </div>
-
-            <div class="row" style="margin-bottom: 10px;">
-              <h4>Για τον γονέα</h4>
-              <textarea cols="80" rows="10" id="content" name="contentParent"> <?php echo $list['history_fparent']?>
-              </textarea>
-              <div class="col-sm-12" style="">
-                  <input class= "btn pull-right btn-success" type="submit" name="history_fparent" value="Αποθήκευση" style=" margin-top: 10px; margin-left: 10px;" />
-                   <input class= "btn pull-right" type="button" onclick="window.print();" value="Εκτύπωση" style="background-color:#E2CB35; margin-top: 10px;" />
-              </div>
-            </div>
           </form>
           </div><!--tab history-->
           <div class="tab-pane" id="therapy" role="tabpanel">
             <form action="core/diagnosis_save.php" method="post">
              <input name="patient_id" value="<?php echo $patient_id?>" type="text" hidden>
               <div class="row">
-              <h4>Για δική μου χρήση</h4>
-                <textarea cols="80" rows="10" id="content" name="contentTherapist">  <?php echo $list['diagnosis_ftherapist']?>
-                </textarea>
-                <div class="col-sm-12" style="">
-                    <input class= "btn pull-right btn-success" type="submit" name="diagnosis_ftherapist" value="Αποθήκευση" style="margin-top: 10px; margin-left: 10px;" />
-                     <input class= "btn pull-right" type="button" onclick="window.print();" value="Εκτύπωση" style="background-color:#E2CB35; margin-top: 10px;" />
+              <h4>Θεραπεία & Διάγνωση</h4>
+              <hr>
+              <?php echo $list['diagnosis_fparent']?>
+              <hr>
+                <div class="col-sm-12" style=" margin-bottom: 15px;">
+                    <input class= "btn pull-right" type="button" onclick="window.print();"  name="diagnosis_ftherapist" value="Εκτύπωση" style="background-color:#E2CB35; margin-top: 10px;" />
                 </div>
               </div>
-            <div class="row" style="margin-bottom: 10px;">
-              <h4>Για τον γονέα</h4>
-              <textarea cols="80" rows="10" id="content" name="contentParent"> <?php echo $list['diagnosis_fparent']?>
-              </textarea>
-              <div class="col-sm-12" style="">
-                  <input class= "btn pull-right btn-success" type="submit" name="diagnosis_fparent" value="Αποθήκευση" style="margin-top: 10px; margin-left: 10px; " />
-                   <input class= "btn pull-right" type="button" onclick="window.print();" value="Εκτύπωση" style="background-color:#E2CB35; margin-top: 10px;" />
-              </div>
-            </div>
             </form>
           </div><!--tab therapy-->
-
-          <div class="tab-pane" id="exercises" role="tabpanel">
-            <div table-responsive">
-             <table class="table table-list-search table-hover">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Τίτλος Άσκησης</th>
-                        <th>Ημερομηνία Καταχώρησης</th>
-                        <th>Οδηγίες</th>
-                        <th>Αριθμός Επαναλήψεων</th>
-                        <th>Σχόλια Κηδεμόνα</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                  <?php  
-                  $ex_list = mysqli_query($conn,"SELECT * FROM patient_exercises WHERE patient_id='".$patient_id."'");
-                  $count=0;
-
-                  while($list = mysqli_fetch_assoc($ex_list)) {
-                    $count++;
-                    $ex_details = mysqli_query($conn,"SELECT  distinct * FROM exercise where exercise_id='".$list['exercise_id']."'");
-
-                    if (!$ex_details) { // add this check.
-                      die('Invalid query: ' . mysql_error());
-                    }else{
-                      $details = mysqli_fetch_array($ex_details);
-                    }
-                ?>
-              <tr>
-                <td><?php echo $count?></td>
-                <td><a href="#" class="pop" style="color:black;"><u><?php echo $details['ex_name']?></u>
-                   <div hidden="">  <img src="<?php echo $list['exercise_path']?>"  class="img-responsive"></div>
-                </a></td>
-                <td><?php echo $list['listing_date']?></td>
-                <td><?php echo $list['guide']?></td>
-                <td><?php echo $list['repetition']?></td>
-                <td><?php echo $list['parent_comment']?></td>
-
-                <td><p data-placement="top" data-toggle="tooltip" title="Edit">
-                <button class="btn btn-clr1 btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" 
-                  data-guide="<?php echo $list['guide']; ?>"
-                  data-ex="<?php echo $list['exercise_id']; ?>"
-                  data-pat="<?php echo $list['patient_id']; ?>"><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-
-                <td><p data-placement="top" data-toggle="tooltip" title="Delete">
-                <button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete"
-                 data-ex="<?php echo $list['exercise_id']; ?>"
-                 data-pat="<?php echo $list['patient_id']; ?>"><span class="glyphicon glyphicon-trash"></span></button></p></td>
-                <td>
-                </td>
-              </tr>
-              <?php } ?>
-
-                </tbody>
-            </table>   
-          </div>
-          </div><!--tab exercises-->
         </div>
         
       </div>
@@ -770,63 +680,6 @@ $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
       </div>   
     </div>
   </div>
-</div>
-
-
-<!--Modal to edit guide for parent-->
-<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove "  style="font-size: 0.6em;" aria-hidden="true"></span></button>
-        <h4 class="modal-title custom_align" id="Heading">Τροποποίηση στις Οδηγίες</h4>
-      </div>
-      <div class="modal-body">
-        <div id="modal-loader" style="display: none; text-align: center;"></div>
-        <div id="dynamic-content">
-        <form role="form"  action="core/update_shared_exercise.php" method="POST" class="form-horizontal">
-            <div class="row">
-                <label  class="col-sm-6"  style="margin-bottom: 10px;" for="guide">Οδηγίες</label>
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" style="margin-bottom: 10px;"
-                    id="guide" placeholder="" name="guide" required/> 
-                </div>
-            </div>
-            <input type="hidden" name="exercise_id" id="exercise_id"  value="">
-            <input type="hidden" name="patient_id" id="patient_id"  value="">
-         </div>   
-      </div>
-      <div class="modal-footer">
-        <div>
-            <input type="submit" class="btn btn-success btn-sm" value="Αποθήκευση">
-        </div>
-      </div>
-       </form>
-    </div><!-- /.modal-content --> 
-  </div><!-- /.modal-dialog --> 
-</div><!-- /.modal- --> 
- 
-<!--Modal for delete patient-->
-<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-        <h4 class="modal-title custom_align" id="Heading">Διαγραφή άσκησης</h4>
-      </div>
-      <form role="form"  action="core/delete_shared_exercise.php" method="POST" class="form-horizontal">
-      <div class="modal-body">
-       <div class="alert alert-danger" ><span class="glyphicon glyphicon-warning-sign"></span> Είστε σίγουροι για ην διαγραφή;</div>
-        <input type="hidden" name="ex_id" id="ex_id"  value="">
-        <input type="hidden" name="pat_id" id="pat_id"  value="">
-      </div>
-      <div class="modal-footer ">
-        <input class="btn btn-success"  type="submit" value='Ναι'>
-        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span>Όχι</button>
-      </div>
-      </form>
-    </div><!-- /.modal-content --> 
-  </div><!-- /.modal-dialog --> 
 </div>
 
 <!--Script for dynamic data for bootstrap modal edit, delete patient -->

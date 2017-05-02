@@ -10,13 +10,15 @@ $date = $_POST['date'];
 $type = $_POST['type'];
 $telephone =$_POST['telephone'];
 
-if($type='Λογοθεραπευτής'){
+
+echo $type;
+if($type=='therapist'){
 	$type='therapist';
 }else{
 	$type='parent';
 }
 
-$add_user =  "INSERT INTO user (first_name,last_name,date_of_birth,telephone,email,password,type) VALUES ('$fname', '$lname','$date','$telephone','$email' , '$password', '$type')";
+$add_user =  "INSERT INTO user (first_name,last_name,date_of_birth,telephone,email,password,type,profile_photo) VALUES ('$fname', '$lname','$date','$telephone','$email' , '$password', '$type','img/profile/prof.png')";
 
 $add = mysqli_query($conn, $add_user);
 

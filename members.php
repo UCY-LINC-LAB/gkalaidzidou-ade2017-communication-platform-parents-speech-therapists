@@ -22,14 +22,22 @@ $num_from=$_POST['num_from'];
 $num_to=$_POST['num_to'];
 $col_state=$_POST['col_state'];
 
-  $q="SELECT COUNT(*) FROM patient WHERE therapist_id='".$therapist_id."'";
+ // $q="SELECT COUNT(*) FROM patient WHERE therapist_id='".$therapist_id."'";
 
-  $r = mysqli_query($conn,$q);
+//$tt=" and telephone='22962415'";
+//$final=$q." ".$tt;
+
+$q="SELECT COUNT(*) FROM patient WHERE therapist_id='".$therapist_id."'";
+$r = mysqli_query($conn,$q);
+
+  //$r = mysqli_query($conn,$final);
 
 
 $list = mysqli_fetch_row($r);
 $product_count = $list[0];
 
+
+//echo $list[0];
 
 $products_per_page = 2;
 
@@ -41,6 +49,7 @@ $page_count = ceil($product_count / $products_per_page);
 $first_product_shown = ($requested_page - 1) * $products_per_page;
 
 // Then we retrieve the data for this requested page
+
 
 $s="SELECT * FROM patient WHERE therapist_id='".$therapist_id."' LIMIT $first_product_shown, $products_per_page";
 $r = mysqli_query($conn,$s);

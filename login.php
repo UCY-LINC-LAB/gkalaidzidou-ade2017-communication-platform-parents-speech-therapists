@@ -230,8 +230,8 @@ window.location.href='login.php';
                     <label class="col-sm-6" style="margin-bottom: 10px;" for="sel1">Τύπος χρήστη</label>
                     <div class="col-sm-6" > 
                         <select class="form-control" id="sel1" style="margin-bottom: 10px;" name="type" required>
-                            <option>Λογοθεραπευτής</option>
-                            <option>Γονέας</option>
+                            <option value="therapist">Λογοθεραπευτής</option>
+                            <option value="parent">Γονέας</option>
                         </select>
                     </div>
                 </div>

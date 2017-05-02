@@ -30,7 +30,12 @@ if (!empty($_POST["email"]) && !empty($_POST["password"])){
         header('Location: ../home.php');
         exit;
     } else if($_SESSION['user_type']=='parent'){
-        header('Location: ../homee.php');
+        $patient_data = mysqli_query($conn,"SELECT * FROM patient WHERE email = '".$email."'");
+        $patient_details =  mysqli_fetch_array($patient_data, MYSQLI_ASSOC);
+        
+        $_SESSION["patient_id"] = $patient_details['patient_id'];
+        $_SESSION["therapist_id"] = $patient_details['therapist_id'];
+        header('Location: ../phome.php');
         exit;
     }else{
      header('Location: ../login.php');
