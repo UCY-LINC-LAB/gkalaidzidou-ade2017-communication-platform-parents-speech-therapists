@@ -12,7 +12,7 @@ body {
 
 /* The white background content wrapper */
 .container > .content {
-    background: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.8);
     padding: 20px;
     margin: 0 -20px;
     -webkit-border-radius: 10px 10px 10px 10px;

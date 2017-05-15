@@ -517,7 +517,7 @@ div.polaroid {
             <ul class="nav tabs"  id="myTab">
               <li class="active"><a href="#graph" data-toggle="tab">Γραφική Προόδου</a></li>
               <li class=""><a href="#history" data-toggle="tab">Ιστορικό</a></li>
-              <li class=""><a href="#therapy" data-toggle="tab">Θεραπεία & Διάγνωση</a></li>
+              <li class=""><a href="#therapy" data-toggle="tab">Διάγνωση & Θεραπεία  </a></li>
               <li class=""><a href="#exercises" data-toggle="tab">Ασκήσεις Σπιτιού</a></li>                                
             </ul>
         </nav>

@@ -125,7 +125,7 @@ if($_SESSION['exercise_id']!=null){
         resize: both;
     }
     .scrollStyle{
-      max-height: 200px;
+      max-height: 300px;
       overflow-y:auto;
       overflow-x: auto;
     }
@@ -212,9 +212,9 @@ body {
 
   textarea {
     height:100%;
-    background-color:beige;
+    background-color:white;
     width:100%;
-    resize:none; border:none;
+    resize:both; border:1px solid #e8e8e8;
     padding:0px; margin:0px;
     
 }
@@ -256,7 +256,7 @@ div { padding:0px; }
 
             if(n){
               var imagId=$(ui.draggable).attr('id');
-               document.getElementById(imagId).style.visibility = "hidden";
+              document.getElementById(imagId).style.visibility = "hidden";
             }
 
 
@@ -266,27 +266,21 @@ div { padding:0px; }
                   stop: handleDragStop
               }));
 
-             var newID= $(ui.draggable).attr('id') +"_"+counter;
-             //alert(newID);
-              $(newClone).attr('id', newID);
 
+             var newID= $(ui.draggable).attr('id') +"_"+counter;
+              $(newClone).attr('id', newID);
 
               positions.push({id: newClone.attr('id'), left:  parseInt( ui.offset.left ) , top: parseInt( ui.offset.top )});
               
 
 
-                var value = $("#element_text").find('textarea').text();
-                //alert(value); 
-
 
               function handleDragStop( event, ui ) {
                 var offsetXPos = parseInt( ui.offset.left );
                 var offsetYPos = parseInt( ui.offset.top );
-                //alert( "Drag stopped!\n\nOffset: (" + offsetXPos + ", " + offsetYPos +  draggable.attr('id') + ")\n");
                 flag=0;
 
-                var vl=$("#element_text textarea").attr("id");
-                alert(vl);
+                var value=$(newClone.attr('id')).val();
 
 
                 $.each(positions, function() {
@@ -298,7 +292,7 @@ div { padding:0px; }
               });
 
                 if(flag==0)
-                   positions.push({id: newClone.attr('id'), left: offsetXPos , top: offsetYPos});           
+                   positions.push({id: newClone.attr('id'), left: offsetXPos , top: offsetYPos});       
             }
         }
   });
@@ -312,38 +306,6 @@ div { padding:0px; }
 });
   </script>
 
-<script type="text/javascript">
-  $(function() {
-$('#new').click(function() {
-  var new_offset = {top:30, left:40};
-  var new_width = 200;
-  var new_height = 150;
-  var newElement$ = $('<div><textarea id="textarea"></textarea></div>')
-                                    .width(new_width)
-                    .height(new_height)
-                                    .draggable({
-                                        cancel: "text",
-                                        start: function (){
-                                            $('#textarea').focus();
-                                         },
-                                        stop: function (){
-                                            $('#textarea').focus();
-                                         } 
-                                     })
-                                    .resizable()
-                  .css({
-                      'position'          : 'absolute',
-                      'background-color'  : 'yellow',
-                      'border-color'      : 'black',
-                      'border-width'      : '1px',
-                      'border-style'      : 'solid'
-                     })
-                   .offset(new_offset)
-                         .appendTo('body');
-            });
-              
-});
-</script>
 
 
   <script type="text/javascript">
@@ -425,12 +387,15 @@ $('#new').click(function() {
     </div>
 
     <div class="center" >
+
+
+
       <div>
         <h4><?php echo $folder_info['name'];?> <i class="fa fa-angle-right" aria-hidden="true"></i> <?php echo $exercise_info['ex_name'];?></h4>
       </div>
 
       <div id="droppable" class="drop_area"  style=" position: relative; background-color: white;">
-      <!--  <div id="trash"><span class="glyphicon glyphicon-trash"></div>-->
+      <div id="trash" style="float: right; margin: 10px;"><span class="glyphicon glyphicon-trash"></div>
 
       <?php
         //Create a query to fetch our values from the database  
@@ -447,10 +412,9 @@ $('#new').click(function() {
         }?>
      </div>
 
-      <div class="row" style="margin: 10px; float: right;">
+      <div class="row" style="margin-top: 10px; margin-right: 40px;float: right;">
           <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#shareEx"><i class="fa fa-share" aria-hidden="true"></i> Κοινοποίηση</button>
           <button type="button" onclick="saveFun()" class="btn btn-success btn-sm"><i class="fa fa-floppy-o" aria-hidden="true"></i> Αποθήκευση</button>
-          <input type="button" id="btnSave" value="Save PNG"/>
       </div>
 
       <form method="POST" enctype="multipart/form-data" action="save.php" id="myForm">
@@ -469,8 +433,20 @@ $('#new').click(function() {
 
     <!-- Tab panes -->
     <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="library">
-        
+
+
+        <div role="tabpanel" class="tab-pane active scrollStyle" id="library">
+                    <!--<div id="element_text" style="cursor: pointer; color:white; margin-bottom: 10px;" >*<textarea id="element_text" placeholder="Text" rows="1" style="color:black;"></textarea></div>-->
+                        <div class="row" style="margin-bottom: 10px;">
+                          <div class="col-sm-8">
+                            <input class="form-control" type="text" name="tt" id="tt" placeholder="Κείμενο.."/> 
+                          </div>
+                          <div class="col-sm-4">
+                            <button id="mybtn" class="btn btn-primary">οκ</button>
+                          </div>
+                        </div>
+                        
+
        <?php 
           $assets = mysqli_query($conn,"SELECT * FROM asset");
 
@@ -487,7 +463,7 @@ $('#new').click(function() {
 
         </div>
         <div role="tabpanel" class="tab-pane" id="dictionary">
-        <div class="row" >
+        <div class="row " >
          <form id='dictionary_search' onsubmit="return false">
           <div class="input-group">
             <div class="input-group-btn">
@@ -506,9 +482,44 @@ $('#new').click(function() {
           </form>
         </div>
 
-        <div id="dictionary_results" style="margin-top: 20px;"></div>
+        <div id="dictionary_results" style="margin-top: 20px;" class="scrollStyle"></div>
         </div>
     </div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    var text_counter=0;
+
+    $('#mybtn').click(function(){
+      text_counter++;
+        var text_value=document.getElementById('tt').value;
+        alert(text_counter);
+        $('#droppable').append('<div class=window><div class=bar style="color:transparent; cursor: pointer;">********</div><div contentEditable=true class=textbox id="'+text_counter+'">'+text_value+'</div><div class=bar style="color:transparent; cursor: pointer;">********</div></div>');
+        
+        var rr=document.getElementById('1').textContent;
+        alert(rr);
+        
+        $(".window").draggable({handle:'.bar'});
+    });
+
+
+    $(".textbox").on("click", function(e) {
+
+      
+        $(".window").draggable('disable');
+        $(this).find(".textbox").focus();
+    });
+
+    $(".textbox").on("blur", function(){
+        $(".window").draggable('enable');
+    });
+}); 
+
+</script>
+
+
+
+
 
 <script type="text/javascript">
     var url = document.location.toString(); // select current url shown in browser.
@@ -521,13 +532,12 @@ $('#new').click(function() {
         window.location.hash = e.target.hash; // to change hash location in url.
     });
 </script>
-    <!--
-      <div class="scrollStyle" id="library">
-        <button id='new'>New</button>
-        <div id="element_text">*<textarea id="element_text" placeholder="Text" rows="1" style="border: none"></textarea></div>
-      </div>
 
--->
+
+       <!-- <button id='new'>New</button>-->
+
+
+
     </div>
 
   </div>
@@ -649,7 +659,7 @@ $(".accordion").click(function(e) {
    <script type="text/javascript">
      function displayCreateFolderDiv(){
 
-      var div = document.getElementById('newFold');
+ <input type="text" name="annotateItem" placeholder="annotateItem"/>
 
       if(div.style.visibility == false){
         div.style.display = 'block';

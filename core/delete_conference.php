@@ -2,11 +2,17 @@
 include 'init.php';
 
 $conferenceID = $_POST['eventID'];
+echo $conferenceID;
+
+
+$deleteConferenceScore = "DELETE FROM conference_score_bar WHERE conference_id='$conferenceID'";
+$delete1 = mysqli_query($conn, $deleteConferenceScore);
+
 
 $deleteConference = "DELETE FROM conference WHERE conference_id='$conferenceID'";
-$delete = mysqli_query($conn, $deleteConference);
+$delete2 = mysqli_query($conn, $deleteConference);
 
-if (!$delete) { // add this check.
+if (!$delete1 && !$delete2) { // add this check.
 	echo "<script>";
 	echo " alert('Something is going wrong. Please try again.');      
 		    window.location.href='". $_SERVER['HTTP_REFERER']."';

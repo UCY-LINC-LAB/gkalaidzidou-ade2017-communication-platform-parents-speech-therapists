@@ -59,7 +59,7 @@ include 'core/init.php';
             color:white;
         }
         body {
-         background-image: url("img/2.jpg");
+         background-image: url("img/2.png");
          background-repeat:no-repeat;
          background-size:100% 100vh;
             }
@@ -70,6 +70,25 @@ include 'core/init.php';
             max-height: 500px;
             width: auto;
 }
+
+    @media screen and (min-width: 768px) {
+      #setpassword .modal-dialog  {width:300px;}
+}
+    #setpassword {
+    top:20%;
+    outline: none;
+    }
+
+    @media screen and (min-width: 768px) {
+      #ee .modal-dialog  {width:500px;}
+}
+    #ee {
+    top:20%;
+    outline: none;
+    }
+
+
+
 
     </style>
 </head>
@@ -97,7 +116,7 @@ include 'core/init.php';
                             </div>
                         </fieldset>
                         <div style="margin-top: 20px;" align="center">
-                            <a href="" style="font-size: x-small;color: inherit;" onclick="lostPass()">Ξεχάσατε τον κωδικό σας;</a>
+                            <a href="" style="font-size: x-small;color: inherit;" data-toggle="modal" data-target="#setpassword">Ξεχάσατε τον κωδικό σας;</a>
                         </div>
                         <div style="width: 100%; height: 20px; border-bottom: 1px solid #5e5e5e; " class="pull-left"></div>
                         <div style="margin-top: 40px">
@@ -245,3 +264,48 @@ window.location.href='login.php';
     </div>
 </div>
 </div>
+
+
+  <!-- Modal for new folder -->
+  <div class="modal fade" id="setpassword" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content" tabindex="-1">
+       <form role="form"  action="#" method="POST" class="form-horizontal">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h5 class="modal-title"><b>Επαναφορά Κωδικού</b></h5>
+        </div>
+        <div class="modal-body">
+          <div class="row" style="margin-bottom: 10px;">
+              <label  class="col-sm-2"  style="margin-top: 8px;" for="title">Email: </label>
+              <div class="col-sm-10">
+                  <input type="text" class="form-control" id="exer_title" placeholder="" name="" value="" required/> 
+              </div>
+          </div>    
+
+        </div>
+        <div class="modal-footer">
+          <div>
+              <input class="btn btn-success btn-sm" value="ΟK" data-dismiss="modal" data-toggle="modal" data-target="#ee">
+          </div>
+        </div>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Modal for new folder -->
+  <div class="modal fade" id="ee" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content" tabindex="-1">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h5 class="modal-title"><b>Έλεγχος email για επαναφορά κωδικού</b></h5>
+        </div>
+         <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>

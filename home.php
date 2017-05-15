@@ -461,7 +461,7 @@ line-height: 22px;
                 title: calEvent.title,
                 message: '<div class="row"> ' +
                          '<div class="col-md-12"> ' +
-                         '<form id="deleteConf" action="core/delete_conference.php" method="POST" class="form-horizontal"> ' +
+                         '<form > ' +
 
                         
                          '<div class="form-group"> ' +
@@ -494,8 +494,41 @@ line-height: 22px;
                         label: '<i class="fa fa-times "></i> Διαγραφή',
                         className: "btn-danger",
                         callback: function () {
+                           var deleteModal =  bootbox.dialog({
+                title: "Διαγραφή συνεδρίας",
+                message: '<div class="row"> ' +
+                         '<div class="col-md-12"> ' +
+                         '<form id="deleteConf" action="core/delete_conference.php" method="POST" class="form-horizontal"> ' +
+
+                         '<div class="form-group"> ' +
+                         '<div style="margin: 10px;" class="alert alert-danger" ><span class="glyphicon glyphicon-warning-sign"></span> Είστε σίγουροι για ην διαγραφή του/της <b>'+
+
+                        calEvent.title+ '</b> <label id="name"></label></div>'+
+                         '</div>'+
+                          '<input name="eventID" hidden value="'+calEvent.id +'">'+
+                         '</form> </div> </div>',
+                buttons: {
+                    success: {
+                        label: "Ναι",
+                        className: "btn-success",
+                        callback: function () {
                           $("#deleteConf").submit();
                             this.close();
+                        }
+                    },
+                    cancel: {
+                        label: 'Όχι',
+                        className: "btn-danger",
+                        callback: function () {
+                          $(document).on('click', '.modal-backdrop', function (event) {
+    bootbox.hideAll()
+});
+                        }
+                }
+              }
+            });
+         
+        deleteModal.modal("show");
                         }
                     },
                     success: {

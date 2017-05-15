@@ -275,7 +275,7 @@ input[type="file"] {
      <?php }}?>
    </div>
 
-    <div class="notification-footer" style="float: right;"><a href="see_all_notifications.php" style="color:black;">Προβολή όλων</a></div>
+    <div class="notification-footer" style="float: right;"><a href="psee_all_notifications.php" style="color:black;">Προβολή όλων</a></div>
 </div>
     </div>
 

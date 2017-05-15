@@ -26,7 +26,7 @@ $therapist_id=$_SESSION["therapist_id"];
 </head>
 
   <body>
-  <?php include_once('navbar.php');?>
+  <?php include_once('pnavbar.php');?>
   <div class="container">
     <div table-responsive">
      <table class="table table-list-search table-hover">

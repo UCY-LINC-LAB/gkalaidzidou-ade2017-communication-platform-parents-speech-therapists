@@ -22,37 +22,46 @@ $num_from=$_POST['num_from'];
 $num_to=$_POST['num_to'];
 $col_state=$_POST['col_state'];
 
- // $q="SELECT COUNT(*) FROM patient WHERE therapist_id='".$therapist_id."'";
+$str="SELECT COUNT(*) FROM patient as p WHERE p.therapist_id='".$therapist_id."'";
+$str_final="SELECT * FROM patient WHERE therapist_id='".$therapist_id."'";
 
-//$tt=" and telephone='22962415'";
-//$final=$q." ".$tt;
+if($date!= null && $date2!= null ){
+  $str=$str." and registration_date between '$date' and '$date2' ";
+  $str_final=$str_final." and registration_date between '$date' and '$date2' ";
+}else if($date!= null){
+  $str=$str." and registration_date between '$date' and CURRENT_DATE";
+  $str_final=$str_final." and registration_date between '$date' and CURRENT_DATE";
+}else if($date2!= null){
+  $str=$str." and registration_date between '2010/01/01' and '$date2'";
+  $str_final=$str_final." and registration_date between '$date' and CURRENT_DATE";
+}
 
-$q="SELECT COUNT(*) FROM patient WHERE therapist_id='".$therapist_id."'";
-$r = mysqli_query($conn,$q);
+//if($num_from!=null && $num_to!=null){
+  //$str=$str." and registration_date between '$date' and '$date2' ";  
+//}
 
-  //$r = mysqli_query($conn,$final);
-
+if($col_name!=null){
+  $str_final=$str_final." ORDER BY '$col_name' DESC";
+}
+//echo $str;
+$r = mysqli_query($conn,$str);
 
 $list = mysqli_fetch_row($r);
 $product_count = $list[0];
-
 
 //echo $list[0];
 
 $products_per_page = 2;
 
-// 55 products => $page_count = 3
 $page_count = ceil($product_count / $products_per_page);
 
 // You can check if $requested_page is > to $page_count OR < 1,
 // and redirect to the page one.
 $first_product_shown = ($requested_page - 1) * $products_per_page;
 
-// Then we retrieve the data for this requested page
-
-
-$s="SELECT * FROM patient WHERE therapist_id='".$therapist_id."' LIMIT $first_product_shown, $products_per_page";
-$r = mysqli_query($conn,$s);
+$str_final=$str_final." LIMIT $first_product_shown, $products_per_page";
+//echo "=> ".$str_final;
+$r = mysqli_query($conn,$str_final);
 ?>
 
 <!DOCTYPE html>
@@ -238,9 +247,9 @@ $r = mysqli_query($conn,$s);
             <div class="col-xs-2">         
               <select  class="form-control" name="col_name" >
                 <option value=""></option>
-                <option value="patient_name">Εγγεγραμμένος</option>
-                <option value="parent_name">Όνομα Κηδεμόνα</option>
-                <option value="emmail">Email</option>
+                <option value="last_name">Εγγεγραμμένος</option>
+                <option value="parent_lname">Όνομα Κηδεμόνα</option>
+                <option value="email">Email</option>
                 <option value="date">Ημερομηνία Εγγραφής</option>
                 <option value="conf_num">Αριθμός Επισκέψεων</option>
               </select>
@@ -586,7 +595,7 @@ function invited() {
       </div>
       <div class="modal-footer ">
         <input class="btn btn-success"  type="submit" value='Ναι'>
-        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span>Όχι</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Όχι</button>
       </div>
       </form>
     </div><!-- /.modal-content --> 

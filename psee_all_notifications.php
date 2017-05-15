@@ -24,7 +24,7 @@ if ( $_SESSION['logged_in'] != true){
 </head>
 
   <body>
-  <?php include_once('navbar.php');?>
+  <?php include_once('pnavbar.php');?>
   <div class="container">
   	<h4>Οι ειδοποιήσεις σας</h4>
   	<hr>

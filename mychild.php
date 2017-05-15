@@ -9,6 +9,7 @@ if ( $_SESSION['logged_in'] != true){
 $patient_id=$_SESSION["patient_id"];
 $therapist_id=$_SESSION["therapist_id"];
 $email=$_SESSION["email"];
+
 //   convert date language to greek                 
 date_default_timezone_set('Europe/Athens');
 
@@ -509,7 +510,7 @@ div.polaroid {
             <ul class="nav tabs"  id="myTab">
               <li class="active"><a href="#graph" data-toggle="tab">Γραφική Προόδου</a></li>
               <li class=""><a href="#history" data-toggle="tab">Ιστορικό</a></li>
-              <li class=""><a href="#therapy" data-toggle="tab">Θεραπεία & Διάγνωση</a></li>                              
+              <li class=""><a href="#therapy" data-toggle="tab">Διάγνωση & Θεραπεία</a></li>                              
             </ul>
         </nav>
       </div>
