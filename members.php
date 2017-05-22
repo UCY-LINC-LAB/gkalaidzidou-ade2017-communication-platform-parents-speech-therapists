@@ -2,7 +2,7 @@
 include 'core/init.php';
 session_start(); 
 
-if ( $_SESSION['logged_in'] != true){
+if ( $_SESSION['logged_in'] != true || $_SESSION['user_type']!='therapist'){
   header('Location: login.php');
 }
 
@@ -69,7 +69,7 @@ $r = mysqli_query($conn,$str_final);
 
 <head>
   <title>logoucon | εγγεγραμμένοι</title>
-  <link rel="icon" type="image/png" href="img/logo.png">
+  <link rel="icon" type="image/png" href="img/icon.png">
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -461,28 +461,28 @@ function invited() {
       <div class="modal-body">
         <form role="form"  action="core/add_patient.php" method="POST" class="form-horizontal">
             <div class="row">
-                <label  class="col-sm-4"  style="margin-bottom: 10px;  text-align: right;" for="Fname">Όνομα Ασθενή</label>
+                <label  class="col-sm-4"  style="margin-bottom: 10px;  text-align: right;" for="Fname">Όνομα Περιστατικού</label>
                 <div class="col-sm-6">
                     <input type="text" class="form-control" style="margin-bottom: 10px;"
                     id="Fname" placeholder="" name="fpname" required/> 
                 </div>
             </div>
             <div class="row">
-              <label  class="col-sm-4"  style="margin-bottom: 10px;  text-align: right;" for="lname">Επίθετο Ασθενή</label>
+              <label  class="col-sm-4"  style="margin-bottom: 10px;  text-align: right;" for="lname">Επίθετο Περιστατικού</label>
               <div class="col-sm-6">
                   <input type="text" class="form-control" style="margin-bottom: 10px;"
                   id="Fname" placeholder="" name="lpname" required/> 
               </div>
             </div>
             <div class="row">
-              <label class="col-sm-4" style="margin-bottom: 10px; text-align: right;" for="LName">Όνομα Κειδεμόνα</label>
+              <label class="col-sm-4" style="margin-bottom: 10px; text-align: right;" for="LName">Όνομα Κηδεμόνα</label>
               <div class="col-sm-6"> 
                   <input type="text"  style="margin-bottom: 10px;" class="form-control"
                   id="Lname" placeholder="" name="fkname" required/>  
               </div>
             </div>
             <div class="row">
-                <label class="col-sm-4" style="margin-bottom: 10px; text-align: right;" for="LName">Επίθετο Κειδεμόνα</label>
+                <label class="col-sm-4" style="margin-bottom: 10px; text-align: right;" for="LName">Επίθετο Κηδεμόνα</label>
                 <div class="col-sm-6"> 
                     <input type="text"  style="margin-bottom: 10px;" class="form-control"
                     id="Lname" placeholder="" name="lkname" required/>  
@@ -525,28 +525,28 @@ function invited() {
         <div id="dynamic-content">
         <form role="form"  action="core/update_patient.php" method="POST" class="form-horizontal">
             <div class="row">
-                <label  class="col-sm-4"  style="margin-bottom: 10px;  text-align: right;" for="Fname">Όνομα Ασθενή</label>
+                <label  class="col-sm-4"  style="margin-bottom: 10px;  text-align: right;" for="Fname">Όνομα Περιστατικού</label>
                 <div class="col-sm-6">
                     <input type="text" class="form-control" style="margin-bottom: 10px;"
                     id="fpname" placeholder="" name="fpname" required/> 
                 </div>
             </div>
             <div class="row">
-              <label  class="col-sm-4"  style="margin-bottom: 10px;  text-align: right;" for="lname">Επίθετο Ασθενή</label>
+              <label  class="col-sm-4"  style="margin-bottom: 10px;  text-align: right;" for="lname">Επίθετο Περιστατικού</label>
               <div class="col-sm-6">
                   <input type="text" class="form-control" style="margin-bottom: 10px;"
                   id="lpname" placeholder="" name="lpname" required/> 
               </div>
             </div>
             <div class="row">
-              <label class="col-sm-4" style="margin-bottom: 10px; text-align: right;" for="LName">Όνομα Κειδεμόνα</label>
+              <label class="col-sm-4" style="margin-bottom: 10px; text-align: right;" for="LName">Όνομα Κηδεμόνα</label>
               <div class="col-sm-6"> 
                   <input type="text"  style="margin-bottom: 10px;" class="form-control"
                   id="fkname" placeholder="" name="fkname" required/>  
               </div>
             </div>
             <div class="row">
-                <label class="col-sm-4" style="margin-bottom: 10px; text-align: right;" for="LName">Επίθετο Κειδεμόνα</label>
+                <label class="col-sm-4" style="margin-bottom: 10px; text-align: right;" for="LName">Επίθετο Κηδεμόνα</label>
                 <div class="col-sm-6"> 
                     <input type="text"  style="margin-bottom: 10px;" class="form-control"
                     id="lkname" placeholder="" name="lkname" required/>  

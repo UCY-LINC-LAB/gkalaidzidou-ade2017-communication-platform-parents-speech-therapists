@@ -19,7 +19,7 @@ if(! $resend ) {
 	</script>";
 }else{
  	echo "<script>";
-	echo " alert('Insert done!');      
+	echo " alert('Resend done!');      
 	window.location.href='". $_SERVER['HTTP_REFERER']."';
 	</script>";
 }	

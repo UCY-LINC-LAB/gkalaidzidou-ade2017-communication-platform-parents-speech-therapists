@@ -1,7 +1,7 @@
 <?php
 include 'core/init.php';
 
-if ( $_SESSION['logged_in'] != true){
+if ( $_SESSION['logged_in'] != true || $_SESSION['user_type']!='therapist'){
   header('Location: login.php');
 }
 
@@ -14,7 +14,7 @@ mysqli_query( $conn,"SET NAMES 'utf8'");
 <html>
 <head>
   <title>logoucon | αρχική</title>
-  <link rel="icon" type="image/png" href="img/logo.png">
+  <link rel="icon" type="image/png" href="img/icon.png">
 
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -419,7 +419,7 @@ line-height: 22px;
                          '</div> ' +
 
                          '<div class="form-group"> ' +
-                         '<label class="col-md-4 control-label" for="">Όνομα ασθενή</label> ' +
+                         '<label class="col-md-4 control-label" for="">Όνομα περιστατικού</label> ' +
 
                          '<div class="col-md-6">' +
                          ' <select name="patient" class="selectpicker" data-show-subtext="true" data-live-search="true"> ' +
@@ -501,7 +501,7 @@ line-height: 22px;
                          '<form id="deleteConf" action="core/delete_conference.php" method="POST" class="form-horizontal"> ' +
 
                          '<div class="form-group"> ' +
-                         '<div style="margin: 10px;" class="alert alert-danger" ><span class="glyphicon glyphicon-warning-sign"></span> Είστε σίγουροι για ην διαγραφή του/της <b>'+
+                         '<div style="margin: 10px;" class="alert alert-danger" ><span class="glyphicon glyphicon-warning-sign"></span> Είστε σίγουροι για την διαγραφή του/της <b>'+
 
                         calEvent.title+ '</b> <label id="name"></label></div>'+
                          '</div>'+
@@ -571,7 +571,7 @@ line-height: 22px;
                          '</div> ' +
 
                          '<div class="form-group"> ' +
-                         '<label class="col-md-4 control-label" for="">Όνομα ασθενή</label> ' +
+                         '<label class="col-md-4 control-label" for="">Όνομα περιστατικού</label> ' +
 
                          '<div class="col-md-6">' +
                          ' <select name="patient" class="selectpicker" data-show-subtext="true" data-live-search="true"> ' +

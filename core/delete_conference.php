@@ -2,12 +2,9 @@
 include 'init.php';
 
 $conferenceID = $_POST['eventID'];
-echo $conferenceID;
-
 
 $deleteConferenceScore = "DELETE FROM conference_score_bar WHERE conference_id='$conferenceID'";
 $delete1 = mysqli_query($conn, $deleteConferenceScore);
-
 
 $deleteConference = "DELETE FROM conference WHERE conference_id='$conferenceID'";
 $delete2 = mysqli_query($conn, $deleteConference);

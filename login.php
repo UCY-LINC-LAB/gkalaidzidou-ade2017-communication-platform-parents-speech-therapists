@@ -11,7 +11,7 @@ include 'core/init.php';
     <meta name="author" content="Giouliana Kalaitzidou">
 
     <title>logoucon | καλώς ορίσατε</title>
-    <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="icon" type="image/png" href="img/icon.png">
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">

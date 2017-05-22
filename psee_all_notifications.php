@@ -2,7 +2,7 @@
 include 'core/init.php';
 session_start(); 
 
-if ( $_SESSION['logged_in'] != true){
+if ( $_SESSION['logged_in'] != true || $_SESSION['user_type']=='therapist'){
   header('Location: login.php');
 }
 
@@ -12,7 +12,7 @@ if ( $_SESSION['logged_in'] != true){
 
 <head>
   <title>logoucon | ειδοποιήσεις</title>
-  <link rel="icon" type="image/png" href="img/logo.png">
+  <link rel="icon" type="image/png" href="img/icon.png">
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 

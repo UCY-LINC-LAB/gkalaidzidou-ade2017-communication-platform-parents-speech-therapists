@@ -2,7 +2,7 @@
 include 'core/init.php';
 session_start(); 
 
-if ( $_SESSION['logged_in'] != true){
+if ( $_SESSION['logged_in'] != true || $_SESSION['user_type']!='therapist'){
   header('Location: login.php');
 }
 
@@ -31,7 +31,7 @@ if($_SESSION['exercise_id']!=null){
 <html>
 <head>
   <title>logoucon | ασκήσεις</title>
-  <link rel="icon" type="image/png" href="img/logo.png">
+  <link rel="icon" type="image/png" href="img/icon.png">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -125,6 +125,11 @@ if($_SESSION['exercise_id']!=null){
         resize: both;
     }
     .scrollStyle{
+      max-height: 300px;
+      /*overflow-y:auto;
+      overflow-x: auto;*/
+    }
+    .scrollStyleD{
       max-height: 300px;
       overflow-y:auto;
       overflow-x: auto;
@@ -482,7 +487,7 @@ div { padding:0px; }
           </form>
         </div>
 
-        <div id="dictionary_results" style="margin-top: 20px;" class="scrollStyle"></div>
+        <div id="dictionary_results" style="margin-top: 20px;" class="scrollStyleD"></div>
         </div>
     </div>
 
@@ -517,10 +522,6 @@ div { padding:0px; }
 
 </script>
 
-
-
-
-
 <script type="text/javascript">
     var url = document.location.toString(); // select current url shown in browser.
 
@@ -532,12 +533,6 @@ div { padding:0px; }
         window.location.hash = e.target.hash; // to change hash location in url.
     });
 </script>
-
-
-       <!-- <button id='new'>New</button>-->
-
-
-
     </div>
 
   </div>
@@ -647,7 +642,7 @@ $(".accordion").click(function(e) {
         </div>
         <div class="modal-footer">
           <div>
-              <input type="submit" class="btn btn-success btn-sm" value="Δημιουργία">
+              <input type="submit" class="btn btn-success btn-sm" value="Δημιουργία"/>
           </div>
         </div>
         </form>
@@ -655,11 +650,12 @@ $(".accordion").click(function(e) {
       
     </div>
   </div>
-  
+   <!--<input type="text" name="annotateItem" placeholder="annotateItem"/>-->
    <script type="text/javascript">
      function displayCreateFolderDiv(){
 
- <input type="text" name="annotateItem" placeholder="annotateItem"/>
+
+ var div = document.getElementById('newFold');
 
       if(div.style.visibility == false){
         div.style.display = 'block';
@@ -721,7 +717,7 @@ $(".accordion").click(function(e) {
         </div>
         <div class="modal-footer">
           <div>
-              <input type="submit" class="btn btn-success btn-sm" value="Αποστολή">
+              <input type="submit" class="btn btn-success btn-sm" id="btnSave" value="Αποστολή">
           </div>
         </div>
         </form>

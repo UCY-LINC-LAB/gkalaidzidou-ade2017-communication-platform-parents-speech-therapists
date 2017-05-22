@@ -1,7 +1,7 @@
 <?php
 include 'core/init.php';
 
-if ( $_SESSION['logged_in'] != true){
+if ( $_SESSION['logged_in'] != true || $_SESSION['user_type']=='therapist'){
   header('Location: login.php');
 }
 
@@ -16,7 +16,7 @@ mysqli_query( $conn,"SET NAMES 'utf8'");
 <html>
 <head>
   <title>logoucon | αρχική</title>
-  <link rel="icon" type="image/png" href="img/logo.png">
+  <link rel="icon" type="image/png" href="img/icon.png">
 
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
   <meta name="viewport" content="width=device-width, initial-scale=1">

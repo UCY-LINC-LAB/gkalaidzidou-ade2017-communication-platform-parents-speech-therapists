@@ -2,7 +2,7 @@
 include 'init.php';
 session_start();
 
-$path="dd";
+$path="ex_screenshot/img2.png";
 $therapist_id=$_SESSION["therapist_id"];  
 $exercise_id=$_POST['exer_id'];
 $patient=$_POST['patient'];

@@ -11,7 +11,7 @@ $filteredData=substr($_POST['img_val'], strpos($_POST['img_val'], ",")+1);
 $unencodedData=base64_decode($filteredData);
  
 //Save the image
-file_put_contents('ex_screenshot/img.png', $unencodedData);
+file_put_contents('ex_screenshot/img2.png', $unencodedData);
 
 
 
